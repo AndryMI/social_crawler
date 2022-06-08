@@ -37,9 +37,9 @@ namespace RD_Team_TweetMonitor
 
             var driver = new ChromeDriver();
 
-            while (main.IsAlive)
+            while (main.IsAlive | queue.TryDequeue(out var tweet))
             {
-                if (queue.TryDequeue(out var tweet))
+                if (tweet != null)
                 {
                     reply.Run(new TwitterCrawler.Task
                     {
@@ -52,9 +52,6 @@ namespace RD_Team_TweetMonitor
             }
 
             driver.Quit();
-
-            // crawler.Run("https://twitter.com/elonmusk");
-            // profile.Run("https://twitter.com/simonschreibt");
         }
     }
 }
