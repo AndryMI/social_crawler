@@ -18,6 +18,11 @@ document.querySelectorAll('[data-testid=tweet]').forEach(function (tweet) {
     const time = tweet.querySelector('time');
     const text = tweet.querySelector('[data-testid=tweetText]');
 
+    // First tweet of replies
+    if (!time || !time.closest('a')) {
+        return
+    }
+
     const reply = tweet.querySelector('[data-testid=reply]');
     const retweet = tweet.querySelector('[data-testid=retweet]');
     const like = tweet.querySelector('[data-testid=like]');

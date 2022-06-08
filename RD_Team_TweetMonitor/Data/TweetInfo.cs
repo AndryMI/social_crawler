@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using OpenQA.Selenium.Chrome;
+using System;
 using System.IO;
 
 namespace RD_Team_TweetMonitor
@@ -16,6 +17,8 @@ namespace RD_Team_TweetMonitor
         public int Like;
 
         public TweetAttachInfo Attach;
+
+        public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 
         public static TweetInfo[] Collect(ChromeDriver driver)
         {

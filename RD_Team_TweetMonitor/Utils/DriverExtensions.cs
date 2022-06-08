@@ -8,7 +8,7 @@ namespace RD_Team_TweetMonitor
 {
     public static class DriverExtensions
     {
-        private static readonly TimeSpan WaitTimeout = TimeSpan.FromSeconds(5);
+        private static readonly TimeSpan WaitTimeout = TimeSpan.FromSeconds(120);
 
         public static IWebElement TryFindElement(this ChromeDriver driver, By by)
         {
@@ -20,6 +20,11 @@ namespace RD_Team_TweetMonitor
             {
                 return null;
             }
+        }
+
+        public static void InitTimeouts(this ChromeDriver driver)
+        {
+            driver.Manage().Timeouts().AsynchronousJavaScript = WaitTimeout;
         }
 
         public static void WaitForArticles(this ChromeDriver driver, int count = 1)

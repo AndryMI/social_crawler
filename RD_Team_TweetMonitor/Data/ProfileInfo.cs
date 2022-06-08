@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using OpenQA.Selenium.Chrome;
+using System;
 using System.IO;
 
 namespace RD_Team_TweetMonitor
@@ -20,6 +21,8 @@ namespace RD_Team_TweetMonitor
 
         public string Following;
         public string Followers;
+
+        public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 
         public static ProfileInfo Collect(ChromeDriver driver)
         {

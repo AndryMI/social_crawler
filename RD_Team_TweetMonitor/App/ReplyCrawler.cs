@@ -16,6 +16,7 @@ namespace RD_Team_TweetMonitor
             try
             {
                 driver.Url = url;
+                driver.InitTimeouts();
                 driver.WaitForLoading();
 
                 while (true)
@@ -36,7 +37,7 @@ namespace RD_Team_TweetMonitor
             catch (Exception e)
             {
                 // Close browser before rethrow exception
-                exception = e;
+                exception = new CrawlingException(e, url, driver);
             }
             finally
             {

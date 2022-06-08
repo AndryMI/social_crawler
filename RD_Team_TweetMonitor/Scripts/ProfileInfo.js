@@ -1,5 +1,9 @@
 ﻿
 var username = document.querySelector('[data-testid="UserName"]');
+if (!username) {
+    return null;
+}
+
 var description = document.querySelector('[data-testid="UserDescription"]');
 var location = document.querySelector('[data-testid="UserLocation"]');
 var url = document.querySelector('[data-testid="UserUrl"]');

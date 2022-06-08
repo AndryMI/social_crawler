@@ -8,7 +8,7 @@ namespace RD_Team_TweetMonitor
         private UniqueFilter<TweetInfo> unique = new UniqueFilter<TweetInfo>(64, tweet => tweet.Link);
 
         public event Action<ProfileInfo> OnProfile;
-        public event Action<TweetInfo[]> OnTweets;
+        public event Action<string, TweetInfo[]> OnTweets;
 
         public void Run(string url)
         {
@@ -17,6 +17,7 @@ namespace RD_Team_TweetMonitor
             try
             {
                 driver.Url = url;
+                driver.InitTimeouts();
                 driver.WaitForLoading();
 
                 var profile = ProfileInfo.Collect(driver);
@@ -34,7 +35,7 @@ namespace RD_Team_TweetMonitor
                     }
                     if (tweets != null && tweets.Length > 0)
                     {
-                        OnTweets?.Invoke(tweets);
+                        OnTweets?.Invoke(url, tweets);
                     }
                     driver.ScrollToLastArticle();
                     driver.WaitForLoading();
@@ -43,7 +44,7 @@ namespace RD_Team_TweetMonitor
             catch (Exception e)
             {
                 // Close browser before rethrow exception
-                exception = e;
+                exception = new CrawlingException(e, url, driver);
             }
             finally
             {

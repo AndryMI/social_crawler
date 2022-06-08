@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using Newtonsoft.Json;
+﻿using System.Collections.Concurrent;
+using System.Threading;
 
 namespace RD_Team_TweetMonitor
 {
@@ -7,22 +7,39 @@ namespace RD_Team_TweetMonitor
     {
         public static void Main(string[] args)
         {
-            var crawler = new ProfileCrawler();
-            crawler.OnProfile += profile =>
+            var storage = new FileStorage();
+            var queue = new ConcurrentQueue<string>();
+
+            var profile = new ProfileCrawler();
+            profile.OnProfile += storage.StoreProfile;
+            profile.OnTweets += storage.StoreTweets;
+
+            profile.OnTweets += (url, tweets) =>
             {
-                Debug.WriteLine("-----------");
-                Debug.WriteLine(JsonConvert.SerializeObject(profile));
-            };
-            crawler.OnTweets += tweets =>
-            {
-                Debug.WriteLine("-----------");
                 foreach (var tweet in tweets)
                 {
-                    Debug.WriteLine(JsonConvert.SerializeObject(tweet));
+                    queue.Enqueue(tweet.Link);
                 }
             };
+
+            var reply = new ReplyCrawler();
+            reply.OnTweets += storage.StoreReplies;
+
+            var main = new Thread(arg => profile.Run(arg as string));
+
+            main.Start("https://twitter.com/simonschreibt");
+
+            while (main.IsAlive)
+            {
+                if (queue.TryDequeue(out var tweet))
+                {
+                    reply.Run(tweet);
+                }
+                main.Join(1000);
+            }
+
             // crawler.Run("https://twitter.com/elonmusk");
-            crawler.Run("https://twitter.com/simonschreibt");
+            // profile.Run("https://twitter.com/simonschreibt");
         }
     }
 }
