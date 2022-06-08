@@ -5,7 +5,7 @@ namespace RD_Team_TweetMonitor
 {
     public class TwitterCrawler
     {
-        private UniqueFilter<TweetInfo> unique = new UniqueFilter<TweetInfo>(64, tweet => tweet.Link);
+        private readonly UniqueFilter<TweetInfo> unique = new UniqueFilter<TweetInfo>(64, tweet => tweet.Link);
 
         public event Action<ProfileInfo> OnProfile;
         public event Action<string, TweetInfo[]> OnTweets;
@@ -13,7 +13,7 @@ namespace RD_Team_TweetMonitor
         public void Run(Task task)
         {
             var exception = default(Exception);
-            var driver = new ChromeDriver();
+            var driver = task.Driver ?? new ChromeDriver();
             try
             {
                 driver.Url = task.Url;
@@ -51,13 +51,17 @@ namespace RD_Team_TweetMonitor
             }
             finally
             {
-                driver.Quit();
+                if (task.Driver == null)
+                {
+                    driver.Quit();
+                }
             }
             throw exception;
         }
 
         public struct Task
         {
+            public ChromeDriver Driver;
             public string Url;
             public bool Profile;
             public bool Tweets;

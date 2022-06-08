@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using OpenQA.Selenium.Chrome;
+using System.Collections.Concurrent;
 using System.Threading;
 
 namespace RD_Team_TweetMonitor
@@ -29,10 +30,12 @@ namespace RD_Team_TweetMonitor
 
             main.Start(new TwitterCrawler.Task
             {
-                Url = "https://twitter.com/simonschreibt",
+                Url = "https://twitter.com/elonmusk",
                 Tweets = true,
                 Profile = true,
             });
+
+            var driver = new ChromeDriver();
 
             while (main.IsAlive)
             {
@@ -40,12 +43,15 @@ namespace RD_Team_TweetMonitor
                 {
                     reply.Run(new TwitterCrawler.Task
                     {
+                        Driver = driver,
                         Url = tweet,
                         Tweets = true,
                     });
                 }
                 main.Join(1000);
             }
+
+            driver.Quit();
 
             // crawler.Run("https://twitter.com/elonmusk");
             // profile.Run("https://twitter.com/simonschreibt");

@@ -72,12 +72,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\FileStorage.cs" />
-    <Compile Include="App\ReplyCrawler.cs" />
     <Compile Include="Data\TweetAttachInfo.cs" />
     <Compile Include="Data\TweetInfo.cs" />
     <Compile Include="Utils\CrawlingException.cs" />
     <Compile Include="Utils\DriverExtensions.cs" />
-    <Compile Include="App\ProfileCrawler.cs" />
+    <Compile Include="App\TwitterCrawler.cs" />
     <Compile Include="Data\ProfileInfo.cs" />
     <Compile Include="App\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
