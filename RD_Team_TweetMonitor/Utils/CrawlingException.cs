@@ -7,12 +7,12 @@ namespace RD_Team_TweetMonitor
 {
     public class CrawlingException : Exception
     {
-        public string Url { get; private set; }
+        public TwitterCrawler.Task Task { get; private set; }
         public string[] Html { get; private set; }
 
-        public CrawlingException(Exception inner, string url, ChromeDriver driver) : base(inner.Message, inner)
+        public CrawlingException(Exception inner, TwitterCrawler.Task task, ChromeDriver driver) : base(inner.Message, inner)
         {
-            Url = url;
+            Task = task;
             Html = driver.FindElements(By.TagName("article")).Select(x => x.GetAttribute("outerHTML")).ToArray();
         }
     }

@@ -5,12 +5,12 @@ namespace RD_Team_TweetMonitor
 {
     public static class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             var storage = new FileStorage();
             var queue = new ConcurrentQueue<string>();
 
-            var profile = new ProfileCrawler();
+            var profile = new TwitterCrawler();
             profile.OnProfile += storage.StoreProfile;
             profile.OnTweets += storage.StoreTweets;
 
@@ -22,18 +22,27 @@ namespace RD_Team_TweetMonitor
                 }
             };
 
-            var reply = new ReplyCrawler();
+            var reply = new TwitterCrawler();
             reply.OnTweets += storage.StoreReplies;
 
-            var main = new Thread(arg => profile.Run(arg as string));
+            var main = new Thread(arg => profile.Run((TwitterCrawler.Task)arg));
 
-            main.Start("https://twitter.com/simonschreibt");
+            main.Start(new TwitterCrawler.Task
+            {
+                Url = "https://twitter.com/simonschreibt",
+                Tweets = true,
+                Profile = true,
+            });
 
             while (main.IsAlive)
             {
                 if (queue.TryDequeue(out var tweet))
                 {
-                    reply.Run(tweet);
+                    reply.Run(new TwitterCrawler.Task
+                    {
+                        Url = tweet,
+                        Tweets = true,
+                    });
                 }
                 main.Join(1000);
             }
