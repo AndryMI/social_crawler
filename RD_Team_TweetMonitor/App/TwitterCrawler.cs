@@ -6,9 +6,12 @@ namespace RD_Team_TweetMonitor
     public class TwitterCrawler
     {
         private readonly UniqueFilter<TweetInfo> unique = new UniqueFilter<TweetInfo>(64, tweet => tweet.Link);
+        private readonly IStorage storage;
 
-        public event Action<ProfileInfo> OnProfile;
-        public event Action<string, TweetInfo[]> OnTweets;
+        public TwitterCrawler(IStorage storage)
+        {
+            this.storage = storage;
+        }
 
         public void Run(Task task)
         {
@@ -25,7 +28,7 @@ namespace RD_Team_TweetMonitor
                     var profile = ProfileInfo.Collect(driver);
                     if (profile != null)
                     {
-                        OnProfile?.Invoke(profile);
+                        storage.StoreProfile(profile);
                     }
                 }
 
@@ -38,7 +41,7 @@ namespace RD_Team_TweetMonitor
                     }
                     if (tweets != null && tweets.Length > 0)
                     {
-                        OnTweets?.Invoke(task.Url, tweets);
+                        storage.StoreTweets(task.Url, tweets);
                     }
                     driver.ScrollToLastArticle();
                     driver.WaitForLoading();

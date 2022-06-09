@@ -3,7 +3,7 @@ using System.IO;
 
 namespace RD_Team_TweetMonitor
 {
-    public class FileStorage
+    public class FileStorage : IStorage
     {
         public void StoreProfile(ProfileInfo profile)
         {
@@ -22,14 +22,9 @@ namespace RD_Team_TweetMonitor
             }
         }
 
-        public void StoreReplies(string url, TweetInfo[] tweets)
+        public void StoreException(CrawlingException exception)
         {
-            foreach (var tweet in tweets)
-            {
-                var path = tweet.Link.Substring("https://twitter.com".Length);
-                Directory.CreateDirectory("Data" + path);
-                File.WriteAllText("Data" + path + ".json", JsonConvert.SerializeObject(tweet));
-            }
+            //TODO store exception
         }
     }
 }
