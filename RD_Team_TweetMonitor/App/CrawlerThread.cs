@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium.Chrome;
-using System;
 using System.Collections.Concurrent;
 using System.Threading;
 
@@ -62,6 +61,10 @@ namespace RD_Team_TweetMonitor
                     }
                     Thread.Sleep(1000);
                 }
+            }
+            if (driver != null)
+            {
+                driver.Quit();
             }
         }
     }

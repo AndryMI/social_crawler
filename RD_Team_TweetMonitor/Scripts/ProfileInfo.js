@@ -1,7 +1,7 @@
 ﻿
 var username = document.querySelector('[data-testid="UserName"]');
 if (!username) {
-    return null;
+    return "null";
 }
 
 var description = document.querySelector('[data-testid="UserDescription"]');

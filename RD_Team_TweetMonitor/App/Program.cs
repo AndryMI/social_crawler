@@ -7,7 +7,7 @@ namespace RD_Team_TweetMonitor
         public static void Main()
         {
             var tasks = new ConcurrentStack<TwitterCrawler.Task>();
-            var threads = new CrawlerThread[4];
+            var threads = new CrawlerThread[Config.Instance.Threads];
             var storage = new AutoTasks(tasks, new FileStorage());
 
             for (var i = 0; i < threads.Length; i++)

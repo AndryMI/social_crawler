@@ -19,7 +19,7 @@ namespace RD_Team_TweetMonitor
 
             Task.Run(async () =>
             {
-                await Task.Delay(TimeSpan.FromSeconds(30));
+                await Task.Delay(TimeSpan.FromSeconds(Config.Instance.RetryTimeout));
                 tasks.Push(exception.Task);
             });
         }

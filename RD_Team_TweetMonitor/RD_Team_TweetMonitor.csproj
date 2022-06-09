@@ -71,11 +71,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App\Config.cs" />
     <Compile Include="App\ConsoleManager.cs" />
     <Compile Include="App\CrawlerThread.cs" />
     <Compile Include="App\Storages\AutoTasks.cs" />
+    <Compile Include="App\Storages\DebugStorage.cs" />
     <Compile Include="App\Storages\FileStorage.cs" />
     <Compile Include="App\Storages\IStorage.cs" />
+    <Compile Include="App\Storages\NullStorage.cs" />
     <Compile Include="App\Storages\ProxyStorage.cs" />
     <Compile Include="Data\TweetAttachInfo.cs" />
     <Compile Include="Data\TweetInfo.cs" />
