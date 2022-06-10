@@ -27,20 +27,20 @@ namespace RD_Team_TweetMonitor
             driver.Manage().Timeouts().AsynchronousJavaScript = WaitTimeout;
         }
 
-        public static void WaitForArticles(this ChromeDriver driver, int count = 1)
+        public static void WaitForPassword(this ChromeDriver driver)
         {
             Thread.Sleep(100);
             var wait = new WebDriverWait(driver, WaitTimeout);
-            wait.Until(x => x.FindElements(By.TagName("article")).Count >= count);
+            wait.Until(x => x.FindElements(By.TagName("[type=\"password\"]")).Count > 0);
         }
 
         public static void WaitForLoading(this ChromeDriver driver)
         {
             Thread.Sleep(100);
-            while (driver.FindElements(By.CssSelector("[role=\"progressbar\"]")).Count > 0)
+            while (driver.FindElements(By.CssSelector("[role=\"progressbar\"]:not([style])")).Count > 0)
             {
                 var wait = new WebDriverWait(driver, WaitTimeout);
-                wait.Until(x => x.FindElements(By.CssSelector("[role=\"progressbar\"]")).Count == 0);
+                wait.Until(x => x.FindElements(By.CssSelector("[role=\"progressbar\"]:not([style])")).Count == 0);
                 Thread.Sleep(100);
             }
         }
@@ -48,6 +48,11 @@ namespace RD_Team_TweetMonitor
         public static void ScrollToLastArticle(this ChromeDriver driver)
         {
             driver.ExecuteScript("Array.from(document.querySelectorAll('article')).pop()?.scrollIntoView()");
+        }
+
+        public static void ScrollToLastFollower(this ChromeDriver driver)
+        {
+            driver.ExecuteScript("Array.from(document.querySelectorAll('[data-testid=UserCell]')).pop()?.scrollIntoView()");
         }
     }
 }

@@ -22,6 +22,11 @@ namespace RD_Team_TweetMonitor
             }
         }
 
+        public void StoreFollowers(string url, FollowersInfo[] followers)
+        {
+            //TODO store followers
+        }
+
         public void StoreException(CrawlingException exception)
         {
             //TODO store exception

@@ -1,18 +1,18 @@
-﻿using OpenQA.Selenium.Chrome;
-using System.Collections.Concurrent;
-using System.Threading;
+﻿using System.Threading;
 
 namespace RD_Team_TweetMonitor
 {
     public class CrawlerThread
     {
-        private readonly ConcurrentStack<TwitterCrawler.Task> tasks;
+        private readonly IDriver driver;
+        private readonly TaskManager tasks;
         private readonly IStorage storage;
         private readonly Thread thread;
         private volatile bool working = true;
 
-        public CrawlerThread(ConcurrentStack<TwitterCrawler.Task> tasks, IStorage storage)
+        public CrawlerThread(IDriver driver, TaskManager tasks, IStorage storage)
         {
+            this.driver = driver;
             this.tasks = tasks;
             this.storage = storage;
             thread = new Thread(Run);
@@ -28,44 +28,28 @@ namespace RD_Team_TweetMonitor
         private void Run()
         {
             var crawler = new TwitterCrawler(storage);
-            var driver = default(ChromeDriver);
             while (working)
             {
-                if (tasks.TryPop(out var task))
+                if (tasks.TryGet(driver.Type, out var task))
                 {
-                    if (driver == null)
-                    {
-                        driver = new ChromeDriver();
-                    }
                     try
                     {
-                        task.Driver = driver;
-                        crawler.Run(task);
+                        crawler.Run(driver.Instance(), task);
                     }
                     catch (CrawlingException ex)
                     {
-                        if (driver != null)
-                        {
-                            driver.Quit();
-                            driver = null;
-                        }
+                        driver.Destroy();
                         storage.StoreException(ex);
                     }
+                    Thread.Sleep(0);
                 }
                 else
                 {
-                    if (driver != null)
-                    {
-                        driver.Quit();
-                        driver = null;
-                    }
+                    driver.Suspend();
                     Thread.Sleep(1000);
                 }
             }
-            if (driver != null)
-            {
-                driver.Quit();
-            }
+            driver.Destroy();
         }
     }
 }

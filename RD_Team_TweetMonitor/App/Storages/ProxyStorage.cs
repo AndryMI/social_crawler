@@ -24,5 +24,10 @@ namespace RD_Team_TweetMonitor
         {
             storage.StoreTweets(url, tweets);
         }
+
+        public virtual void StoreFollowers(string url, FollowersInfo[] followers)
+        {
+            storage.StoreFollowers(url, followers);
+        }
     }
 }

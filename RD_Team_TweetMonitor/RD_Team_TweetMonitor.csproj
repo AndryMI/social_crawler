@@ -73,18 +73,24 @@
   <ItemGroup>
     <Compile Include="App\Config.cs" />
     <Compile Include="App\ConsoleManager.cs" />
-    <Compile Include="App\CrawlerThread.cs" />
+    <Compile Include="App\Crawling\CrawlerTask.cs" />
+    <Compile Include="App\Crawling\CrawlerThread.cs" />
+    <Compile Include="App\Drivers\AnonymousDriver.cs" />
+    <Compile Include="App\Drivers\AuthorizedDriver.cs" />
+    <Compile Include="App\Drivers\IDriver.cs" />
     <Compile Include="App\Storages\AutoTasks.cs" />
     <Compile Include="App\Storages\DebugStorage.cs" />
     <Compile Include="App\Storages\FileStorage.cs" />
     <Compile Include="App\Storages\IStorage.cs" />
     <Compile Include="App\Storages\NullStorage.cs" />
     <Compile Include="App\Storages\ProxyStorage.cs" />
+    <Compile Include="App\Crawling\TaskManager.cs" />
+    <Compile Include="Data\FollowersInfo.cs" />
     <Compile Include="Data\TweetAttachInfo.cs" />
     <Compile Include="Data\TweetInfo.cs" />
     <Compile Include="Utils\CrawlingException.cs" />
     <Compile Include="Utils\DriverExtensions.cs" />
-    <Compile Include="App\TwitterCrawler.cs" />
+    <Compile Include="App\Crawling\TwitterCrawler.cs" />
     <Compile Include="Data\ProfileInfo.cs" />
     <Compile Include="App\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,6 +101,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\FollowersInfo.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\ProfileInfo.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

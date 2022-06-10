@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
 
 namespace RD_Team_TweetMonitor
 {
     public class ConsoleManager
     {
-        public static void Run(ConcurrentStack<TwitterCrawler.Task> tasks)
+        public static void Run(TaskManager tasks)
         {
             while (true)
             {
@@ -25,12 +24,7 @@ namespace RD_Team_TweetMonitor
 
                 if (command.StartsWith("https://twitter.com/"))
                 {
-                    tasks.Push(new TwitterCrawler.Task
-                    {
-                        Url = command,
-                        Profile = true,
-                        Tweets = true,
-                    });
+                    tasks.Add(CrawlerTask.FromUrl(command));
                 }
             }
         }

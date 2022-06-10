@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
 namespace RD_Team_TweetMonitor
 {
     public class AutoTasks : ProxyStorage
     {
-        private readonly ConcurrentStack<TwitterCrawler.Task> tasks;
+        private readonly TaskManager tasks;
 
-        public AutoTasks(ConcurrentStack<TwitterCrawler.Task> tasks, IStorage storage) : base(storage)
+        public AutoTasks(TaskManager tasks, IStorage storage) : base(storage)
         {
             this.tasks = tasks;
         }
@@ -20,7 +19,7 @@ namespace RD_Team_TweetMonitor
             Task.Run(async () =>
             {
                 await Task.Delay(TimeSpan.FromSeconds(Config.Instance.RetryTimeout));
-                tasks.Push(exception.Task);
+                tasks.Add(exception.Task);
             });
         }
 
@@ -32,11 +31,7 @@ namespace RD_Team_TweetMonitor
             {
                 foreach (var tweet in tweets)
                 {
-                    tasks.Push(new TwitterCrawler.Task
-                    {
-                        Url = tweet.Link,
-                        Tweets = true,
-                    });
+                    tasks.Add(CrawlerTask.FromUrl(tweet.Link));
                 }
             }
         }

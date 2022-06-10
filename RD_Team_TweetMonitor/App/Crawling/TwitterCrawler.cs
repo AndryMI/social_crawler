@@ -5,7 +5,8 @@ namespace RD_Team_TweetMonitor
 {
     public class TwitterCrawler
     {
-        private readonly UniqueFilter<TweetInfo> unique = new UniqueFilter<TweetInfo>(64, tweet => tweet.Link);
+        private readonly UniqueFilter<TweetInfo> tweet = new UniqueFilter<TweetInfo>(64, tweet => tweet.Link);
+        private readonly UniqueFilter<FollowersInfo> follower = new UniqueFilter<FollowersInfo>(64, follower => follower.Link);
         private readonly IStorage storage;
 
         public TwitterCrawler(IStorage storage)
@@ -13,10 +14,8 @@ namespace RD_Team_TweetMonitor
             this.storage = storage;
         }
 
-        public void Run(Task task)
+        public void Run(ChromeDriver driver, CrawlerTask task)
         {
-            var exception = default(Exception);
-            var driver = task.Driver ?? new ChromeDriver();
             try
             {
                 driver.Url = task.Url;
@@ -34,7 +33,7 @@ namespace RD_Team_TweetMonitor
 
                 while (task.Tweets)
                 {
-                    var tweets = unique.Filter(TweetInfo.Collect(driver));
+                    var tweets = tweet.Filter(TweetInfo.Collect(driver));
                     if (tweets != null && tweets.Length == 0)
                     {
                         return;
@@ -46,28 +45,26 @@ namespace RD_Team_TweetMonitor
                     driver.ScrollToLastArticle();
                     driver.WaitForLoading();
                 }
+
+                while (task.Followers)
+                {
+                    var followers = follower.Filter(FollowersInfo.Collect(driver));
+                    if (followers != null && followers.Length == 0)
+                    {
+                        return;
+                    }
+                    if (followers != null && followers.Length > 0)
+                    {
+                        storage.StoreFollowers(task.Url, followers);
+                    }
+                    driver.ScrollToLastFollower();
+                    driver.WaitForLoading();
+                }
             }
             catch (Exception e)
             {
-                // Close browser before rethrow exception
-                exception = new CrawlingException(e, task, driver);
+                throw new CrawlingException(e, task, driver);
             }
-            finally
-            {
-                if (task.Driver == null)
-                {
-                    driver.Quit();
-                }
-            }
-            throw exception;
-        }
-
-        public struct Task
-        {
-            public ChromeDriver Driver;
-            public string Url;
-            public bool Profile;
-            public bool Tweets;
         }
     }
 }

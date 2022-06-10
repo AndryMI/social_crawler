@@ -14,5 +14,9 @@ namespace RD_Team_TweetMonitor
         public void StoreTweets(string url, TweetInfo[] tweets)
         {
         }
+
+        public void StoreFollowers(string url, FollowersInfo[] followers)
+        {
+        }
     }
 }

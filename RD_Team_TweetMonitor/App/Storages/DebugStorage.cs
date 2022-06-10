@@ -25,5 +25,15 @@ namespace RD_Team_TweetMonitor
                 Debug.WriteLine(JsonConvert.SerializeObject(tweet));
             }
         }
+
+        public void StoreFollowers(string url, FollowersInfo[] followers)
+        {
+            Debug.WriteLine("--- --- ---");
+            Debug.WriteLine("URL: " + url);
+            foreach (var follower in followers)
+            {
+                Debug.WriteLine(JsonConvert.SerializeObject(follower));
+            }
+        }
     }
 }
