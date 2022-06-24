@@ -2,6 +2,7 @@
 using Core.Crawling;
 using Core.Managers;
 using Core.Storages;
+using Instagram.Crawling;
 using System.Collections.Generic;
 using System.Linq;
 using Twitter.Crawling;
@@ -15,7 +16,8 @@ namespace CrawlerApp
             var storage = new DebugStorage();
             var factory = new TaskFactory()
             {
-                { "https://twitter.com/", (url, priority) => new TwitterTask(url, priority) }
+                { "https://twitter.com/", (url, priority) => new TwitterTask(url, priority) },
+                { "https://www.instagram.com/", (url, priority) => new InstagramTask(url, priority) },
             };
 
             var tasks = new TaskManager(factory);
