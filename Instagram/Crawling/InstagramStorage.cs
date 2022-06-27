@@ -19,6 +19,7 @@ namespace Instagram.Crawling
 
         public void StoreProfile(ProfileInfo profile)
         {
+            Debug.WriteLine(JsonConvert.SerializeObject(profile));
         }
 
         public void StorePost(PostInfo post)
@@ -33,6 +34,11 @@ namespace Instagram.Crawling
             {
                 Debug.WriteLine(JsonConvert.SerializeObject(comment));
             }
+        }
+
+        public void StoreStory(StoryInfo story)
+        {
+            Debug.WriteLine(JsonConvert.SerializeObject(story));
         }
     }
 }

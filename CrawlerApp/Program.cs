@@ -4,6 +4,7 @@ using Core.Managers;
 using Core.Storages;
 using Instagram.Crawling;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Twitter.Crawling;
 
@@ -13,6 +14,17 @@ namespace CrawlerApp
     {
         public static void Main(string[] args)
         {
+            foreach (var arg in args)
+            {
+                if (arg == "--kill-drivers")
+                {
+                    foreach (var process in Process.GetProcessesByName("chromedriver"))
+                    {
+                        process.Kill();
+                    }
+                }
+            }
+
             var storage = new DebugStorage();
             var factory = new TaskFactory()
             {

@@ -56,6 +56,7 @@
     <Compile Include="Data\CommentInfo.cs" />
     <Compile Include="Data\PostInfo.cs" />
     <Compile Include="Data\ProfileInfo.cs" />
+    <Compile Include="Data\StoryInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +80,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Instagram\ProfileInfo.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Instagram\StoryInfo.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

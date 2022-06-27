@@ -42,6 +42,24 @@ namespace Instagram.Crawling
                     }
                 }
 
+                if (task.CrawlStories)
+                {
+                    driver.TryOpenStories();
+
+                    while (driver.Url.Contains("/stories/"))
+                    {
+                        driver.WaitForStoryLoading();
+
+                        var story = StoryInfo.Collect(driver);
+                        if (story != null)
+                        {
+                            storage.StoreStory(story);
+                        }
+
+                        driver.FindElement(By.TagName("body")).SendKeys(Keys.ArrowRight);
+                    }
+                }
+
                 var postUrl = driver.Url;
                 if (task.CrawlPosts)
                 {
@@ -76,7 +94,7 @@ namespace Instagram.Crawling
 
                     while (task.CrawlComments)
                     {
-                        driver.WaitForLoading();
+                        driver.WaitForCommentsLoading();
 
                         var comments = comment.Filter(CommentInfo.Collect(driver));
                         if (comments != null && comments.Length == 0)

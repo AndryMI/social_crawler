@@ -10,11 +10,13 @@ namespace Instagram.Crawling
         public InstagramTask(string url, string priority) : base(url, priority)
         {
             CrawlProfile = true;
+            CrawlStories = true;
             CrawlPosts = true;
             CrawlComments = true;
         }
 
         public readonly bool CrawlProfile;
+        public readonly bool CrawlStories;
         public readonly bool CrawlPosts;
         public readonly bool CrawlComments;
 
