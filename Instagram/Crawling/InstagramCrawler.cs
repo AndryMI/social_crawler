@@ -1,6 +1,7 @@
 ﻿using Core;
 using Core.Crawling;
 using Instagram.Data;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 
@@ -8,6 +9,8 @@ namespace Instagram.Crawling
 {
     public class InstagramCrawler
     {
+        private readonly UniqueFilter<CommentInfo> comment = new UniqueFilter<CommentInfo>(64, comment => comment.Link);
+
         private readonly Browser browser;
         private readonly InstagramStorage storage;
         private readonly InstagramTask task;
@@ -30,55 +33,67 @@ namespace Instagram.Crawling
                 driver.Url = task.Url;
                 driver.WaitForMain();
 
-                var profile = ProfileInfo.Collect(driver);
-                if (profile != null)
+                if (task.CrawlProfile)
                 {
-                    storage.StoreProfile(profile);
+                    var profile = ProfileInfo.Collect(driver);
+                    if (profile != null)
+                    {
+                        storage.StoreProfile(profile);
+                    }
                 }
 
-                System.Threading.Thread.Sleep(10000);
+                var postUrl = driver.Url;
+                if (task.CrawlPosts)
+                {
+                    var post = driver.TryFindElement(By.CssSelector("article a"));
+                    if (post == null)
+                    {
+                        //TODO posts not found
+                        return;
+                    }
+                    var href = post.GetDomAttribute("href");
+                    if (href == null || !href.StartsWith("/p/"))
+                    {
+                        //TODO posts not found
+                        return;
+                    }
+                    post.Click();
+                    driver.WaitForDialogLoading();
+                }
+                while (task.CrawlPosts)
+                {
+                    if (postUrl == driver.Url)
+                    {
+                        break;
+                    }
+                    postUrl = driver.Url;
 
-                //driver.Url = task.Url;
-                //driver.WaitForLoading();
+                    var post = PostInfo.Collect(driver);
+                    if (post != null)
+                    {
+                        storage.StorePost(post);
+                    }
 
-                //if (task.CrawlProfile)
-                //{
-                //    var profile = ProfileInfo.Collect(driver);
-                //    if (profile != null)
-                //    {
-                //        storage.StoreProfile(profile);
-                //    }
-                //}
+                    while (task.CrawlComments)
+                    {
+                        driver.WaitForLoading();
 
-                //while (task.CrawlTweets)
-                //{
-                //    var tweets = tweet.Filter(TweetInfo.Collect(driver));
-                //    if (tweets != null && tweets.Length == 0)
-                //    {
-                //        return;
-                //    }
-                //    if (tweets != null && tweets.Length > 0)
-                //    {
-                //        storage.StoreTweets(task.Url, tweets);
-                //    }
-                //    driver.ScrollToLastArticle();
-                //    driver.WaitForLoading();
-                //}
+                        var comments = comment.Filter(CommentInfo.Collect(driver));
+                        if (comments != null && comments.Length == 0)
+                        {
+                            break;
+                        }
+                        if (comments != null && comments.Length > 0)
+                        {
+                            storage.StoreComments(comments);
+                        }
+                        driver.ScrollToLastComment();
+                        driver.LoadMoreComments();
+                    }
 
-                //while (task.CrawlFollowers)
-                //{
-                //    var followers = follower.Filter(FollowersInfo.Collect(driver));
-                //    if (followers != null && followers.Length == 0)
-                //    {
-                //        return;
-                //    }
-                //    if (followers != null && followers.Length > 0)
-                //    {
-                //        storage.StoreFollowers(task.Url, followers);
-                //    }
-                //    driver.ScrollToLastFollower();
-                //    driver.WaitForLoading();
-                //}
+                    driver.FindElement(By.TagName("body")).SendKeys(Keys.ArrowRight);
+                    driver.WaitForDialogLoading();
+                }
             }
             catch (Exception e)
             {

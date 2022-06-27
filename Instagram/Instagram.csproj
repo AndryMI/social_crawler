@@ -48,10 +48,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Crawling\DriverExtensions.cs" />
     <Compile Include="Crawling\InstagramAccount.cs" />
     <Compile Include="Crawling\InstagramCrawler.cs" />
     <Compile Include="Crawling\InstagramStorage.cs" />
     <Compile Include="Crawling\InstagramTask.cs" />
+    <Compile Include="Data\CommentInfo.cs" />
+    <Compile Include="Data\PostInfo.cs" />
     <Compile Include="Data\ProfileInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -69,6 +72,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Scripts\Instagram\CommentInfo.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Instagram\PostInfo.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\Instagram\ProfileInfo.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -9,7 +9,14 @@ namespace Instagram.Crawling
 
         public InstagramTask(string url, string priority) : base(url, priority)
         {
+            CrawlProfile = true;
+            CrawlPosts = true;
+            CrawlComments = true;
         }
+
+        public readonly bool CrawlProfile;
+        public readonly bool CrawlPosts;
+        public readonly bool CrawlComments;
 
         public override void Run(Browser browser, IStorage storage, TaskManager tasks)
         {
