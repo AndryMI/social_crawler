@@ -1,44 +1,41 @@
-﻿using Core.Crawling;
-using Core.Storages;
+﻿using Core.Storages;
 using Instagram.Data;
-using Newtonsoft.Json;
-using System.Diagnostics;
+using System;
 
 namespace Instagram.Crawling
 {
     public class InstagramStorage
     {
         private readonly IStorage storage;
-        private readonly TaskManager tasks;
 
-        public InstagramStorage(IStorage storage, TaskManager tasks)
+        public InstagramStorage(IStorage storage)
         {
             this.storage = storage;
-            this.tasks = tasks;
         }
 
         public void StoreProfile(ProfileInfo profile)
         {
-            Debug.WriteLine(JsonConvert.SerializeObject(profile));
+            var uri = new Uri(profile.Link);
+            storage.StoreData(uri, profile);
         }
 
         public void StorePost(PostInfo post)
         {
-            Debug.WriteLine(JsonConvert.SerializeObject(post));
+            var uri = new Uri(post.ProfileUrl);
+            storage.StoreData(uri, post);
         }
 
         public void StoreComments(CommentInfo[] comments)
         {
-            Debug.WriteLine("--- --- ---");
             foreach (var comment in comments)
             {
-                Debug.WriteLine(JsonConvert.SerializeObject(comment));
+                storage.StoreData(new Uri(comment.PostUrl), comment);
             }
         }
 
         public void StoreStory(StoryInfo story)
         {
-            Debug.WriteLine(JsonConvert.SerializeObject(story));
+            storage.StoreData(new Uri(story.Link), story);
         }
     }
 }

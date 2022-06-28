@@ -1,6 +1,7 @@
 ﻿using Core;
 using Core.Crawling;
 using Core.Storages;
+using System;
 using Twitter.Data;
 
 namespace Twitter.Crawling
@@ -18,10 +19,17 @@ namespace Twitter.Crawling
 
         public void StoreProfile(ProfileInfo profile)
         {
+            storage.StoreData(new Uri(profile.Link), profile);
         }
 
         public void StoreTweets(string url, TweetInfo[] tweets)
         {
+            var uri = new Uri(url);
+            foreach (var tweet in tweets)
+            {
+                storage.StoreData(uri, tweet);
+            }
+
             if (!url.Contains("/status/"))
             {
                 foreach (var tweet in tweets)
@@ -33,6 +41,11 @@ namespace Twitter.Crawling
 
         public void StoreFollowers(string url, FollowersInfo[] followers)
         {
+            var uri = new Uri(url);
+            foreach (var follower in followers)
+            {
+                storage.StoreData(uri, follower);
+            }
         }
 
         public void StoreException(CrawlingException exception)

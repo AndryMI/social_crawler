@@ -7,7 +7,6 @@ namespace Core.Crawling
         public readonly string Priority;
         public readonly string Url;
 
-        public abstract string Type { get; }
         public abstract void Run(Browser browser, IStorage storage, TaskManager tasks);
 
         public CrawlerTask(string url, string priority)

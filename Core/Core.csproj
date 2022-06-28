@@ -65,6 +65,7 @@
     <Content Include="Scripts\DeleteAllCookies.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Compile Include="Storages\FileStorage.cs" />
     <Compile Include="Storages\IStorage.cs" />
     <Compile Include="Storages\DebugStorage.cs" />
     <Compile Include="Utils\CrawlingException.cs" />

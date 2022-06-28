@@ -5,8 +5,6 @@ namespace Twitter.Crawling
 {
     public class TwitterTask : CrawlerTask
     {
-        public override string Type => "Twitter";
-
         public TwitterTask(string url, string priority) : base(url, priority)
         {
             if (url.Contains("/followers") || url.Contains("/following"))
