@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Core.Crawling;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Text;
@@ -15,7 +16,7 @@ namespace Core.Storages
             this.folder = folder;
         }
 
-        public void StoreData(Uri url, object data)
+        public void StoreData(CrawlerTask task, Uri url, object data)
         {
             var path = $"{folder}/{url.Host}{url.LocalPath}";
             var file = $"/{data.GetType()}.{nextUid++}.json";

@@ -46,7 +46,7 @@ namespace Twitter.Crawling
                     var profile = ProfileInfo.Collect(driver);
                     if (profile != null)
                     {
-                        storage.StoreProfile(profile);
+                        storage.StoreProfile(task, profile);
                     }
                 }
 
@@ -59,7 +59,7 @@ namespace Twitter.Crawling
                     }
                     if (tweets != null && tweets.Length > 0)
                     {
-                        storage.StoreTweets(task.Url, tweets);
+                        storage.StoreTweets(task, tweets);
                     }
                     driver.ScrollToLastArticle();
                     driver.WaitForLoading();
@@ -74,7 +74,7 @@ namespace Twitter.Crawling
                     }
                     if (followers != null && followers.Length > 0)
                     {
-                        storage.StoreFollowers(task.Url, followers);
+                        storage.StoreFollowers(task, followers);
                     }
                     driver.ScrollToLastFollower();
                     driver.WaitForLoading();

@@ -13,29 +13,29 @@ namespace Instagram.Crawling
             this.storage = storage;
         }
 
-        public void StoreProfile(ProfileInfo profile)
+        public void StoreProfile(InstagramTask task, ProfileInfo profile)
         {
             var uri = new Uri(profile.Link);
-            storage.StoreData(uri, profile);
+            storage.StoreData(task, uri, profile);
         }
 
-        public void StorePost(PostInfo post)
+        public void StorePost(InstagramTask task, PostInfo post)
         {
             var uri = new Uri(post.ProfileUrl);
-            storage.StoreData(uri, post);
+            storage.StoreData(task, uri, post);
         }
 
-        public void StoreComments(CommentInfo[] comments)
+        public void StoreComments(InstagramTask task, CommentInfo[] comments)
         {
             foreach (var comment in comments)
             {
-                storage.StoreData(new Uri(comment.PostUrl), comment);
+                storage.StoreData(task, new Uri(comment.PostUrl), comment);
             }
         }
 
-        public void StoreStory(StoryInfo story)
+        public void StoreStory(InstagramTask task, StoryInfo story)
         {
-            storage.StoreData(new Uri(story.Link), story);
+            storage.StoreData(task, new Uri(story.Link), story);
         }
     }
 }

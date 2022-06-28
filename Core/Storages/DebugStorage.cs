@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Core.Crawling;
+using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 
@@ -6,7 +7,7 @@ namespace Core.Storages
 {
     public class DebugStorage : IStorage
     {
-        public void StoreData(Uri url, object data)
+        public void StoreData(CrawlerTask task, Uri url, object data)
         {
             Debug.WriteLine($"--- {url.Host}{url.LocalPath} ---");
             Debug.WriteLine(JsonConvert.SerializeObject(data));

@@ -17,20 +17,20 @@ namespace Twitter.Crawling
             this.tasks = tasks;
         }
 
-        public void StoreProfile(ProfileInfo profile)
+        public void StoreProfile(TwitterTask task, ProfileInfo profile)
         {
-            storage.StoreData(new Uri(profile.Link), profile);
+            storage.StoreData(task, new Uri(profile.Link), profile);
         }
 
-        public void StoreTweets(string url, TweetInfo[] tweets)
+        public void StoreTweets(TwitterTask task, TweetInfo[] tweets)
         {
-            var uri = new Uri(url);
+            var uri = new Uri(task.Url);
             foreach (var tweet in tweets)
             {
-                storage.StoreData(uri, tweet);
+                storage.StoreData(task, uri, tweet);
             }
 
-            if (!url.Contains("/status/"))
+            if (!task.Url.Contains("/status/"))
             {
                 foreach (var tweet in tweets)
                 {
@@ -39,12 +39,12 @@ namespace Twitter.Crawling
             }
         }
 
-        public void StoreFollowers(string url, FollowersInfo[] followers)
+        public void StoreFollowers(TwitterTask task, FollowersInfo[] followers)
         {
-            var uri = new Uri(url);
+            var uri = new Uri(task.Url);
             foreach (var follower in followers)
             {
-                storage.StoreData(uri, follower);
+                storage.StoreData(task, uri, follower);
             }
         }
 

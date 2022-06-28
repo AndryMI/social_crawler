@@ -38,7 +38,7 @@ namespace Instagram.Crawling
                     var profile = ProfileInfo.Collect(driver);
                     if (profile != null)
                     {
-                        storage.StoreProfile(profile);
+                        storage.StoreProfile(task, profile);
                     }
                 }
 
@@ -53,7 +53,7 @@ namespace Instagram.Crawling
                         var story = StoryInfo.Collect(driver);
                         if (story != null)
                         {
-                            storage.StoreStory(story);
+                            storage.StoreStory(task, story);
                         }
 
                         driver.FindElement(By.TagName("body")).SendKeys(Keys.ArrowRight);
@@ -89,7 +89,7 @@ namespace Instagram.Crawling
                     var post = PostInfo.Collect(driver);
                     if (post != null)
                     {
-                        storage.StorePost(post);
+                        storage.StorePost(task, post);
                     }
 
                     while (task.CrawlComments)
@@ -103,7 +103,7 @@ namespace Instagram.Crawling
                         }
                         if (comments != null && comments.Length > 0)
                         {
-                            storage.StoreComments(comments);
+                            storage.StoreComments(task, comments);
                         }
                         driver.ScrollToLastComment();
                         driver.LoadMoreComments();
