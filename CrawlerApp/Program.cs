@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Twitter.Crawling;
+using VK.Crawling;
 
 namespace CrawlerApp
 {
@@ -28,6 +29,7 @@ namespace CrawlerApp
             var storage = new DebugStorage();
             var factory = new TaskFactory()
             {
+                { "https://vk.com/", (url, priority) => new VkTask(url, priority) },
                 { "https://twitter.com/", (url, priority) => new TwitterTask(url, priority) },
                 { "https://www.instagram.com/", (url, priority) => new InstagramTask(url, priority) },
             };

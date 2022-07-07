@@ -1,9 +1,6 @@
-﻿using Core;
-using Core.Crawling;
+﻿using Core.Crawling;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
-using System;
 using System.Linq;
 
 namespace Instagram.Crawling
@@ -32,28 +29,18 @@ namespace Instagram.Crawling
             // Accept Cookies
             driver.FindElements(By.TagName("button")).LastOrDefault(button => button.Text.ToLower().Contains("cookie"))?.Click();
 
-            new WebDriverWait(driver, TimeSpan.FromMinutes(Config.Instance.WaitTimeout)).Until(x =>
+            driver.TryUntilExec(() =>
             {
-                try
-                {
-                    var user = driver.FindElement(By.CssSelector("input[name=username]"));
-                    user.Click();
-                    user.SendKeys(Email);
-                    return true;
-                }
-                catch { return false; }
+                var user = driver.FindElement(By.CssSelector("input[name=username]"));
+                user.Click();
+                user.SendKeys(Email);
             });
 
-            new WebDriverWait(driver, TimeSpan.FromMinutes(Config.Instance.WaitTimeout)).Until(x =>
+            driver.TryUntilExec(() =>
             {
-                try
-                {
-                    var pass = driver.FindElement(By.CssSelector("[type=password]"));
-                    pass.Click();
-                    pass.SendKeys(Password + "\n");
-                    return true;
-                }
-                catch { return false; }
+                var pass = driver.FindElement(By.CssSelector("[type=password]"));
+                pass.Click();
+                pass.SendKeys(Password + "\n");
             });
 
             driver.WaitForMain();

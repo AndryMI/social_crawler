@@ -65,6 +65,10 @@
       <Project>{7c96d4e2-c40f-4531-84bd-c46b7432d014}</Project>
       <Name>Twitter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VK\VK.csproj">
+      <Project>{2490c20d-aa9a-495e-98de-6afe33a34edd}</Project>
+      <Name>VK</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.102.0.5005.6102\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.102.0.5005.6102\build\Selenium.WebDriver.ChromeDriver.targets')" />

@@ -47,6 +47,10 @@ namespace Core.Crawling
 
         public T Get(string url)
         {
+            if (accounts.Count == 0)
+            {
+                throw new Exception("Accounts list is empty");
+            }
             lock (locker)
             {
                 var account = accounts.Find(x => x.AssignedUrls.Contains(url));
