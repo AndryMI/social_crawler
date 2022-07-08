@@ -1,7 +1,5 @@
 ﻿using Core.Storages;
-using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Core.Crawling
 {
@@ -41,12 +39,7 @@ namespace Core.Crawling
                     {
                         storage.StoreException(ex);
                         browser.Close();
-
-                        Task.Run(async () =>
-                        {
-                            await Task.Delay(TimeSpan.FromSeconds(Config.Instance.RetryTimeout));
-                            tasks.Add(ex.Task);
-                        });
+                        tasks.Retry(ex.Task);
                     }
                 }
                 else

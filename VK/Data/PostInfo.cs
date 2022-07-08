@@ -23,7 +23,7 @@ namespace VK.Data
             {
                 if (DateTimeOffset.TryParse(Time.Replace("at", CreatedAt.Year.ToString()), out var result))
                 {
-                    return result.ToString("yyyy-MM-ddTHH:mm:ss.000Z");
+                    return result.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.000Z");
                 }
                 return null;
             }

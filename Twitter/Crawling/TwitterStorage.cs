@@ -6,12 +6,12 @@ using Twitter.Data;
 
 namespace Twitter.Crawling
 {
-    public class TwitterSotrage
+    public class TwitterStorage
     {
         private readonly IStorage storage;
         private readonly TaskManager tasks;
 
-        public TwitterSotrage(IStorage storage, TaskManager tasks)
+        public TwitterStorage(IStorage storage, TaskManager tasks)
         {
             this.storage = storage;
             this.tasks = tasks;

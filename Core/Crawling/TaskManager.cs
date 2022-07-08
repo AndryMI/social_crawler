@@ -30,7 +30,7 @@ namespace Core.Crawling
         {
             if (priority == null)
             {
-                priority = DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
+                priority = DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.000Z");
             }
             Add(factory.CreateTask(url, priority));
         }
@@ -47,13 +47,22 @@ namespace Core.Crawling
         {
             lock (locker)
             {
-                task = tasks.OrderByDescending(x => x.Priority).FirstOrDefault();
+                task = tasks.Where(x => x.RunAt <= DateTimeOffset.UtcNow).OrderByDescending(x => x.Priority).FirstOrDefault();
                 if (task != null)
                 {
                     tasks.Remove(task);
                     return true;
                 }
                 return false;
+            }
+        }
+
+        public void Retry(CrawlerTask task)
+        {
+            lock (locker)
+            {
+                task.RunAt = DateTimeOffset.UtcNow.AddSeconds(Config.Instance.RetryTimeout);
+                tasks.Add(task);
             }
         }
     }

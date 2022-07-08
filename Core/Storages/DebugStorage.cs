@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
+using System.Text;
 
 namespace Core.Storages
 {
@@ -15,7 +16,15 @@ namespace Core.Storages
 
         public void StoreException(CrawlingException ex)
         {
-            throw ex;
+            var error = new StringBuilder();
+            for (var e = ex.InnerException; e != null; e = e.InnerException)
+            {
+                error.AppendLine(e.Message);
+                error.AppendLine(e.StackTrace);
+                error.AppendLine();
+            }
+            Debug.WriteLine(error.ToString());
+            Debugger.Break();
         }
     }
 }

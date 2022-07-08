@@ -13,10 +13,10 @@ namespace Twitter.Crawling
         private readonly UniqueFilter<FollowersInfo> follower = new UniqueFilter<FollowersInfo>(64, follower => follower.Link);
 
         private readonly Browser browser;
-        private readonly TwitterSotrage storage;
+        private readonly TwitterStorage storage;
         private readonly TwitterTask task;
 
-        public TwitterCrawler(Browser browser, TwitterSotrage storage, TwitterTask task)
+        public TwitterCrawler(Browser browser, TwitterStorage storage, TwitterTask task)
         {
             this.browser = browser;
             this.storage = storage;
@@ -39,6 +39,7 @@ namespace Twitter.Crawling
                 }
 
                 driver.Url = task.Url;
+                driver.WaitForMain();
                 driver.WaitForLoading();
 
                 if (task.CrawlProfile)

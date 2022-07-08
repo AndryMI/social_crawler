@@ -27,7 +27,7 @@ namespace Twitter.Crawling
 
         public override void Run(Browser browser, IStorage storage, TaskManager tasks)
         {
-            new TwitterCrawler(browser, new TwitterSotrage(storage, tasks), this).Run();
+            new TwitterCrawler(browser, new TwitterStorage(storage, tasks), this).Run();
         }
     }
 }
