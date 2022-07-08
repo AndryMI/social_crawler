@@ -70,6 +70,7 @@
     <Compile Include="Storages\DebugStorage.cs" />
     <Compile Include="Utils\CrawlingException.cs" />
     <Compile Include="Utils\DriverExtensions.cs" />
+    <Compile Include="Utils\ScriptExtensions.cs" />
     <Compile Include="Utils\UniqueFilter.cs" />
   </ItemGroup>
   <ItemGroup>

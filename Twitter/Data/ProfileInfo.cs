@@ -1,7 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Core.Utils;
 using OpenQA.Selenium.Chrome;
 using System;
-using System.IO;
 
 namespace Twitter.Data
 {
@@ -26,9 +25,7 @@ namespace Twitter.Data
 
         public static ProfileInfo Collect(ChromeDriver driver)
         {
-            var script = File.ReadAllText("Scripts/Twitter/ProfileInfo.js");
-            var json = driver.ExecuteScript(script) as string;
-            return JsonConvert.DeserializeObject<ProfileInfo>(json);
+            return driver.RunCollector<ProfileInfo>("Scripts/Twitter/ProfileInfo.js");
         }
     }
 }

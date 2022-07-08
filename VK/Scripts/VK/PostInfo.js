@@ -1,6 +1,14 @@
 ﻿
 var posts = []
 
+function CssBackgroundImage(el) {
+    if (el) {
+        var match = el.style.backgroundImage.match(/url\(['"]?(.*?)['"]?\)/i)
+        return match ? match[1] : el.style.backgroundImage
+    }
+    return null
+}
+
 Array.from(document.querySelectorAll('.post')).slice(-50).forEach(post => {
 
     post.querySelector('.wall_post_more')?.click()
@@ -28,10 +36,9 @@ Array.from(document.querySelectorAll('.post')).slice(-50).forEach(post => {
 
     post.querySelectorAll('.wall_post_cont a').forEach(a => {
         if (a.href) {
-            var match = a.style.backgroundImage.match(/url\(['"]?(.*?)['"]?\)/i)
             media.push({
                 Url: a.href,
-                Image: match ? match[1] : a.style.backgroundImage,
+                Image: CssBackgroundImage(a),
             })
         }
     })

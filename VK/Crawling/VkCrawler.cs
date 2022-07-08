@@ -3,7 +3,6 @@ using Core.Crawling;
 using VK.Data;
 using OpenQA.Selenium.Chrome;
 using System;
-using OpenQA.Selenium;
 
 namespace VK.Crawling
 {
@@ -38,16 +37,14 @@ namespace VK.Crawling
                 }
 
                 driver.Url = task.Url;
-
-                // Switch to English
-                var cookie = driver.Manage().Cookies.GetCookieNamed("remixlang");
-                if (cookie == null || cookie.Value != "3")
-                {
-                    driver.Manage().Cookies.AddCookie(new Cookie("remixlang", "3", ".vk.com", "/", DateTime.Now.AddYears(1), true, false, "None"));
-                    driver.Url = task.Url;
-                }
-
+                driver.SwitchToEnglish();
                 driver.WaitForPageLayout();
+
+                if (driver.IsPrivatePage())
+                {
+                    storage.OnPrivatePage(task);
+                    return;
+                }
 
                 if (task.CrawlProfile)
                 {

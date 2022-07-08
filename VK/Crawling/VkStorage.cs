@@ -30,5 +30,13 @@ namespace VK.Crawling
                 storage.StoreData(task, uri, post);
             }
         }
+
+        public void OnPrivatePage(VkTask task)
+        {
+            if (task.NeedAuthorization == false)
+            {
+                //TODO create new task with auth
+            }
+        }
     }
 }

@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Core.Utils;
 using OpenQA.Selenium.Chrome;
-using System.IO;
+using System;
 
 namespace Twitter.Data
 {
@@ -8,11 +8,11 @@ namespace Twitter.Data
     {
         public string Link;
 
+        public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
+
         public static FollowersInfo[] Collect(ChromeDriver driver)
         {
-            var script = File.ReadAllText("Scripts/Twitter/FollowersInfo.js");
-            var json = driver.ExecuteScript(script) as string;
-            return JsonConvert.DeserializeObject<FollowersInfo[]>(json);
+            return driver.RunCollector<FollowersInfo[]>("Scripts/Twitter/FollowersInfo.js");
         }
     }
 }

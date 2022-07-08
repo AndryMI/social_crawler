@@ -1,7 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Core.Utils;
 using OpenQA.Selenium.Chrome;
 using System;
-using System.IO;
 
 namespace Instagram.Data
 {
@@ -16,9 +15,7 @@ namespace Instagram.Data
 
         public static StoryInfo Collect(ChromeDriver driver)
         {
-            var script = File.ReadAllText("Scripts/Instagram/StoryInfo.js");
-            var json = driver.ExecuteScript(script) as string;
-            return JsonConvert.DeserializeObject<StoryInfo>(json);
+            return driver.RunCollector<StoryInfo>("Scripts/Instagram/StoryInfo.js");
         }
     }
 }

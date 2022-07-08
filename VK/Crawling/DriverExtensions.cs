@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Crawling;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
@@ -9,6 +10,21 @@ namespace VK.Crawling
 {
     public static class DriverExtensions
     {
+        public static void SwitchToEnglish(this ChromeDriver driver)
+        {
+            var cookie = driver.Manage().Cookies.GetCookieNamed("remixlang");
+            if (cookie == null || cookie.Value != "3")
+            {
+                driver.Manage().Cookies.AddCookie(new Cookie("remixlang", "3", ".vk.com", "/", DateTime.Now.AddYears(1), true, false, "None"));
+                driver.Url = driver.Url;
+            }
+        }
+
+        public static bool IsPrivatePage(this ChromeDriver driver)
+        {
+            return driver.TryFindElement(By.CssSelector(".profile_deleted_text")) != null;
+        }
+
         public static void WaitForPageLayout(this ChromeDriver driver)
         {
             Thread.Sleep(100);
