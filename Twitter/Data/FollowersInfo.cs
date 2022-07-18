@@ -8,6 +8,10 @@ namespace Twitter.Data
     {
         public string Link;
 
+        public string Name;
+        public string Description;
+        public string PhotoUrl;
+
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 
         public static FollowersInfo[] Collect(ChromeDriver driver)
