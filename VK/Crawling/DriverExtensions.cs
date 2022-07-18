@@ -51,5 +51,17 @@ namespace VK.Crawling
         {
             driver.ExecuteScript("document.getElementById('wall_more_link')?.click(); document.getElementById('wall_more_link')?.scrollIntoView()");
         }
+
+        public static void WaitForRepliesLoading(this ChromeDriver driver)
+        {
+            Thread.Sleep(100);
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Config.Instance.WaitTimeout));
+            wait.Until(x => x.FindElements(By.CssSelector(".progress_inline.replies_next_loader")).Count == 0);
+        }
+
+        public static void ScrollToNextReplies(this ChromeDriver driver)
+        {
+            driver.ExecuteScript("var next = document.querySelector('.replies_next'); next?.scrollIntoView(); next?.click();");
+        }
     }
 }

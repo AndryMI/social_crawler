@@ -9,6 +9,7 @@ namespace VK.Crawling
     public class VkCrawler
     {
         private readonly UniqueFilter<PostInfo> post = new UniqueFilter<PostInfo>(64, post => post.Link);
+        private readonly UniqueFilter<CommentInfo> comment = new UniqueFilter<CommentInfo>(64, comment => comment.Link);
 
         private readonly Browser browser;
         private readonly VkStorage storage;
@@ -68,6 +69,21 @@ namespace VK.Crawling
                     }
                     driver.ScrollToLoadMore();
                     driver.WaitForPostsLoading();
+                }
+
+                while (task.CrawlComments)
+                {
+                    var comments = comment.Filter(CommentInfo.Collect(driver));
+                    if (comments != null && comments.Length == 0)
+                    {
+                        return;
+                    }
+                    if (comments != null && comments.Length > 0)
+                    {
+                        storage.StoreComments(task, comments);
+                    }
+                    driver.ScrollToNextReplies();
+                    driver.WaitForRepliesLoading();
                 }
             }
             catch (Exception e)

@@ -29,13 +29,28 @@ namespace VK.Crawling
             {
                 storage.StoreData(task, uri, post);
             }
+
+            foreach (var post in posts)
+            {
+                tasks.AddUrl(post.Link, post.ParsedTime);
+            }
+        }
+
+        public void StoreComments(VkTask task, CommentInfo[] comments)
+        {
+            var uri = new Uri(task.Url);
+            foreach (var comment in comments)
+            {
+                storage.StoreData(task, uri, comment);
+            }
         }
 
         public void OnPrivatePage(VkTask task)
         {
             if (task.NeedAuthorization == false)
             {
-                //TODO create new task with auth
+                task.NeedAuthorization = true;
+                tasks.Add(task);
             }
         }
     }

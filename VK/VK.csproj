@@ -48,6 +48,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Crawling\DateTimeParser.cs" />
     <Compile Include="Crawling\DriverExtensions.cs" />
     <Compile Include="Crawling\VkAccount.cs" />
     <Compile Include="Crawling\VkCrawler.cs" />

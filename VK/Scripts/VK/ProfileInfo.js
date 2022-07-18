@@ -32,7 +32,7 @@ var photo = document.querySelector('#page_avatar img') || document.querySelector
 var header = CssBackgroundImage(document.querySelector('.page_cover'))
 
 var url = Array.from(document.querySelectorAll('.profile_info a')).map(a => a.href).find(u => u.indexOf('/away.php') >= 0)
-       || document.querySelector('.group_info_row.site a').href
+       || document.querySelector('.group_info_row.site a')?.href
 
 var description = []
 

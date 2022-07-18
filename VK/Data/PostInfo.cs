@@ -1,6 +1,7 @@
 ﻿using Core.Utils;
 using OpenQA.Selenium.Chrome;
 using System;
+using VK.Crawling;
 
 namespace VK.Data
 {
@@ -17,17 +18,7 @@ namespace VK.Data
         public int Shares;
         public int Views;
 
-        public string ParsedTime
-        {
-            get
-            {
-                if (DateTimeOffset.TryParse(Time.Replace("at", CreatedAt.Year.ToString()), out var result))
-                {
-                    return result.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.000Z");
-                }
-                return null;
-            }
-        }
+        public string ParsedTime => DateTimeParser.Convert(Time, CreatedAt);
 
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 

@@ -9,6 +9,12 @@ function CssBackgroundImage(el) {
     return null
 }
 
+function SumReactions(obj) {
+    var sum = 0;
+    Object.keys(obj).forEach(key => sum += obj[key])
+    return sum;
+}
+
 Array.from(document.querySelectorAll('.post')).slice(-50).forEach(post => {
 
     post.querySelector('.wall_post_more')?.click()
@@ -23,7 +29,7 @@ Array.from(document.querySelectorAll('.post')).slice(-50).forEach(post => {
     var time = post.querySelector('.post_date')
     var text = post.querySelector('.wall_post_text')
 
-    var reactions = JSON.parse(post.querySelector('[data-reaction-counts]')?.dataset?.reactionCounts ?? '[]').reduce((a, b) => a + b, 0)
+    var reactions = SumReactions(JSON.parse(post.querySelector('[data-reaction-counts]')?.dataset?.reactionCounts ?? '[]'))
     var shares = JSON.parse(post.querySelector('[data-count].share')?.dataset?.count ?? '0')
     var views = parseInt(post.querySelector('.like_views').title) || 0
 
