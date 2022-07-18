@@ -9,8 +9,8 @@ namespace Twitter.Crawling
 {
     public class TwitterCrawler
     {
-        private readonly UniqueFilter<TweetInfo> tweet = new UniqueFilter<TweetInfo>(64, tweet => tweet.Link);
-        private readonly UniqueFilter<FollowersInfo> follower = new UniqueFilter<FollowersInfo>(64, follower => follower.Link);
+        private readonly UniqueFilter<TweetInfo> tweet = new UniqueFilter<TweetInfo>(tweet => tweet.Link);
+        private readonly UniqueFilter<FollowersInfo> follower = new UniqueFilter<FollowersInfo>(follower => follower.Link);
 
         private readonly Browser browser;
         private readonly TwitterStorage storage;

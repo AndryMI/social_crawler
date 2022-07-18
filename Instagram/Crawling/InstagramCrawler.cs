@@ -9,7 +9,7 @@ namespace Instagram.Crawling
 {
     public class InstagramCrawler
     {
-        private readonly UniqueFilter<CommentInfo> comment = new UniqueFilter<CommentInfo>(64, comment => comment.Link);
+        private readonly UniqueFilter<CommentInfo> comment = new UniqueFilter<CommentInfo>(comment => comment.Link);
 
         private readonly Browser browser;
         private readonly InstagramStorage storage;

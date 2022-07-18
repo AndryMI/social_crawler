@@ -5,20 +5,24 @@ namespace Core
 {
     public class UniqueFilter<T>
     {
-        private readonly int maxSize;
         private readonly Func<T, string> getId;
+        private int maxSize;
 
         private readonly List<string> order = new List<string>();
         private readonly HashSet<string> hash = new HashSet<string>();
 
-        public UniqueFilter(int maxSize, Func<T, string> getId)
+        public UniqueFilter(Func<T, string> getId)
         {
-            this.maxSize = maxSize;
             this.getId = getId;
         }
 
         public T[] Filter(T[] items)
         {
+            if (items.Length > maxSize)
+            {
+                maxSize = items.Length;
+            }
+
             var result = new List<T>();
             foreach (var item in items)
             {

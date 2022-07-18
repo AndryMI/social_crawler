@@ -9,7 +9,7 @@ function CssBackgroundImage(el) {
     return null
 }
 
-document.querySelectorAll('.reply').forEach(reply => {
+Array.from(document.querySelectorAll('.reply')).slice(-500).forEach(reply => {
 
     // Unwrap emoji
     reply.querySelectorAll('img.emoji').forEach(function (img) {
