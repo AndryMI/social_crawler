@@ -7,6 +7,10 @@ namespace Core
     {
         public static readonly Config Instance = Init();
 
+        public string ApiUrl { get; private set; } = "https://sc-api-srv.albertroi.com/api";
+        public string ApiMail { get; private set; } = "qa@roibees.com";
+        public string ApiPass { get; private set; } = "test";
+
         public int Threads { get; private set; } = 1;
         public int WaitTimeout { get; private set; } = 90;
         public int RetryTimeout { get; private set; } = 60;
