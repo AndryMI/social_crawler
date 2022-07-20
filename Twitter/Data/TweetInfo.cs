@@ -1,5 +1,6 @@
 ﻿using Core.Data;
 using Core.Utils;
+using Newtonsoft.Json;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Text.RegularExpressions;
@@ -16,6 +17,7 @@ namespace Twitter.Data
         }
         private string profileLink;
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string PostLink { get; set; }
         public string Link { get; set; }
 

@@ -26,7 +26,7 @@ namespace CrawlerApp
                 }
             }
 
-            var storage = new DebugStorage();
+            var storage = new RemoteStorage();
             var factory = new TaskFactory()
             {
                 { "https://vk.com/", (url, priority) => new VkTask(url, priority) },
@@ -39,14 +39,17 @@ namespace CrawlerApp
 
             ConsoleManager.Run(tasks);
 
-            for (var i = 0; i < threads.Length; i++)
+            foreach (var thread in threads)
             {
-                threads[i].Stop(0);
+                thread.Stop(0);
             }
-            for (var i = 0; i < threads.Length; i++)
+            storage.Stop(0);
+
+            foreach (var thread in threads)
             {
-                threads[i].Stop();
+                thread.Stop();
             }
+            storage.Stop();
         }
 
         private static IEnumerable<CrawlerThread> InitThreads(TaskManager tasks, IStorage storage)
