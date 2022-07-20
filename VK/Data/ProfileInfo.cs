@@ -1,4 +1,5 @@
-﻿using Core.Utils;
+﻿using Core.Data;
+using Core.Utils;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,10 @@ namespace VK.Data
         Group,
     }
 
-    public class ProfileInfo
+    public class ProfileInfo : IProfileInfo
     {
-        public string Link;
+        public string Social => "vkontakte";
+        public string Link { get; set; }
 
         public ProfileType Type;
         public string Name;

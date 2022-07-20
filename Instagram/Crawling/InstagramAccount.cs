@@ -43,6 +43,7 @@ namespace Instagram.Crawling
                 pass.SendKeys(Password + "\n");
             });
 
+            driver.WaitForUrlChange();
             driver.WaitForMain();
         }
     }

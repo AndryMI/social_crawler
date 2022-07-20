@@ -50,12 +50,13 @@ Array.from(document.querySelectorAll('.post')).slice(-50).forEach(post => {
     })
 
     posts.push({
+        ProfileLink: document.location.href,
         Link: link.href,
 
         Text: text?.innerText?.trim(),
         Media: media,
         QuoteLink: quote?.href,
-        Time: time?.innerText?.trim(),
+        RawTime: time?.innerText?.trim(),
 
         Reactions: reactions,
         Shares: shares,

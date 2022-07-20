@@ -27,6 +27,11 @@ namespace Core.Crawling
                 }
                 this.driver = new ChromeDriver(service, options, timeout);
                 this.profile = profile;
+                //TODO tempfix https://github.com/SeleniumHQ/selenium/issues/10799
+                if (profile != null)
+                {
+                    System.Threading.Thread.Sleep(1000);
+                }
             }
             return driver;
         }

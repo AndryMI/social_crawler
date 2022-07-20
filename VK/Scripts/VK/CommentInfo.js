@@ -1,4 +1,5 @@
 ﻿
+var profile = document.querySelector('.post_author a')
 var comments = [];
 
 function CssBackgroundImage(el) {
@@ -37,6 +38,8 @@ Array.from(document.querySelectorAll('.reply')).slice(-500).forEach(reply => {
     })
 
     comments.push({
+        ProfileLink: profile?.href,
+        PostLink: document.location.href,
         Link: date.href,
 
         Author: author?.innerText?.trim(),
@@ -44,7 +47,7 @@ Array.from(document.querySelectorAll('.reply')).slice(-500).forEach(reply => {
         MentionUrl: mention?.href,
         Media: media,
         Text: text?.innerText?.trim(),
-        Time: date?.innerText?.trim(),
+        RawTime: date?.innerText?.trim(),
 
         Likes: likes,
     })

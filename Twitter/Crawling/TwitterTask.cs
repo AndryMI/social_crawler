@@ -20,6 +20,8 @@ namespace Twitter.Crawling
             CrawlTweets = true;
         }
 
+        public string ProfileLink;
+
         public readonly bool NeedAuthorization;
         public readonly bool CrawlProfile;
         public readonly bool CrawlTweets;

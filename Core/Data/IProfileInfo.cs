@@ -3,6 +3,7 @@ namespace Core.Data
 {
     public interface IProfileInfo
     {
-        string Link { get; set; }
+        string Social { get; }
+        string Link { get; }
     }
 }

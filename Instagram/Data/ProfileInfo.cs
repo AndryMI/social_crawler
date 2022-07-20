@@ -1,12 +1,14 @@
-﻿using Core.Utils;
+﻿using Core.Data;
+using Core.Utils;
 using OpenQA.Selenium.Chrome;
 using System;
 
 namespace Instagram.Data
 {
-    public class ProfileInfo
+    public class ProfileInfo : IProfileInfo
     {
-        public string Link;
+        public string Social => "instagram";
+        public string Link { get; set; }
 
         public string Id;
         public string Name;

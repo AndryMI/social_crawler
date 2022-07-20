@@ -1,17 +1,19 @@
-﻿using Core.Utils;
+﻿using Core.Data;
+using Core.Utils;
 using OpenQA.Selenium.Chrome;
 using System;
 
 namespace Instagram.Data
 {
-    public class PostInfo
+    public class PostInfo : IPostInfo
     {
-        public string Link;
+        public string Social => "instagram";
+        public string ProfileLink { get; set; }
+        public string Link { get; set; }
         
-        public string ProfileUrl;
         public string ImageUrl;
         public string VideoUrl;
-        public string Time;
+        public string Time { get; set; }
 
         public string Like;
 

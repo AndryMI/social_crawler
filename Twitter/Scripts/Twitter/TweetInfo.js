@@ -29,7 +29,12 @@ document.querySelectorAll('[data-testid=tweet]').forEach(function (tweet) {
 
     const attach = tweet.querySelector('[aria-labelledby]')
 
+    const profile = document.location.href.indexOf('/status/') < 0 ? document.location.href : null;
+    const post = document.location.href.indexOf('/status/') < 0 ? null : document.location.href;
+
     tweets.push({
+        ProfileLink: profile,
+        PostLink: post,
         Link: time.closest('a').href,
         Time: time.dateTime,
         Text: text?.innerText?.trim(),

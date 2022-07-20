@@ -8,9 +8,9 @@ var likes = document.querySelector('[href="' + document.location.pathname + 'lik
 var time = document.querySelector('[href="' + document.location.pathname + '"] time')
 
 return JSON.stringify({
+    ProfileLink: profile?.href,
     Link: document.location.href,
 
-    ProfileUrl: profile?.href,
     ImageUrl: (video?.poster ?? image?.src),
     VideoUrl: video?.src,
 

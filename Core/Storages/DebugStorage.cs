@@ -1,6 +1,6 @@
 ﻿using Core.Crawling;
+using Core.Data;
 using Newtonsoft.Json;
-using System;
 using System.Diagnostics;
 using System.Text;
 
@@ -8,9 +8,21 @@ namespace Core.Storages
 {
     public class DebugStorage : IStorage
     {
-        public void StoreData(CrawlerTask task, Uri url, object data)
+        public void StoreProfile(CrawlerTask task, IProfileInfo data)
         {
-            Debug.WriteLine($"--- {url.Host}{url.LocalPath} ---");
+            Debug.WriteLine($"--- {data.Link} ---");
+            Debug.WriteLine(JsonConvert.SerializeObject(data));
+        }
+
+        public void StorePost(CrawlerTask task, IPostInfo data)
+        {
+            Debug.WriteLine($"--- {data.Link} ---");
+            Debug.WriteLine(JsonConvert.SerializeObject(data));
+        }
+
+        public void StoreComment(CrawlerTask task, ICommentInfo data)
+        {
+            Debug.WriteLine($"--- {data.Link} ---");
             Debug.WriteLine(JsonConvert.SerializeObject(data));
         }
 

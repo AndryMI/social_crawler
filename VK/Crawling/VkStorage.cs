@@ -1,6 +1,5 @@
 ﻿using Core.Storages;
 using VK.Data;
-using System;
 using Core.Crawling;
 
 namespace VK.Crawling
@@ -18,30 +17,27 @@ namespace VK.Crawling
 
         public void StoreProfile(VkTask task, ProfileInfo profile)
         {
-            var uri = new Uri(profile.Link);
-            storage.StoreData(task, uri, profile);
+            storage.StoreProfile(task, profile);
         }
 
         public void StorePosts(VkTask task, PostInfo[] posts)
         {
-            var uri = new Uri(task.Url);
             foreach (var post in posts)
             {
-                storage.StoreData(task, uri, post);
+                storage.StorePost(task, post);
             }
 
             foreach (var post in posts)
             {
-                tasks.AddUrl(post.Link, post.ParsedTime);
+                tasks.AddUrl(post.Link, post.Time);
             }
         }
 
         public void StoreComments(VkTask task, CommentInfo[] comments)
         {
-            var uri = new Uri(task.Url);
             foreach (var comment in comments)
             {
-                storage.StoreData(task, uri, comment);
+                storage.StoreComment(task, comment);
             }
         }
 

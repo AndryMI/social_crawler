@@ -1,24 +1,27 @@
-﻿using Core.Utils;
+﻿using Core.Data;
+using Core.Utils;
 using OpenQA.Selenium.Chrome;
 using System;
 using VK.Crawling;
 
 namespace VK.Data
 {
-    public class PostInfo
+    public class PostInfo : IPostInfo
     {
-        public string Link;
+        public string Social => "vkontakte";
+        public string ProfileLink { get; set; }
+        public string Link { get; set; }
         
         public string Text;
         public PostMediaInfo[] Media;
         public string QuoteLink;
-        public string Time;
+        public string RawTime;
 
         public int Reactions;
         public int Shares;
         public int Views;
 
-        public string ParsedTime => DateTimeParser.Convert(Time, CreatedAt);
+        public string Time => DateTimeParser.Convert(RawTime, CreatedAt);
 
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 

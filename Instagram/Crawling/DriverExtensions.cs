@@ -60,7 +60,7 @@ namespace Instagram.Crawling
                     return driver.Url.Contains("/stories/");
                 });
             }
-            catch (TimeoutException) { }
+            catch (WebDriverTimeoutException) { }
         }
     }
 }

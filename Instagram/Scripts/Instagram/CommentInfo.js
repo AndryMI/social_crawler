@@ -1,4 +1,5 @@
 ﻿
+var profile = document.querySelector('[role=dialog] header a');
 var comments = [];
 
 document.querySelectorAll('[role=dialog] article ul > div').forEach(function (comment) {
@@ -9,8 +10,9 @@ document.querySelectorAll('[role=dialog] article ul > div').forEach(function (co
     var time = comment.querySelector('time');
 
     comments.push({
+        ProfileLink: profile?.href,
+        PostLink: document.location.href,
         Link: time.closest('a')?.href || document.location.href,
-        PostUrl: document.location.href,
 
         Header: header,
         Body: text.join('\n'),

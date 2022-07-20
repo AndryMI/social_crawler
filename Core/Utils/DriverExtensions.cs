@@ -16,6 +16,17 @@ namespace Core.Crawling
             Thread.Sleep(100);
         }
 
+        public static void WaitForUrlChange(this ChromeDriver driver, string url = null)
+        {
+            if (url == null)
+            {
+                url = driver.Url;
+            }
+            Thread.Sleep(100);
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Config.Instance.WaitTimeout));
+            wait.Until(x => x.Url != url);
+        }
+
         public static void WaitForMain(this ChromeDriver driver)
         {
             Thread.Sleep(100);

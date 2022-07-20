@@ -1,12 +1,14 @@
-﻿using Core.Utils;
+﻿using Core.Data;
+using Core.Utils;
 using OpenQA.Selenium.Chrome;
 using System;
 
 namespace Twitter.Data
 {
-    public class ProfileInfo
+    public class ProfileInfo : IProfileInfo
     {
-        public string Link;
+        public string Social => "twitter";
+        public string Link { get; set; }
 
         public string Id;
         public string Name;
