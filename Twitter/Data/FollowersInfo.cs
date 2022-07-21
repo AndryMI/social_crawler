@@ -10,7 +10,7 @@ namespace Twitter.Data
 
         public string Name;
         public string Description;
-        public string PhotoUrl;
+        public string PhotoImg;
 
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 

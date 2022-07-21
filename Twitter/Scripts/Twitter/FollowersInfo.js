@@ -23,7 +23,7 @@ document.querySelectorAll('[data-testid=UserCell]').forEach(function (follower) 
 
         Name: name?.innerText?.trim(),
         Description: description?.id ? null : description?.innerText?.trim(),
-        PhotoUrl: photo?.src,
+        PhotoImg: photo?.src,
     });
 });
 

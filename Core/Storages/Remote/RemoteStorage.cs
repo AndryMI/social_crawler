@@ -6,20 +6,11 @@ using System.Threading;
 
 namespace Core.Storages
 {
-    public class RemoteStorage : IStorage
+    public class RemoteStorage : Threaded, IStorage
     {
-        private readonly Thread thread;
-        private volatile bool working = true;
-
         private readonly ConcurrentQueue<IProfileInfo> profiles = new ConcurrentQueue<IProfileInfo>();
         private readonly ConcurrentQueue<IPostInfo> posts = new ConcurrentQueue<IPostInfo>();
         private readonly ConcurrentQueue<ICommentInfo> comments = new ConcurrentQueue<ICommentInfo>();
-
-        public RemoteStorage()
-        {
-            thread = new Thread(Run);
-            thread.Start();
-        }
 
         public void StoreProfile(CrawlerTask task, IProfileInfo data)
         {
@@ -41,27 +32,21 @@ namespace Core.Storages
             //TODO store exceptions
         }
 
-        public void Stop(int timeout = -1)
-        {
-            working = false;
-            thread.Join(timeout);
-        }
-
-        private void Run()
+        protected override void Run()
         {
             var client = new StorageApiClient();
-            while (working)
+            while (IsWorking)
             {
                 client.StoreProfiles(Dequeue(profiles, 30));
-                if (!working) break;
+                if (!IsWorking) break;
                 Thread.Sleep(1000);
 
                 client.StorePosts(Dequeue(posts, 30));
-                if (!working) break;
+                if (!IsWorking) break;
                 Thread.Sleep(1000);
 
                 client.StoreComments(Dequeue(comments, 30));
-                if (!working) break;
+                if (!IsWorking) break;
                 Thread.Sleep(1000);
             }
         }

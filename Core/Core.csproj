@@ -67,12 +67,14 @@
     </Content>
     <Compile Include="Storages\IStorage.cs" />
     <Compile Include="Storages\DebugStorage.cs" />
+    <Compile Include="Storages\NullStorage.cs" />
     <Compile Include="Storages\Remote\RemoteStorage.cs" />
     <Compile Include="Storages\Remote\StorageApiClient.cs" />
     <Compile Include="Utils\ApiClient.cs" />
     <Compile Include="Utils\CrawlingException.cs" />
     <Compile Include="Utils\DriverExtensions.cs" />
     <Compile Include="Utils\ScriptExtensions.cs" />
+    <Compile Include="Utils\Threaded.cs" />
     <Compile Include="Utils\UniqueFilter.cs" />
   </ItemGroup>
   <ItemGroup>
