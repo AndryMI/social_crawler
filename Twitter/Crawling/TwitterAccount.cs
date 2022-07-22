@@ -1,11 +1,19 @@
 ﻿using Core.Crawling;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using System;
+using System.Text.RegularExpressions;
 
 namespace Twitter.Crawling
 {
     public class TwitterAccount : Account
     {
+        public override string ToUid(string url)
+        {
+            var uri = new Uri(url);
+            return uri.Host + Regex.Match(uri.LocalPath, "/[^/]*");
+        }
+
         public override void Login(ChromeDriver driver)
         {
             driver.Url = "https://twitter.com/login";

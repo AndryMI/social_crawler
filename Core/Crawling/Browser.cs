@@ -11,6 +11,14 @@ namespace Core.Crawling
         private ChromeDriver driver = null;
         private string profile = null;
 
+        public ChromeDriver Driver<T>(string url) where T : Account, new()
+        {
+            var account = Accounts<T>.Instance.Get(url);
+            var driver = Driver(account.BrowserProfile);
+            account.Login(driver);
+            return driver;
+        }
+
         public ChromeDriver Driver(string profile = null)
         {
             if (this.profile != profile)
@@ -28,6 +36,7 @@ namespace Core.Crawling
                 }
                 this.driver = new ChromeDriver(service, options, timeout);
                 this.profile = profile;
+
                 //TODO tempfix https://github.com/SeleniumHQ/selenium/issues/10799
                 if (profile != null)
                 {
@@ -39,12 +48,9 @@ namespace Core.Crawling
 
         public void Close()
         {
-            if (driver != null)
-            {
-                driver.Quit();
-                driver = null;
-                profile = null;
-            }
+            driver?.Quit();
+            driver = null;
+            profile = null;
         }
 
         private static ChromeDriverService InitService()

@@ -27,15 +27,7 @@ namespace VK.Crawling
             ChromeDriver driver = null;
             try
             {
-                if (task.NeedAuthorization)
-                {
-                    var account = Accounts<VkAccount>.Instance.Get(task.Url);
-                    account.Login(driver = browser.Driver(account.BrowserProfile));
-                }
-                else
-                {
-                    driver = browser.Driver();
-                }
+                driver = task.NeedAuthorization ? browser.Driver<VkAccount>(task.Url) : browser.Driver();
 
                 driver.Url = task.Url;
                 driver.SwitchToEnglish();

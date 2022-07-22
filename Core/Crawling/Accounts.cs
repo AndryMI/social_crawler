@@ -15,13 +15,20 @@ namespace Core.Crawling
         public string Email;
         public string Password;
 
-        public HashSet<string> AssignedUrls = new HashSet<string>();
+        public readonly HashSet<string> AssignedUids = new HashSet<string>();
 
         public abstract void Login(ChromeDriver driver);
+
+        public virtual string ToUid(string url)
+        {
+            var uri = new Uri(url);
+            return uri.Host + uri.LocalPath;
+        }
     }
 
-    public class Accounts<T> where T : Account
+    public class Accounts<T> where T : Account, new()
     {
+        private static readonly T Sample = new T();
         public static readonly Accounts<T> Instance = new Accounts<T>();
 
         private readonly object locker = new object();
@@ -53,13 +60,14 @@ namespace Core.Crawling
             }
             lock (locker)
             {
-                var account = accounts.Find(x => x.AssignedUrls.Contains(url));
+                var uid = Sample.ToUid(url);
+                var account = accounts.Find(x => x.AssignedUids.Contains(uid));
                 if (account == null)
                 {
-                    var urls = accounts.Min(x => x.AssignedUrls.Count);
-                    var selected = accounts.Where(x => x.AssignedUrls.Count == urls).ToArray();
+                    var uids = accounts.Min(x => x.AssignedUids.Count);
+                    var selected = accounts.Where(x => x.AssignedUids.Count == uids).ToArray();
                     account = selected[random.Next(selected.Length)];
-                    account.AssignedUrls.Add(url);
+                    account.AssignedUids.Add(uid);
                     File.WriteAllText(FileName, JsonConvert.SerializeObject(accounts, Formatting.Indented));
                 }
                 return account;

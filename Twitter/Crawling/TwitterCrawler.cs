@@ -2,7 +2,6 @@
 using Core.Crawling;
 using OpenQA.Selenium.Chrome;
 using System;
-using System.Text.RegularExpressions;
 using Twitter.Data;
 
 namespace Twitter.Crawling
@@ -28,15 +27,7 @@ namespace Twitter.Crawling
             ChromeDriver driver = null;
             try
             {
-                if (task.NeedAuthorization)
-                {
-                    var account = GetAccount(task.Url);
-                    account.Login(driver = browser.Driver(account.BrowserProfile));
-                }
-                else
-                {
-                    driver = browser.Driver();
-                }
+                driver = task.NeedAuthorization ? browser.Driver<TwitterAccount>(task.Url) : browser.Driver();
 
                 driver.Url = task.Url;
                 driver.WaitForMain();
@@ -85,13 +76,6 @@ namespace Twitter.Crawling
             {
                 throw new CrawlingException(e, task, driver);
             }
-        }
-
-        private static TwitterAccount GetAccount(string url)
-        {
-            var uri = new Uri(url);
-            url = uri.Scheme + "://" + uri.Host + Regex.Match(uri.LocalPath, "/[^/]*");
-            return Accounts<TwitterAccount>.Instance.Get(url);
         }
     }
 }
