@@ -22,6 +22,6 @@ return JSON.stringify({
 
     PhotoImg: photo?.src,
 
-    RawFollowing: following?.title || following?.innerText,
-    RawFollowers: followers?.title || followers?.innerText
+    Following: following?.title || following?.innerText,
+    Followers: followers?.title || followers?.innerText
 })

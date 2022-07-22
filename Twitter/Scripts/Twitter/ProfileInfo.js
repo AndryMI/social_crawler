@@ -41,6 +41,6 @@ return JSON.stringify({
     HeaderImg: header?.src,
     PhotoImg: photo?.src,
 
-    Following: following?.querySelector('span')?.innerText,
-    Followers: followers?.querySelector('span')?.innerText,
+    RawFollowing: following?.querySelector('span')?.innerText,
+    RawFollowers: followers?.querySelector('span')?.innerText,
 })
