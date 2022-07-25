@@ -1,6 +1,5 @@
-﻿using Core.Data;
-using Core.Utils;
-using OpenQA.Selenium.Chrome;
+﻿using Core.Crawling;
+using Core.Data;
 using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -19,8 +18,8 @@ namespace Twitter.Data
         public string Url;
         public string JoinDate;
 
-        public string HeaderImg;
-        public string PhotoImg;
+        public ImageUrl HeaderImg;
+        public ImageUrl PhotoImg;
 
         public string RawFollowing;
         public string RawFollowers;
@@ -30,9 +29,9 @@ namespace Twitter.Data
 
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 
-        public static ProfileInfo Collect(ChromeDriver driver)
+        public static ProfileInfo Collect(Browser browser)
         {
-            return driver.RunCollector<ProfileInfo>("Scripts/Twitter/ProfileInfo.js");
+            return browser.RunCollector<ProfileInfo>("Scripts/Twitter/ProfileInfo.js");
         }
 
         public static int ParseFollow(string line)

@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MimeTypes, Version=2.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MediaTypeMap.Core.2.3.3\lib\net45\MimeTypes.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -53,9 +56,11 @@
     <Compile Include="Config.cs" />
     <Compile Include="Crawling\Accounts.cs" />
     <Compile Include="Crawling\Browser.cs" />
+    <Compile Include="Crawling\BrowserNetwork.cs" />
     <Compile Include="Crawling\CrawlerThread.cs" />
     <Compile Include="Crawling\TaskFactory.cs" />
     <Compile Include="Data\ICommentInfo.cs" />
+    <Compile Include="Data\ImageUrl.cs" />
     <Compile Include="Data\IPostInfo.cs" />
     <Compile Include="Data\IProfileInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,6 +78,7 @@
     <Compile Include="Utils\ApiClient.cs" />
     <Compile Include="Utils\CrawlingException.cs" />
     <Compile Include="Utils\DriverExtensions.cs" />
+    <Compile Include="Crawling\ImageUrlCollector.cs" />
     <Compile Include="Utils\ScriptExtensions.cs" />
     <Compile Include="Utils\Threaded.cs" />
     <Compile Include="Utils\UniqueFilter.cs" />

@@ -46,9 +46,7 @@ namespace Core.Storages
             {
                 if (e.Response is HttpWebResponse response && response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    var json = base.Request("POST", "/auth/login", new { email = Config.Instance.ApiMail, password = Config.Instance.ApiPass });
-                    var auth = JsonConvert.DeserializeObject<Auth>(json);
-                    AuthHeader = $"{auth.token_type} {auth.access_token}";
+                    Login();
                     return base.Request(method, path, data);
                 }
                 Debug.WriteLine(ReadAllText(e.Response));

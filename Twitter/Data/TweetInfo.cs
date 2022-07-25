@@ -1,7 +1,6 @@
-﻿using Core.Data;
-using Core.Utils;
+﻿using Core.Crawling;
+using Core.Data;
 using Newtonsoft.Json;
-using OpenQA.Selenium.Chrome;
 using System;
 using System.Text.RegularExpressions;
 
@@ -32,9 +31,9 @@ namespace Twitter.Data
 
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 
-        public static TweetInfo[] Collect(ChromeDriver driver)
+        public static TweetInfo[] Collect(Browser browser)
         {
-            return driver.RunCollector<TweetInfo[]>("Scripts/Twitter/TweetInfo.js");
+            return browser.RunCollector<TweetInfo[]>("Scripts/Twitter/TweetInfo.js");
         }
 
         private static string ExtractProfileLink(string link)

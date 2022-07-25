@@ -1,10 +1,11 @@
-﻿
+﻿using Core.Data;
+
 namespace Twitter.Data
 {
     public class TweetAttachInfo
     {
         public string[] Videos;
-        public string[] Images;
+        public ImageUrl[] Images;
         public string Text;
     }
 }

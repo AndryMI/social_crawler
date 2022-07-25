@@ -35,7 +35,7 @@ namespace Twitter.Crawling
 
                 if (task.CrawlProfile)
                 {
-                    var profile = ProfileInfo.Collect(driver);
+                    var profile = ProfileInfo.Collect(browser);
                     if (profile != null)
                     {
                         storage.StoreProfile(task, profile);
@@ -44,7 +44,7 @@ namespace Twitter.Crawling
 
                 while (task.CrawlTweets)
                 {
-                    var tweets = tweet.Filter(TweetInfo.Collect(driver));
+                    var tweets = tweet.Filter(TweetInfo.Collect(browser));
                     if (tweets != null && tweets.Length == 0)
                     {
                         return;
@@ -59,7 +59,7 @@ namespace Twitter.Crawling
 
                 while (task.CrawlFollowers)
                 {
-                    var followers = follower.Filter(FollowersInfo.Collect(driver));
+                    var followers = follower.Filter(FollowersInfo.Collect(browser));
                     if (followers != null && followers.Length == 0)
                     {
                         return;

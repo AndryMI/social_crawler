@@ -1,5 +1,5 @@
-﻿using Core.Utils;
-using OpenQA.Selenium.Chrome;
+﻿using Core.Crawling;
+using Core.Data;
 using System;
 
 namespace Twitter.Data
@@ -10,13 +10,13 @@ namespace Twitter.Data
 
         public string Name;
         public string Description;
-        public string PhotoImg;
+        public ImageUrl PhotoImg;
 
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 
-        public static FollowersInfo[] Collect(ChromeDriver driver)
+        public static FollowersInfo[] Collect(Browser browser)
         {
-            return driver.RunCollector<FollowersInfo[]>("Scripts/Twitter/FollowersInfo.js");
+            return browser.RunCollector<FollowersInfo[]>("Scripts/Twitter/FollowersInfo.js");
         }
     }
 }
