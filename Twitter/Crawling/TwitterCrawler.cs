@@ -47,7 +47,7 @@ namespace Twitter.Crawling
                     var tweets = tweet.Filter(TweetInfo.Collect(browser));
                     if (tweets != null && tweets.Length == 0)
                     {
-                        return;
+                        break;
                     }
                     if (tweets != null && tweets.Length > 0)
                     {
@@ -62,7 +62,7 @@ namespace Twitter.Crawling
                     var followers = follower.Filter(FollowersInfo.Collect(browser));
                     if (followers != null && followers.Length == 0)
                     {
-                        return;
+                        break;
                     }
                     if (followers != null && followers.Length > 0)
                     {

@@ -1,5 +1,6 @@
 ﻿using Core.Crawling;
 using Core.Storages;
+using System;
 
 namespace Twitter.Crawling
 {
@@ -7,13 +8,20 @@ namespace Twitter.Crawling
     {
         public TwitterTask(string url, string priority) : base(url, priority)
         {
-            if (url.Contains("/followers") || url.Contains("/following"))
+            var uri = new Uri(url);
+            if (uri.LocalPath.EndsWith("/followers") || uri.LocalPath.EndsWith("/following"))
             {
                 NeedAuthorization = true;
                 CrawlFollowers = true;
                 return;
             }
-            if (!url.Contains("/status/"))
+            if (uri.LocalPath.StartsWith("/search"))
+            {
+                CrawlTweets = true;
+                CrawlFollowers = true;
+                return;
+            }
+            if (!uri.LocalPath.Contains("/status/"))
             {
                 CrawlProfile = true;
             }
