@@ -23,20 +23,20 @@ namespace Twitter.Crawling
 
         public void StoreTweets(TwitterTask task, TweetInfo[] tweets)
         {
-            if (!task.Url.Contains("/status/"))
+            if (task.Parent != null)
             {
                 foreach (var tweet in tweets)
                 {
-                    storage.StorePost(task, tweet);
-                    tasks.Add(new TwitterTask(tweet.Link, tweet.Time) { ProfileLink = task.Url });
+                    tweet.ProfileLink = task.ProfileLink;
+                    storage.StoreComment(task, tweet);
                 }
             }
             else
             {
                 foreach (var tweet in tweets)
                 {
-                    tweet.ProfileLink = task.ProfileLink;
-                    storage.StoreComment(task, tweet);
+                    storage.StorePost(task, tweet);
+                    tasks.Add(new TwitterTask(tweet.Link, tweet.Time, task));
                 }
             }
         }

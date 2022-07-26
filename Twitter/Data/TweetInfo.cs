@@ -2,7 +2,6 @@
 using Core.Data;
 using Newtonsoft.Json;
 using System;
-using System.Text.RegularExpressions;
 
 namespace Twitter.Data
 {
@@ -11,7 +10,7 @@ namespace Twitter.Data
         public string Social => "twitter";
 
         public string ProfileLink {
-            get => profileLink ?? ExtractProfileLink(PostLink ?? Link);
+            get => profileLink ?? TwitterUtils.ExtractProfileLink(PostLink ?? Link);
             set => profileLink = value;
         }
         private string profileLink;
@@ -34,11 +33,6 @@ namespace Twitter.Data
         public static TweetInfo[] Collect(Browser browser)
         {
             return browser.RunCollector<TweetInfo[]>("Scripts/Twitter/TweetInfo.js");
-        }
-
-        private static string ExtractProfileLink(string link)
-        {
-            return Regex.Replace(link, "/status/.*", "");
         }
     }
 }

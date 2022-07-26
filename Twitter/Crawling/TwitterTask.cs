@@ -6,6 +6,11 @@ namespace Twitter.Crawling
 {
     public class TwitterTask : CrawlerTask
     {
+        public TwitterTask(string url, string priority, TwitterTask parent) : this(url, priority)
+        {
+            Parent = parent;
+        }
+
         public TwitterTask(string url, string priority) : base(url, priority)
         {
             var uri = new Uri(url);
@@ -28,12 +33,14 @@ namespace Twitter.Crawling
             CrawlTweets = true;
         }
 
-        public string ProfileLink;
+        public readonly TwitterTask Parent;
 
         public readonly bool NeedAuthorization;
         public readonly bool CrawlProfile;
         public readonly bool CrawlTweets;
         public readonly bool CrawlFollowers;
+
+        public string ProfileLink => Parent != null && !new Uri(Parent.Url).LocalPath.StartsWith("/search") ? TwitterUtils.ExtractProfileLink(Parent.Url) : null;
 
         public override void Run(Browser browser, IStorage storage, TaskManager tasks)
         {

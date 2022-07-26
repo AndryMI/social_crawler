@@ -29,12 +29,13 @@ document.querySelectorAll('[data-testid=tweet]').forEach(function (tweet) {
 
     const attach = tweet.querySelector('[aria-labelledby]')
 
-    const profile = document.location.href.indexOf('/status/') < 0 ? document.location.href : null;
-    const post = document.location.href.indexOf('/status/') < 0 ? null : document.location.href;
+    // const isPost = document.location.href.indexOf('/status/') >= 0
+    const isPost = !!document.querySelector('meta[property="og:type"][content=article]')
+    const isProfile = !!document.querySelector('meta[property="og:type"][content=profile]')
 
     tweets.push({
-        ProfileLink: profile,
-        PostLink: post,
+        ProfileLink: isProfile ? document.location.href : null,
+        PostLink: isPost ? document.location.href : null,
         Link: time.closest('a').href,
         Time: time.dateTime,
         Text: text?.innerText?.trim(),
