@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace Twitter.Crawling
 {
@@ -11,6 +12,11 @@ namespace Twitter.Crawling
         public override string ToUid(string url)
         {
             var uri = new Uri(url);
+            if (uri.LocalPath.StartsWith("/search"))
+            {
+                var query = HttpUtility.ParseQueryString(uri.Query)["q"];
+                return uri.Host + "?" + query;
+            }
             return uri.Host + Regex.Match(uri.LocalPath, "/[^/]*");
         }
 
