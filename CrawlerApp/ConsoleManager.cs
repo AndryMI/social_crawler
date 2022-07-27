@@ -1,5 +1,6 @@
 ﻿using Core.Crawling;
 using Instagram.Crawling;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using Twitter.Crawling;
@@ -24,7 +25,7 @@ namespace CrawlerApp
 
                 if (command.ToLower() == "stats")
                 {
-                    //TODO write tasks execution stats
+                    Console.WriteLine(JsonConvert.SerializeObject(tasks.Progress, Formatting.Indented));
                 }
 
                 if (command.StartsWith("https://"))
@@ -43,7 +44,7 @@ namespace CrawlerApp
 
         private class Command : ICommand
         {
-            private readonly string url;
+            public readonly string url;
 
             public Command(string url)
             {

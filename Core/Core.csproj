@@ -58,6 +58,7 @@
     <Compile Include="Crawling\Browser.cs" />
     <Compile Include="Crawling\BrowserNetwork.cs" />
     <Compile Include="Crawling\CrawlerThread.cs" />
+    <Compile Include="Crawling\TaskProgress.cs" />
     <Compile Include="Data\ICommentInfo.cs" />
     <Compile Include="Data\ImageUrl.cs" />
     <Compile Include="Data\IPostInfo.cs" />

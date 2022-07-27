@@ -8,7 +8,12 @@ namespace Core.Crawling
     {
         private readonly object locker = new object();
         private readonly List<CrawlerTask> tasks = new List<CrawlerTask>();
-        private readonly HashSet<CrawlerTask> active = new HashSet<CrawlerTask>();
+        private readonly TaskProgress progress = new TaskProgress();
+
+        public List<TaskProgress.Item> Progress
+        {
+            get { lock (locker) { return progress.Items; } }
+        }
 
         public void Add(ICommand command)
         {
@@ -17,6 +22,7 @@ namespace Core.Crawling
                 foreach (var task in command.CreateTasks())
                 {
                     tasks.Add(task);
+                    progress.Add(task);
                 }
             }
         }
@@ -26,6 +32,7 @@ namespace Core.Crawling
             lock (locker)
             {
                 tasks.Add(task);
+                progress.Add(task);
             }
         }
 
@@ -37,7 +44,7 @@ namespace Core.Crawling
                 if (task != null)
                 {
                     tasks.Remove(task);
-                    active.Add(task);
+                    progress.Activate(task);
                     return true;
                 }
                 return false;
@@ -50,6 +57,7 @@ namespace Core.Crawling
             {
                 task.RunAt = DateTimeOffset.UtcNow.AddSeconds(Config.Instance.RetryTimeout);
                 tasks.Add(task);
+                progress.Add(task);
             }
         }
 
@@ -57,7 +65,7 @@ namespace Core.Crawling
         {
             lock (locker)
             {
-                active.Remove(task);
+                progress.Complete(task);
             }
         }
     }
