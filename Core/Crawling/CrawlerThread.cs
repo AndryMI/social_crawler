@@ -24,11 +24,13 @@ namespace Core.Crawling
                     try
                     {
                         task.Run(browser, storage, tasks);
+                        tasks.Complete(task);
                     }
                     catch (CrawlingException ex)
                     {
                         storage.StoreException(ex);
                         browser.Close();
+                        tasks.Complete(task);
                         tasks.Retry(ex.Task);
                     }
                 }

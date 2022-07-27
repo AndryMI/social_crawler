@@ -1,6 +1,5 @@
-﻿using Core.Data;
-using Core.Utils;
-using OpenQA.Selenium.Chrome;
+﻿using Core.Crawling;
+using Core.Data;
 using System;
 
 namespace Instagram.Data
@@ -22,9 +21,9 @@ namespace Instagram.Data
 
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 
-        public static ProfileInfo Collect(ChromeDriver driver)
+        public static ProfileInfo Collect(Browser browser)
         {
-            return driver.RunCollector<ProfileInfo>("Scripts/Instagram/ProfileInfo.js");
+            return browser.RunCollector<ProfileInfo>("Scripts/Instagram/ProfileInfo.js");
         }
     }
 }

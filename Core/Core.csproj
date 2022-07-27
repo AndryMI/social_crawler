@@ -58,14 +58,13 @@
     <Compile Include="Crawling\Browser.cs" />
     <Compile Include="Crawling\BrowserNetwork.cs" />
     <Compile Include="Crawling\CrawlerThread.cs" />
-    <Compile Include="Crawling\TaskFactory.cs" />
     <Compile Include="Data\ICommentInfo.cs" />
     <Compile Include="Data\ImageUrl.cs" />
     <Compile Include="Data\IPostInfo.cs" />
     <Compile Include="Data\IProfileInfo.cs" />
+    <Compile Include="Crawling\ICommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Crawling\CrawlerTask.cs" />
-    <Compile Include="Managers\ConsoleManager.cs" />
     <Compile Include="Crawling\TaskManager.cs" />
     <Content Include="Scripts\DeleteAllCookies.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -79,7 +78,6 @@
     <Compile Include="Utils\CrawlingException.cs" />
     <Compile Include="Utils\DriverExtensions.cs" />
     <Compile Include="Crawling\ImageUrlCollector.cs" />
-    <Compile Include="Utils\ScriptExtensions.cs" />
     <Compile Include="Utils\Threaded.cs" />
     <Compile Include="Utils\UniqueFilter.cs" />
   </ItemGroup>

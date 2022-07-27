@@ -1,6 +1,5 @@
-﻿using Core.Data;
-using Core.Utils;
-using OpenQA.Selenium.Chrome;
+﻿using Core.Crawling;
+using Core.Data;
 using System;
 using VK.Crawling;
 
@@ -26,9 +25,9 @@ namespace VK.Data
 
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 
-        public static CommentInfo[] Collect(ChromeDriver driver)
+        public static CommentInfo[] Collect(Browser browser)
         {
-            return driver.RunCollector<CommentInfo[]>("Scripts/VK/CommentInfo.js");
+            return browser.RunCollector<CommentInfo[]>("Scripts/VK/CommentInfo.js");
         }
     }
 }

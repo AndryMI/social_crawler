@@ -29,7 +29,7 @@ namespace VK.Crawling
 
             foreach (var post in posts)
             {
-                tasks.AddUrl(post.Link, post.Time);
+                tasks.Add(new VkTask(post.Link, post.Time, task));
             }
         }
 

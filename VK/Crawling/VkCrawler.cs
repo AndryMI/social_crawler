@@ -41,7 +41,7 @@ namespace VK.Crawling
 
                 if (task.CrawlProfile)
                 {
-                    var profile = ProfileInfo.Collect(driver);
+                    var profile = ProfileInfo.Collect(browser);
                     if (profile != null)
                     {
                         storage.StoreProfile(task, profile);
@@ -50,7 +50,7 @@ namespace VK.Crawling
 
                 while (task.CrawlPosts)
                 {
-                    var posts = post.Filter(PostInfo.Collect(driver));
+                    var posts = post.Filter(PostInfo.Collect(browser));
                     if (posts != null && posts.Length == 0)
                     {
                         return;
@@ -65,7 +65,7 @@ namespace VK.Crawling
 
                 while (task.CrawlComments)
                 {
-                    var comments = comment.Filter(CommentInfo.Collect(driver));
+                    var comments = comment.Filter(CommentInfo.Collect(browser));
                     if (comments != null && comments.Length == 0)
                     {
                         return;

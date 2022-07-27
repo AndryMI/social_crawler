@@ -34,7 +34,7 @@ namespace Instagram.Crawling
 
                 if (task.CrawlProfile)
                 {
-                    var profile = ProfileInfo.Collect(driver);
+                    var profile = ProfileInfo.Collect(browser);
                     if (profile != null)
                     {
                         storage.StoreProfile(task, profile);
@@ -49,7 +49,7 @@ namespace Instagram.Crawling
                     {
                         driver.WaitForStoryLoading();
 
-                        var story = StoryInfo.Collect(driver);
+                        var story = StoryInfo.Collect(browser);
                         if (story != null)
                         {
                             storage.StoreStory(task, story);
@@ -85,7 +85,7 @@ namespace Instagram.Crawling
                     }
                     postUrl = driver.Url;
 
-                    var post = PostInfo.Collect(driver);
+                    var post = PostInfo.Collect(browser);
                     if (post != null)
                     {
                         storage.StorePost(task, post);
@@ -95,7 +95,7 @@ namespace Instagram.Crawling
                     {
                         driver.WaitForCommentsLoading();
 
-                        var comments = comment.Filter(CommentInfo.Collect(driver));
+                        var comments = comment.Filter(CommentInfo.Collect(browser));
                         if (comments != null && comments.Length == 0)
                         {
                             break;

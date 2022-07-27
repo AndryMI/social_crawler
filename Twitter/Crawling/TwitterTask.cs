@@ -6,12 +6,12 @@ namespace Twitter.Crawling
 {
     public class TwitterTask : CrawlerTask
     {
-        public TwitterTask(string url, string priority, TwitterTask parent) : this(url, priority)
+        public TwitterTask(string url, string priority, TwitterTask parent) : this(url, priority, parent.Command)
         {
             Parent = parent;
         }
 
-        public TwitterTask(string url, string priority) : base(url, priority)
+        public TwitterTask(string url, string priority, ICommand command) : base(url, priority, command)
         {
             var uri = new Uri(url);
             if (uri.LocalPath.EndsWith("/followers") || uri.LocalPath.EndsWith("/following"))

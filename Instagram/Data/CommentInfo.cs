@@ -1,6 +1,5 @@
-﻿using Core.Data;
-using Core.Utils;
-using OpenQA.Selenium.Chrome;
+﻿using Core.Crawling;
+using Core.Data;
 using System;
 
 namespace Instagram.Data
@@ -19,9 +18,9 @@ namespace Instagram.Data
 
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 
-        public static CommentInfo[] Collect(ChromeDriver driver)
+        public static CommentInfo[] Collect(Browser browser)
         {
-            return driver.RunCollector<CommentInfo[]>("Scripts/Instagram/CommentInfo.js");
+            return browser.RunCollector<CommentInfo[]>("Scripts/Instagram/CommentInfo.js");
         }
     }
 }

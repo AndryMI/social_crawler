@@ -6,7 +6,12 @@ namespace VK.Crawling
 {
     public class VkTask : CrawlerTask
     {
-        public VkTask(string url, string priority) : base(url, priority)
+        public VkTask(string url, string priority, VkTask parent) : this(url, priority, parent.Command)
+        {
+            Parent = parent;
+        }
+
+        public VkTask(string url, string priority, ICommand command) : base(url, priority, command)
         {
             var uri = new Uri(url);
             if (uri.LocalPath.StartsWith("/wall"))
@@ -17,6 +22,8 @@ namespace VK.Crawling
             CrawlProfile = true;
             CrawlPosts = true;
         }
+
+        public readonly VkTask Parent;
 
         public bool NeedAuthorization;
         public readonly bool CrawlProfile;

@@ -8,31 +8,17 @@ namespace Core.Crawling
     {
         private readonly object locker = new object();
         private readonly List<CrawlerTask> tasks = new List<CrawlerTask>();
-        private readonly TaskFactory factory;
+        private readonly HashSet<CrawlerTask> active = new HashSet<CrawlerTask>();
 
-        public TaskManager(TaskFactory factory)
+        public void Add(ICommand command)
         {
-            this.factory = factory;
-        }
-
-        public int Count
-        {
-            get
+            lock (locker)
             {
-                lock (locker)
+                foreach (var task in command.CreateTasks())
                 {
-                    return tasks.Count;
+                    tasks.Add(task);
                 }
             }
-        }
-
-        public void AddUrl(string url, string priority = null)
-        {
-            if (priority == null)
-            {
-                priority = DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.000Z");
-            }
-            Add(factory.CreateTask(url, priority));
         }
 
         public void Add(CrawlerTask task)
@@ -51,6 +37,7 @@ namespace Core.Crawling
                 if (task != null)
                 {
                     tasks.Remove(task);
+                    active.Add(task);
                     return true;
                 }
                 return false;
@@ -63,6 +50,14 @@ namespace Core.Crawling
             {
                 task.RunAt = DateTimeOffset.UtcNow.AddSeconds(Config.Instance.RetryTimeout);
                 tasks.Add(task);
+            }
+        }
+
+        public void Complete(CrawlerTask task)
+        {
+            lock (locker)
+            {
+                active.Remove(task);
             }
         }
     }

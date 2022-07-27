@@ -1,6 +1,5 @@
-﻿using Core.Data;
-using Core.Utils;
-using OpenQA.Selenium.Chrome;
+﻿using Core.Crawling;
+using Core.Data;
 using System;
 using System.Collections.Generic;
 
@@ -30,9 +29,9 @@ namespace VK.Data
 
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 
-        public static ProfileInfo Collect(ChromeDriver driver)
+        public static ProfileInfo Collect(Browser browser)
         {
-            return driver.RunCollector<ProfileInfo>("Scripts/VK/ProfileInfo.js");
+            return browser.RunCollector<ProfileInfo>("Scripts/VK/ProfileInfo.js");
         }
     }
 }

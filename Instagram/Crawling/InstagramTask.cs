@@ -5,7 +5,7 @@ namespace Instagram.Crawling
 {
     public class InstagramTask : CrawlerTask
     {
-        public InstagramTask(string url, string priority) : base(url, priority)
+        public InstagramTask(string url, string priority, ICommand command) : base(url, priority, command)
         {
             CrawlProfile = true;
             CrawlStories = true;
