@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Crawling\DriverExtensions.cs" />
     <Compile Include="Crawling\TwitterAccount.cs" />
+    <Compile Include="Crawling\TwitterCommand.cs" />
     <Compile Include="Crawling\TwitterCrawler.cs" />
     <Compile Include="Crawling\TwitterStorage.cs" />
     <Compile Include="Crawling\TwitterUtils.cs" />

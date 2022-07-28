@@ -54,19 +54,17 @@ namespace CrawlerApp
 
             public IEnumerable<CrawlerTask> CreateTasks()
             {
-                var priority = DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.000Z");
-
                 if (Url.StartsWith("https://vk.com/"))
                 {
-                    yield return new VkTask(Url, priority, this);
+                    yield return new VkTask(Url, CrawlerTask.DefaultPriority, this);
                 }
                 if (Url.StartsWith("https://twitter.com/"))
                 {
-                    yield return new TwitterTask(Url, priority, this);
+                    yield return new TwitterTask(Url, CrawlerTask.DefaultPriority, this);
                 }
                 if (Url.StartsWith("https://www.instagram.com/"))
                 {
-                    yield return new InstagramTask(Url, priority, this);
+                    yield return new InstagramTask(Url, CrawlerTask.DefaultPriority, this);
                 }
             }
         }

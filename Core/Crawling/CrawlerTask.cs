@@ -19,5 +19,7 @@ namespace Core.Crawling
             Priority = priority;
             Url = url;
         }
+
+        public static string DefaultPriority => DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.000Z");
     }
 }
