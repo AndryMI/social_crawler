@@ -7,7 +7,21 @@ namespace Core.Crawling
     {
         private readonly Dictionary<ICommand, Item> items = new Dictionary<ICommand, Item>();
 
-        public List<Item> Items => new List<Item>(items.Values);
+        public List<Item> Items
+        {
+            get
+            {
+                var result = new List<Item>(items.Values);
+                foreach (var item in result)
+                {
+                    if (item.CompleteTasks >= item.TotalTasks)
+                    {
+                        items.Remove(item.Command);
+                    }
+                }
+                return result;
+            }
+        }
 
         public void Add(CrawlerTask task)
         {

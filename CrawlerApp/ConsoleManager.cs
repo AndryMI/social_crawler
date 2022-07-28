@@ -44,28 +44,29 @@ namespace CrawlerApp
 
         private class Command : ICommand
         {
-            public readonly string url;
+            public string Type => "Console";
+            public readonly string Url;
 
             public Command(string url)
             {
-                this.url = url;
+                Url = url;
             }
 
             public IEnumerable<CrawlerTask> CreateTasks()
             {
                 var priority = DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.000Z");
 
-                if (url.StartsWith("https://vk.com/"))
+                if (Url.StartsWith("https://vk.com/"))
                 {
-                    yield return new VkTask(url, priority, this);
+                    yield return new VkTask(Url, priority, this);
                 }
-                if (url.StartsWith("https://twitter.com/"))
+                if (Url.StartsWith("https://twitter.com/"))
                 {
-                    yield return new TwitterTask(url, priority, this);
+                    yield return new TwitterTask(Url, priority, this);
                 }
-                if (url.StartsWith("https://www.instagram.com/"))
+                if (Url.StartsWith("https://www.instagram.com/"))
                 {
-                    yield return new InstagramTask(url, priority, this);
+                    yield return new InstagramTask(Url, priority, this);
                 }
             }
         }
