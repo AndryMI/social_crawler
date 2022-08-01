@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.DevTools.V103;
 using OpenQA.Selenium.DevTools.V103.Network;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,11 +10,13 @@ namespace Core.Crawling
 {
     public class BrowserNetwork : IDisposable
     {
+        private readonly ILogger log;
         private readonly Dictionary<string, Item> requests = new Dictionary<string, Item>();
         private readonly DevToolsSessionDomains domains;
 
         public BrowserNetwork(ChromeDriver driver)
         {
+            log = Log.Logger.ForContext<BrowserNetwork>().ForContext("SessionId", driver.SessionId);
             domains = driver.GetDevToolsSession().GetVersionSpecificDomains<DevToolsSessionDomains>();
             domains.Network.Enable(new EnableCommandSettings()).Wait();
             domains.Network.RequestWillBeSent += OnRequestWillBeSent;
@@ -61,6 +64,7 @@ namespace Core.Crawling
                 var data = domains.Network.GetResponseBody(new GetResponseBodyCommandSettings { RequestId = item.id }).Result;
                 return data.Base64Encoded ? Convert.FromBase64String(data.Body) : Encoding.UTF8.GetBytes(data.Body);
             }
+            log.Warning("Response body not found: {url}", url);
             return null;
         }
 
@@ -71,11 +75,13 @@ namespace Core.Crawling
 
         private void OnRequestWillBeSent(object sender, RequestWillBeSentEventArgs e)
         {
+            log.Verbose("Net Send {RequestId} {Type} {Url}", e.RequestId, e.Type, e.Request.Url);
             AddItem(new Item { id = e.RequestId, url = e.Request.Url, type = e.Type });
         }
 
         private void OnResponseReceived(object sender, ResponseReceivedEventArgs e)
         {
+            log.Verbose("Net Response {RequestId} {Type}", e.RequestId, e.Type);
             var item = GetItem(e.RequestId);
             if (item != null)
             {
@@ -86,6 +92,7 @@ namespace Core.Crawling
 
         private void OnLoadingFailed(object sender, LoadingFailedEventArgs e)
         {
+            log.Verbose("Net Failed {RequestId} {Error}", e.RequestId, e.ErrorText);
             var item = GetItem(e.RequestId);
             if (item != null)
             {
@@ -96,6 +103,7 @@ namespace Core.Crawling
 
         private void OnLoadingFinished(object sender, LoadingFinishedEventArgs e)
         {
+            log.Verbose("Net Complete {RequestId}", e.RequestId);
             var item = GetItem(e.RequestId);
             if (item != null)
             {

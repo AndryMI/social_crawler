@@ -1,4 +1,5 @@
 ﻿using Core.Storages;
+using Newtonsoft.Json;
 using System;
 
 namespace Core.Crawling
@@ -18,6 +19,11 @@ namespace Core.Crawling
             Command = command;
             Priority = priority;
             Url = url;
+        }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
         }
 
         public static string DefaultPriority => DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.000Z");

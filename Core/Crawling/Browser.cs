@@ -12,6 +12,7 @@ namespace Core.Crawling
         private static readonly ChromeDriverService service = InitService();
 
         private BrowserNetwork network = null;
+        private BrowserConsole console = null;
         private ChromeDriver driver = null;
         private string profile = null;
 
@@ -40,6 +41,7 @@ namespace Core.Crawling
                 }
                 this.driver = new ChromeDriver(service, options, timeout);
                 this.network = new BrowserNetwork(driver);
+                this.console = new BrowserConsole(driver);
                 this.profile = profile;
 
                 //TODO tempfix https://github.com/SeleniumHQ/selenium/issues/10799
@@ -81,6 +83,8 @@ namespace Core.Crawling
             driver = null;
             network?.Dispose();
             network = null;
+            console?.Dispose();
+            console = null;
             profile = null;
         }
 

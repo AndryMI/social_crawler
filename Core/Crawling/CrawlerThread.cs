@@ -1,4 +1,5 @@
 ﻿using Core.Storages;
+using Serilog;
 using System.Threading;
 
 namespace Core.Crawling
@@ -23,11 +24,13 @@ namespace Core.Crawling
                 {
                     try
                     {
+                        Log.Information("Begin Task: {task}", task);
                         task.Run(browser, storage, tasks);
                         tasks.Complete(task);
                     }
                     catch (CrawlingException ex)
                     {
+                        Log.Warning(ex, "Task failed");
                         storage.StoreException(ex);
                         browser.Close();
                         tasks.Complete(task);

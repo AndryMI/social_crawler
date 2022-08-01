@@ -59,6 +59,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="Crawling\Accounts.cs" />
     <Compile Include="Crawling\Browser.cs" />
+    <Compile Include="Crawling\BrowserConsole.cs" />
     <Compile Include="Crawling\BrowserNetwork.cs" />
     <Compile Include="Crawling\CrawlerThread.cs" />
     <Compile Include="Crawling\TaskProgress.cs" />
