@@ -15,7 +15,7 @@ namespace Core
 
         protected Threaded()
         {
-            thread = new Thread(Run);
+            thread = new Thread(Run) { Name = GetType().ToString() };
             thread.Start();
             threads.Add(this);
         }

@@ -1,6 +1,8 @@
 ﻿using Core;
 using Core.Crawling;
 using Core.Storages;
+using Serilog;
+using Serilog.Formatting.Compact;
 using System.Diagnostics;
 
 namespace CrawlerApp
@@ -9,6 +11,16 @@ namespace CrawlerApp
     {
         public static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .WriteTo.Console()
+                .WriteTo.Debug()
+                .WriteTo.File(new CompactJsonFormatter(), "Logs/.log", rollingInterval: RollingInterval.Day)
+                .Enrich.FromLogContext()
+                .Enrich.WithThreadId()
+                .Enrich.WithThreadName()
+                .CreateLogger();
+
             foreach (var arg in args)
             {
                 if (arg == "--kill-drivers")
@@ -31,6 +43,7 @@ namespace CrawlerApp
             ConsoleManager.Run(tasks);
 
             Threaded.StopAll();
+            Log.CloseAndFlush();
         }
     }
 }

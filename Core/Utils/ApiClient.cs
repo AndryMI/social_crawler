@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Serilog;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -7,11 +8,13 @@ namespace Core
 {
     public class ApiClient
     {
+        private readonly ILogger log;
         private readonly string host;
         public string AuthHeader { get; set; }
 
         public ApiClient(string host)
         {
+            this.log = Log.Logger.ForContext(GetType());
             this.host = host;
         }
 
@@ -51,12 +54,14 @@ namespace Core
                 using (var writer = new StreamWriter(stream))
                 {
                     var json = JsonConvert.SerializeObject(data);
+                    log.Verbose("Send {@data}", data);
                     writer.Write(json);
                 }
             }
 
             var response = request.GetResponse();
             var result = ReadAllText(response);
+            log.Verbose("Receive {json}", result);
 
             return result;
         }
