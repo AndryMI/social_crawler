@@ -12,7 +12,7 @@ namespace Core
         public string ApiPass { get; private set; } = "test";
 
         public int Threads { get; private set; } = 1;
-        public int WaitTimeout { get; private set; } = 90;
+        public int WaitTimeout { get; private set; } = 300;
         public int RetryTimeout { get; private set; } = 60;
 
         private static Config Init()

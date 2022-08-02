@@ -7,6 +7,9 @@ namespace Twitter.Crawling
 {
     public class TwitterCommand : ICommand
     {
+        [JsonProperty("_id")]
+        public string Id { get; set; }
+
         [JsonProperty("type")]
         public string Type { get; set; }
 

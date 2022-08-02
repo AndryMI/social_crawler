@@ -44,11 +44,13 @@ namespace CrawlerApp
 
         private class Command : ICommand
         {
+            public string Id { get; private set; }
             public string Type => "Console";
             public readonly string Url;
 
             public Command(string url)
             {
+                Id = Guid.NewGuid().ToString();
                 Url = url;
             }
 

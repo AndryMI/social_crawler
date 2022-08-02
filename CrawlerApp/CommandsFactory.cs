@@ -21,6 +21,9 @@ namespace CrawlerApp
         {
             var json = serializer.Deserialize<JObject>(reader);
             var type = types[json["type"].ToString()];
+
+            json["_id"] = json["_id"]["$oid"];
+
             return (ICommand)json.ToObject(type);
         }
 
