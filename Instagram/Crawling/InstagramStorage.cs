@@ -5,9 +5,9 @@ namespace Instagram.Crawling
 {
     public class InstagramStorage
     {
-        private readonly IStorage storage;
+        private readonly IDataStorage storage;
 
-        public InstagramStorage(IStorage storage)
+        public InstagramStorage(IDataStorage storage)
         {
             this.storage = storage;
         }

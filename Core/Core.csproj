@@ -74,7 +74,7 @@
     <Content Include="Scripts\DeleteAllCookies.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Compile Include="Storages\IStorage.cs" />
+    <Compile Include="Storages\IDataStorage.cs" />
     <Compile Include="Storages\DebugStorage.cs" />
     <Compile Include="Storages\NullStorage.cs" />
     <Compile Include="Storages\Remote\RemoteStorage.cs" />

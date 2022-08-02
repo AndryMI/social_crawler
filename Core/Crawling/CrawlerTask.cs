@@ -12,7 +12,7 @@ namespace Core.Crawling
 
         public DateTimeOffset RunAt = DateTimeOffset.UtcNow;
 
-        public abstract void Run(Browser browser, IStorage storage, TaskManager tasks);
+        public abstract void Run(Browser browser, IDataStorage storage, TaskManager tasks);
 
         public CrawlerTask(string url, string priority, ICommand command)
         {

@@ -7,10 +7,10 @@ namespace Twitter.Crawling
 {
     public class TwitterStorage
     {
-        private readonly IStorage storage;
+        private readonly IDataStorage storage;
         private readonly TaskManager tasks;
 
-        public TwitterStorage(IStorage storage, TaskManager tasks)
+        public TwitterStorage(IDataStorage storage, TaskManager tasks)
         {
             this.storage = storage;
             this.tasks = tasks;

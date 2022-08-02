@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace Core.Storages
 {
-    public class RemoteStorage : Threaded, IStorage
+    public class RemoteStorage : Threaded, IDataStorage
     {
         private readonly Queue<IProfileInfo> profiles = new Queue<IProfileInfo>();
         private readonly Queue<IPostInfo> posts = new Queue<IPostInfo>();

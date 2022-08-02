@@ -42,7 +42,7 @@ namespace Twitter.Crawling
 
         public string ProfileLink => Parent != null && !new Uri(Parent.Url).LocalPath.StartsWith("/search") ? TwitterUtils.ExtractProfileLink(Parent.Url) : null;
 
-        public override void Run(Browser browser, IStorage storage, TaskManager tasks)
+        public override void Run(Browser browser, IDataStorage storage, TaskManager tasks)
         {
             new TwitterCrawler(browser, new TwitterStorage(storage, tasks), this).Run();
         }

@@ -30,7 +30,7 @@ namespace VK.Crawling
         public readonly bool CrawlPosts;
         public readonly bool CrawlComments;
 
-        public override void Run(Browser browser, IStorage storage, TaskManager tasks)
+        public override void Run(Browser browser, IDataStorage storage, TaskManager tasks)
         {
             new VkCrawler(browser, new VkStorage(storage, tasks), this).Run();
         }

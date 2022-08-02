@@ -6,10 +6,10 @@ namespace VK.Crawling
 {
     public class VkStorage
     {
-        private readonly IStorage storage;
+        private readonly IDataStorage storage;
         private readonly TaskManager tasks;
 
-        public VkStorage(IStorage storage, TaskManager tasks)
+        public VkStorage(IDataStorage storage, TaskManager tasks)
         {
             this.storage = storage;
             this.tasks = tasks;

@@ -7,9 +7,9 @@ namespace Core.Crawling
     public class CrawlerThread : Threaded
     {
         private readonly TaskManager tasks;
-        private readonly IStorage storage;
+        private readonly IDataStorage storage;
 
-        public CrawlerThread(TaskManager tasks, IStorage storage)
+        public CrawlerThread(TaskManager tasks, IDataStorage storage)
         {
             this.storage = storage;
             this.tasks = tasks;

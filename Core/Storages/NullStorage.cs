@@ -3,7 +3,7 @@ using Core.Data;
 
 namespace Core.Storages
 {
-    public class NullStorage : IStorage
+    public class NullStorage : IDataStorage
     {
         public void StoreProfile(CrawlerTask task, IProfileInfo data)
         {

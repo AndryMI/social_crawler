@@ -3,7 +3,7 @@ using Core.Data;
 
 namespace Core.Storages
 {
-    public interface IStorage
+    public interface IDataStorage
     {
         void StoreProfile(CrawlerTask task, IProfileInfo data);
         void StorePost(CrawlerTask task, IPostInfo data);

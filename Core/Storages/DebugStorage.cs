@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Core.Storages
 {
-    public class DebugStorage : IStorage
+    public class DebugStorage : IDataStorage
     {
         public void StoreProfile(CrawlerTask task, IProfileInfo data)
         {
