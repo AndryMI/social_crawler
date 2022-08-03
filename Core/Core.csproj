@@ -86,6 +86,7 @@
     <Compile Include="Utils\CrawlingException.cs" />
     <Compile Include="Utils\DriverExtensions.cs" />
     <Compile Include="Crawling\ImageUrlCollector.cs" />
+    <Compile Include="Utils\LoggerConfig.cs" />
     <Compile Include="Utils\Threaded.cs" />
     <Compile Include="Utils\UniqueFilter.cs" />
   </ItemGroup>
