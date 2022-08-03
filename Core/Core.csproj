@@ -76,6 +76,8 @@
     </Content>
     <Compile Include="Storages\IDataStorage.cs" />
     <Compile Include="Storages\DebugStorage.cs" />
+    <Compile Include="Storages\IMediaStorage.cs" />
+    <Compile Include="Storages\LocalMediaStorage.cs" />
     <Compile Include="Storages\NullStorage.cs" />
     <Compile Include="Storages\Remote\RemoteStorage.cs" />
     <Compile Include="Storages\Remote\StorageApiClient.cs" />

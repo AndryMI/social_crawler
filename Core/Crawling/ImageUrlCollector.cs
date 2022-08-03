@@ -17,6 +17,11 @@ namespace Core.Crawling
             this.network = network;
         }
 
+        public List<ImageUrl>.Enumerator GetEnumerator()
+        {
+            return images.GetEnumerator();
+        }
+
         public void WaitForLoading()
         {
             var urls = images.Select(x => x.Original).ToList();

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Core.Storages;
+using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
@@ -11,10 +12,16 @@ namespace Core.Crawling
     {
         private static readonly ChromeDriverService service = InitService();
 
+        private readonly IMediaStorage media;
         private BrowserNetwork network = null;
         private BrowserConsole console = null;
         private ChromeDriver driver = null;
         private string profile = null;
+
+        public Browser(IMediaStorage media)
+        {
+            this.media = media;
+        }
 
         public ChromeDriver Driver<T>(string url) where T : Account, new()
         {
@@ -73,7 +80,14 @@ namespace Core.Crawling
             }
             var images = new ImageUrlCollector(network);
             var result = JsonConvert.DeserializeObject<T>(json, images);
-            images.WaitForLoading();
+            if (media.WaitForBrowserLoading)
+            {
+                images.WaitForLoading();
+            }
+            foreach (var image in images)
+            {
+                media.StoreImage(image);
+            }
             return result;
         }
 

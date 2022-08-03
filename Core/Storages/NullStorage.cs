@@ -3,8 +3,10 @@ using Core.Data;
 
 namespace Core.Storages
 {
-    public class NullStorage : IDataStorage
+    public class NullStorage : IDataStorage, IMediaStorage
     {
+        public bool WaitForBrowserLoading => false;
+
         public void StoreProfile(CrawlerTask task, IProfileInfo data)
         {
         }
@@ -18,6 +20,10 @@ namespace Core.Storages
         }
 
         public void StoreException(CrawlingException ex)
+        {
+        }
+
+        public void StoreImage(ImageUrl image)
         {
         }
     }

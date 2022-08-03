@@ -38,10 +38,11 @@ namespace CrawlerApp
 
             var tasks = new TaskManager();
             var storage = new DebugStorage();
+            var media = new LocalMediaStorage("Files");
 
             for (var i = 0; i < Config.Instance.Threads; i++)
             {
-                new CrawlerThread(tasks, storage);
+                new CrawlerThread(tasks, storage, media);
             }
 
             ConsoleManager.Run(tasks);
