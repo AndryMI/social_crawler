@@ -1,13 +1,21 @@
 ﻿using Newtonsoft.Json;
-using System.Diagnostics;
+using Serilog;
 using System.Net;
 
 namespace Core
 {
     public class ApiServerClient : ApiClient
     {
+        private static string SharedAuthHeader;
+
         public ApiServerClient() : base(Config.Instance.ApiUrl)
         {
+        }
+
+        public override string AuthHeader
+        {
+            get => SharedAuthHeader;
+            set => SharedAuthHeader = value;
         }
 
         public override string Request(string method, string path, object data = null)
@@ -23,7 +31,7 @@ namespace Core
                     Login();
                     return base.Request(method, path, data);
                 }
-                Debug.WriteLine(ReadAllText(e.Response));
+                Log.Error(e, "{ErrorResponse}", e.Response != null ? ReadAllText(e.Response) : null);
                 throw;
             }
         }

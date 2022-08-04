@@ -10,7 +10,8 @@ namespace Core
     {
         private readonly ILogger log;
         private readonly string host;
-        public string AuthHeader { get; set; }
+
+        public virtual string AuthHeader { get; set; }
 
         public ApiClient(string host)
         {
@@ -18,31 +19,12 @@ namespace Core
             this.host = host;
         }
 
-        public T Get<T>(string path)
-        {
-            return Request<T>("GET", path, null);
-        }
-
-        public T Put<T>(string path, object data = null)
-        {
-            return Request<T>("PUT", path, data);
-        }
-
-        public T Post<T>(string path, object data = null)
-        {
-            return Request<T>("POST", path, data);
-        }
-
-        public T Request<T>(string method, string path, object data = null)
-        {
-            return JsonConvert.DeserializeObject<T>(Request(method, path, data));
-        }
-
         public virtual string Request(string method, string path, object data = null)
         {
+            var multipart = data as MultipartData;
             var request = (HttpWebRequest)WebRequest.Create(host + path);
             request.Method = method;
-            request.ContentType = "application/json";
+            request.ContentType = multipart?.ContentType ?? "application/json";
 
             if (!string.IsNullOrEmpty(AuthHeader))
             {
@@ -53,9 +35,17 @@ namespace Core
                 using (var stream = request.GetRequestStream())
                 using (var writer = new StreamWriter(stream))
                 {
-                    var json = JsonConvert.SerializeObject(data);
-                    log.Verbose("Send {@data}", data);
-                    writer.Write(json);
+                    if (multipart == null)
+                    {
+                        var json = JsonConvert.SerializeObject(data);
+                        log.Verbose("Send {json}", json);
+                        writer.Write(json);
+                    }
+                    else
+                    {
+                        log.Verbose("Send {multipart}", multipart);
+                        multipart.Serialize(writer);
+                    }
                 }
             }
 

@@ -14,8 +14,8 @@ namespace Core
         public CrawlingException(Exception inner, CrawlerTask task, ChromeDriver driver) : base(inner.Message, inner)
         {
             Task = task;
-            Html = (string)(driver?.ExecuteScript("return document.body.outerHTML") ?? "");
-            Screenshot = driver?.GetScreenshot();
+            try { Html = (string)(driver?.ExecuteScript("return document.body.outerHTML") ?? ""); } catch { }
+            try { Screenshot = driver?.GetScreenshot(); } catch { }
         }
     }
 }
