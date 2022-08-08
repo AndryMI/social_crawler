@@ -7,6 +7,7 @@ namespace Core.Storages
         /// <summary>Wait for the browser to complete image requests</summary>
         bool WaitForBrowserLoading { get; }
 
+        /// <summary>Stores or schedules to store image and updates Stored property</summary>
         void StoreImage(ImageUrl image);
     }
 }

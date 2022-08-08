@@ -1,30 +1,38 @@
 ﻿using Core.Crawling;
 using Core.Data;
+using Core.Storages.Remote;
+using MimeTypes;
+using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace Core.Storages
 {
-    public class RemoteStorage : Threaded, IDataStorage
+    public class RemoteStorage : Threaded, IDataStorage, IMediaStorage
     {
-        private readonly Queue<IProfileInfo> profiles = new Queue<IProfileInfo>();
-        private readonly Queue<IPostInfo> posts = new Queue<IPostInfo>();
-        private readonly Queue<ICommentInfo> comments = new Queue<ICommentInfo>();
+        private readonly ConcurrentQueue<RequestChunk> chunks = new ConcurrentQueue<RequestChunk>();
+
+        public bool WaitForBrowserLoading => true;
 
         public void StoreProfile(CrawlerTask task, IProfileInfo data)
         {
-            profiles.Enqueue(task, data);
+            chunks.Enqueue(new RequestChunk(task, data));
         }
 
         public void StorePost(CrawlerTask task, IPostInfo data)
         {
-            posts.Enqueue(task, data);
+            chunks.Enqueue(new RequestChunk(task, data));
         }
 
         public void StoreComment(CrawlerTask task, ICommentInfo data)
         {
-            comments.Enqueue(task, data);
+            chunks.Enqueue(new RequestChunk(task, data));
+        }
+
+        public void StoreImage(ImageUrl image)
+        {
+            image.Stored = DateTimeOffset.UtcNow.ToString(@"\/yyyy\/MM\/dd\/") + ObjectId.New() + MimeTypeMap.GetExtension(image.MimeType);
+            chunks.Enqueue(new RequestChunk(image));
         }
 
         public void StoreException(CrawlingException ex)
@@ -37,35 +45,12 @@ namespace Core.Storages
             var client = new StorageApiClient();
             while (IsWorking)
             {
-                client.StoreProfiles(profiles.Dequeue(30));
-                if (!IsWorking) break;
-                Thread.Sleep(1000);
-
-                client.StorePosts(posts.Dequeue(30));
-                if (!IsWorking) break;
-                Thread.Sleep(1000);
-
-                client.StoreComments(comments.Dequeue(30));
-                if (!IsWorking) break;
-                Thread.Sleep(1000);
-            }
-        }
-
-        private class Queue<T> : ConcurrentQueue<StorageApiClient.Args<T>>
-        {
-            public void Enqueue(CrawlerTask task, T data)
-            {
-                Enqueue(new StorageApiClient.Args<T> { task = task, data = data });
-            }
-
-            public List<StorageApiClient.Args<T>> Dequeue(int max)
-            {
-                var list = new List<StorageApiClient.Args<T>>();
-                while (TryDequeue(out var item) && list.Count < max)
+                while (!client.IsReady && chunks.TryDequeue(out var chunk))
                 {
-                    list.Add(item);
+                    client.Add(chunk);
                 }
-                return list;
+                client.Send();
+                Thread.Sleep(1000);
             }
         }
     }

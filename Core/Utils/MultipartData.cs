@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Core
@@ -12,6 +13,9 @@ namespace Core
         private readonly List<Item> items = new List<Item>();
 
         public string ContentType => "multipart/form-data; boundary=" + boundary;
+
+        public int Size => items.Sum(x => x.Size ?? 0);
+        public int Count => items.Count;
 
         public void Add(string name, string data, string filename = null, string type = null)
         {
