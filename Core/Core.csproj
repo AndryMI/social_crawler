@@ -79,6 +79,7 @@
     <Compile Include="Storages\IMediaStorage.cs" />
     <Compile Include="Storages\LocalMediaStorage.cs" />
     <Compile Include="Storages\NullStorage.cs" />
+    <Compile Include="Storages\Remote\UniqueMediaFilter.cs" />
     <Compile Include="Storages\Remote\RemoteStorage.cs" />
     <Compile Include="Storages\Remote\RequestChunk.cs" />
     <Compile Include="Storages\Remote\StorageApiClient.cs" />

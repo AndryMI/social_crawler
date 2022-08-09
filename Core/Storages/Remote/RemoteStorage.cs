@@ -1,7 +1,7 @@
 ﻿using Core.Crawling;
 using Core.Data;
 using Core.Storages.Remote;
-using MimeTypes;
+using Serilog;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
@@ -11,6 +11,7 @@ namespace Core.Storages
     public class RemoteStorage : Threaded, IDataStorage, IMediaStorage
     {
         private readonly ConcurrentQueue<RequestChunk> chunks = new ConcurrentQueue<RequestChunk>();
+        private readonly UniqueMediaFilter unique = new UniqueMediaFilter();
 
         public bool WaitForBrowserLoading => true;
 
@@ -31,8 +32,10 @@ namespace Core.Storages
 
         public void StoreImage(ImageUrl image)
         {
-            image.Stored = DateTimeOffset.UtcNow.ToString(@"\/yyyy\/MM\/dd\/") + ObjectId.New() + MimeTypeMap.GetExtension(image.MimeType);
-            chunks.Enqueue(new RequestChunk(image));
+            if (unique.NeedStore(image))
+            {
+                chunks.Enqueue(new RequestChunk(image));
+            }
         }
 
         public void StoreException(CrawlingException ex)
@@ -45,12 +48,20 @@ namespace Core.Storages
             var client = new StorageApiClient();
             while (IsWorking)
             {
-                while (!client.IsReady && chunks.TryDequeue(out var chunk))
+                try
                 {
-                    client.Add(chunk);
+                    while (!client.IsReady && chunks.TryDequeue(out var chunk))
+                    {
+                        client.Add(chunk);
+                    }
+                    client.Send();
+                    Thread.Sleep(1000);
                 }
-                client.Send();
-                Thread.Sleep(1000);
+                catch (Exception ex)
+                {
+                    Log.Fatal(ex, "Fatal");
+                    Thread.Sleep(TimeSpan.FromSeconds(15));
+                }
             }
         }
     }
