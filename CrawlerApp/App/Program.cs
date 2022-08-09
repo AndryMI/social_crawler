@@ -2,40 +2,48 @@
 using Core.Crawling;
 using Core.Storages;
 using Serilog;
+using System;
 using System.Diagnostics;
 
 namespace CrawlerApp
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
-            LoggerConfig.Init();
-
-            foreach (var arg in args)
+            try
             {
-                if (arg == "--kill-drivers")
+                LoggerConfig.Init();
+                ProgramArgs.Handle(args);
+
+                var tasks = new TaskManager();
+                var storage = new RemoteStorage();
+                var errors = new LocalErrorStorage("Errors");
+
+                for (var i = 0; i < Config.Instance.Threads; i++)
                 {
-                    foreach (var process in Process.GetProcessesByName("chromedriver"))
-                    {
-                        process.Kill();
-                    }
+                    new CrawlerThread(tasks, storage, storage, errors);
                 }
+
+                RemoteManager.Run(tasks);
             }
-
-            var tasks = new TaskManager();
-            var storage = new RemoteStorage();
-            var errors = new LocalErrorStorage("Errors");
-
-            for (var i = 0; i < Config.Instance.Threads; i++)
+            catch (Exception ex)
             {
-                new CrawlerThread(tasks, storage, storage, errors);
+                Log.Fatal(ex, "Terminate");
             }
+            finally
+            {
+                Threaded.StopAll();
+                Log.CloseAndFlush();
+            }
+        }
 
-            RemoteManager.Run(tasks);
-
-            Threaded.StopAll();
-            Log.CloseAndFlush();
+        public static void KillDrivers()
+        {
+            foreach (var process in Process.GetProcessesByName("chromedriver"))
+            {
+                process.Kill();
+            }
         }
     }
 }

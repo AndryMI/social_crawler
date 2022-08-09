@@ -31,6 +31,7 @@ namespace Core.Crawling
                         Log.Information("Begin Task: {task}", task);
                         task.Run(browser, storage, tasks);
                         tasks.Complete(task);
+                        Log.Information("Task complete");
                     }
                     catch (CrawlingException ex)
                     {

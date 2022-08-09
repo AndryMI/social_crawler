@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Core.Crawling
@@ -14,7 +15,7 @@ namespace Core.Crawling
                 var result = new List<Item>(items.Values);
                 foreach (var item in result)
                 {
-                    if (item.CompleteTasks >= item.TotalTasks)
+                    if (item.IsOutdated)
                     {
                         items.Remove(item.Command);
                     }
@@ -59,6 +60,12 @@ namespace Core.Crawling
             public int ActiveTasks { get; private set; }
             public int CompleteTasks { get; private set; }
             public int TotalTasks { get; private set; }
+
+            [JsonIgnore]
+            public bool IsOutdated
+            {
+                get => CompleteTasks >= TotalTasks && UpdatedAt < DateTimeOffset.UtcNow.AddMinutes(-1);
+            }
 
             public Item(ICommand command)
             {

@@ -45,6 +45,7 @@ namespace Core.Storages
             {
                 try
                 {
+                    Log.Debug("Storage Size: {ChunksCount}", chunks.Count);
                     while (!client.IsReady && chunks.TryDequeue(out var chunk))
                     {
                         client.Add(chunk);

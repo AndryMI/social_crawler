@@ -12,6 +12,7 @@ namespace Core
         {
             InitDefault();
             InitCompiled();
+            Log.Information("Logger initialized");
         }
 
         private static void InitDefault()

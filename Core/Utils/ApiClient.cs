@@ -38,12 +38,12 @@ namespace Core
                     if (multipart == null)
                     {
                         var json = JsonConvert.SerializeObject(data);
-                        log.Verbose("Send {json}", json);
+                        log.Verbose("Send {method} {path} {json}", method, path, json);
                         writer.Write(json);
                     }
                     else
                     {
-                        log.Verbose("Send {multipart}", multipart);
+                        log.Verbose("Send {method} {path} {multipart}", method, path, multipart);
                         multipart.Serialize(writer);
                     }
                 }
