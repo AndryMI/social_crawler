@@ -32,6 +32,9 @@ namespace Twitter.Crawling
             {
                 var link = "https://twitter.com/search?q=" + HttpUtility.UrlEncode(string.Join(" ", Keywords));
                 yield return new TwitterTask(link, CrawlerTask.DefaultPriority, this);
+
+                link += "&f=user";
+                yield return new TwitterTask(link, CrawlerTask.DefaultPriority, this);
             }
         }
     }

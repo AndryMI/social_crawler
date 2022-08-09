@@ -6,7 +6,7 @@ namespace Core.Storages
     {
         private MultipartData data = new MultipartData();
 
-        public bool IsReady => data.Size > 5000000;
+        public bool IsReady => data.Size > Config.Instance.StorageApiSizeThreshold;
 
         public void Add(RequestChunk chunk)
         {

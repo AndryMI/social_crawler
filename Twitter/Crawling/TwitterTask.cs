@@ -22,6 +22,7 @@ namespace Twitter.Crawling
             }
             if (uri.LocalPath.StartsWith("/search"))
             {
+                IsSearch = true;
                 CrawlTweets = true;
                 CrawlFollowers = true;
                 return;
@@ -34,11 +35,12 @@ namespace Twitter.Crawling
         }
 
         public readonly TwitterTask Parent;
+        public readonly bool IsSearch;
 
-        public readonly bool NeedAuthorization;
-        public readonly bool CrawlProfile;
-        public readonly bool CrawlTweets;
-        public readonly bool CrawlFollowers;
+        public bool NeedAuthorization;
+        public bool CrawlProfile;
+        public bool CrawlTweets;
+        public bool CrawlFollowers;
 
         public string ProfileLink => Parent != null && !new Uri(Parent.Url).LocalPath.StartsWith("/search") ? TwitterUtils.ExtractProfileLink(Parent.Url) : null;
 

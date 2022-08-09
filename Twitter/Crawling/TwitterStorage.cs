@@ -37,6 +37,14 @@ namespace Twitter.Crawling
                 {
                     storage.StorePost(task, tweet);
                     tasks.Add(new TwitterTask(tweet.Link, tweet.Time, task));
+
+                    if (task.IsSearch)
+                    {
+                        tasks.Add(new TwitterTask(tweet.ProfileLink, CrawlerTask.DefaultPriority, task)
+                        {
+                            CrawlTweets = false
+                        });
+                    }
                 }
             }
         }

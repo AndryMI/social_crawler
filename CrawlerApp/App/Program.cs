@@ -24,15 +24,14 @@ namespace CrawlerApp
             }
 
             var tasks = new TaskManager();
-            var storage = new DebugStorage();
-            var media = new LocalMediaStorage("Files");
+            var storage = new RemoteStorage();
 
             for (var i = 0; i < Config.Instance.Threads; i++)
             {
-                new CrawlerThread(tasks, storage, media);
+                new CrawlerThread(tasks, storage, storage);
             }
 
-            ConsoleManager.Run(tasks);
+            RemoteManager.Run(tasks);
 
             Threaded.StopAll();
             Log.CloseAndFlush();
