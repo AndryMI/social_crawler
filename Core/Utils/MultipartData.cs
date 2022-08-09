@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,6 +32,12 @@ namespace Core
         {
             foreach (var item in items)
             {
+                if (item.data == null)
+                {
+                    Log.Warning("Item is empty: {Name} {File} {Type}", item.name, item.file, item.type);
+                    continue;
+                }
+
                 writer.Write("\r\n--");
                 writer.Write(boundary);
                 writer.Write("\r\n");
