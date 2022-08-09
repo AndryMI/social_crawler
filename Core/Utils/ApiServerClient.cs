@@ -31,7 +31,7 @@ namespace Core
                     Login();
                     return base.Request(method, path, data);
                 }
-                Log.Error(e, "{ErrorResponse}", e.Response != null ? ReadAllText(e.Response) : null);
+                Log.Warning(e, "{ErrorResponse}", e.Response != null ? ReadAllText(e.Response) : null);
                 throw;
             }
         }

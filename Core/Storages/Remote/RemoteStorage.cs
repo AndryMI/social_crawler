@@ -38,11 +38,6 @@ namespace Core.Storages
             }
         }
 
-        public void StoreException(CrawlingException ex)
-        {
-            //TODO store exceptions
-        }
-
         protected override void Run()
         {
             var client = new StorageApiClient();
@@ -55,12 +50,12 @@ namespace Core.Storages
                         client.Add(chunk);
                     }
                     client.Send();
-                    Thread.Sleep(1000);
+                    Thread.Sleep(TimeSpan.FromSeconds(Config.Instance.StorageApiSendInterval));
                 }
                 catch (Exception ex)
                 {
-                    Log.Fatal(ex, "Fatal");
-                    Thread.Sleep(TimeSpan.FromSeconds(15));
+                    Log.Fatal(ex, "Failed to store data");
+                    Thread.Sleep(TimeSpan.FromSeconds(Config.Instance.RetryTimeout));
                 }
             }
         }

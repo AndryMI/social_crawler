@@ -3,7 +3,7 @@ using Core.Data;
 
 namespace Core.Storages
 {
-    public class NullStorage : IDataStorage, IMediaStorage
+    public class NullStorage : IDataStorage, IMediaStorage, IErrorStorage
     {
         public bool WaitForBrowserLoading => false;
 

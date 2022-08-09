@@ -53,10 +53,5 @@ namespace Twitter.Crawling
         {
             //TODO store data
         }
-
-        public void StoreException(CrawlingException exception)
-        {
-            storage.StoreException(exception);
-        }
     }
 }

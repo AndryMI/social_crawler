@@ -25,10 +25,11 @@ namespace CrawlerApp
 
             var tasks = new TaskManager();
             var storage = new RemoteStorage();
+            var errors = new LocalErrorStorage("Errors");
 
             for (var i = 0; i < Config.Instance.Threads; i++)
             {
-                new CrawlerThread(tasks, storage, storage);
+                new CrawlerThread(tasks, storage, storage, errors);
             }
 
             RemoteManager.Run(tasks);

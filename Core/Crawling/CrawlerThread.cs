@@ -9,12 +9,14 @@ namespace Core.Crawling
         private readonly TaskManager tasks;
         private readonly IDataStorage storage;
         private readonly IMediaStorage media;
+        private readonly IErrorStorage errors;
 
-        public CrawlerThread(TaskManager tasks, IDataStorage storage, IMediaStorage media)
+        public CrawlerThread(TaskManager tasks, IDataStorage storage, IMediaStorage media, IErrorStorage errors)
         {
             this.storage = storage;
             this.tasks = tasks;
             this.media = media;
+            this.errors = errors;
         }
 
         protected override void Run()
@@ -33,7 +35,7 @@ namespace Core.Crawling
                     catch (CrawlingException ex)
                     {
                         Log.Warning(ex, "Task failed");
-                        storage.StoreException(ex);
+                        errors.StoreException(ex);
                         browser.Close();
                         tasks.Complete(task);
                         tasks.Retry(ex.Task);

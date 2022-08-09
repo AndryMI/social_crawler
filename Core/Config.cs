@@ -28,6 +28,9 @@ namespace Core
         [JsonProperty]
         public int StorageApiSizeThreshold { get; private set; } = 1000000;
 
+        [JsonProperty]
+        public int StorageApiSendInterval { get; private set; } = 1;
+
         private static Config Init()
         {
             if (File.Exists("Configs/config.json"))

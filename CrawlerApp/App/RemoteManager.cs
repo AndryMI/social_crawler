@@ -1,6 +1,7 @@
 ﻿using Core;
 using Core.Crawling;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -31,12 +32,17 @@ namespace CrawlerApp
             var client = new RemoteManager();
             while (true)
             {
-                //TODO exception handling
-
-                var commands = client.Sync(tasks.Progress);
-                foreach (var command in commands)
+                try
                 {
-                    tasks.Add(command);
+                    var commands = client.Sync(tasks.Progress);
+                    foreach (var command in commands)
+                    {
+                        tasks.Add(command);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Fatal(ex, "Failed to sync commands");
                 }
                 Thread.Sleep(TimeSpan.FromMinutes(1));
             }
