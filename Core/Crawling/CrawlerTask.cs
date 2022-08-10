@@ -10,6 +10,8 @@ namespace Core.Crawling
         public readonly string Priority;
         public readonly string Url;
 
+        public string Type => GetType().Name;
+
         public DateTimeOffset RunAt = DateTimeOffset.UtcNow;
 
         public abstract void Run(Browser browser, IDataStorage storage, TaskManager tasks);

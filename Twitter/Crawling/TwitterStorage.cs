@@ -22,29 +22,35 @@ namespace Twitter.Crawling
 
         public void StoreTweets(TwitterTask task, TweetInfo[] tweets)
         {
-            if (task.Parent != null)
+            if (task is PostCommentsTask)
             {
                 foreach (var tweet in tweets)
                 {
                     tweet.ProfileLink = task.ProfileLink;
                     storage.StoreComment(task, tweet);
                 }
+                return;
             }
-            else
+            if (task is PostProfileTask)
             {
                 foreach (var tweet in tweets)
                 {
                     storage.StorePost(task, tweet);
-                    tasks.Add(new TwitterTask(tweet.Link, tweet.Time, task));
-
-                    if (task.IsSearch)
-                    {
-                        tasks.Add(new TwitterTask(tweet.ProfileLink, tweet.Time, task)
-                        {
-                            CrawlTweetsOnce = true
-                        });
-                    }
                 }
+                return;
+            }
+
+            if (task.IsSearch)
+            {
+                foreach (var tweet in tweets)
+                {
+                    tasks.Add(new PostProfileTask(tweet.ProfileLink, tweet.Time, task));
+                }
+            }
+            foreach (var tweet in tweets)
+            {
+                storage.StorePost(task, tweet);
+                tasks.Add(new PostCommentsTask(tweet.Link, tweet.Time, task));
             }
         }
 

@@ -4,6 +4,19 @@ using System;
 
 namespace Twitter.Crawling
 {
+    public class PostCommentsTask : TwitterTask
+    {
+        public PostCommentsTask(string url, string priority, TwitterTask parent) : base(url, priority, parent) { }
+    }
+
+    public class PostProfileTask : TwitterTask
+    {
+        public PostProfileTask(string url, string priority, TwitterTask parent) : base(url, priority, parent) 
+        {
+            CrawlTweetsOnce = true;
+        }
+    }
+
     public class TwitterTask : CrawlerTask
     {
         public TwitterTask(string url, string priority, TwitterTask parent) : this(url, priority, parent.Command)
@@ -37,11 +50,11 @@ namespace Twitter.Crawling
         public readonly TwitterTask Parent;
         public readonly bool IsSearch;
 
-        public bool NeedAuthorization;
-        public bool CrawlProfile;
-        public bool CrawlTweets;
-        public bool CrawlTweetsOnce;
-        public bool CrawlFollowers;
+        public bool NeedAuthorization { get; protected set; }
+        public bool CrawlProfile { get; protected set; }
+        public bool CrawlTweets { get; protected set; }
+        public bool CrawlTweetsOnce { get; protected set; }
+        public bool CrawlFollowers { get; protected set; }
 
         public string ProfileLink => Parent != null && !new Uri(Parent.Url).LocalPath.StartsWith("/search") ? TwitterUtils.ExtractProfileLink(Parent.Url) : null;
 

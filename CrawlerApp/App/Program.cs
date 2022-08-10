@@ -11,7 +11,11 @@ namespace CrawlerApp
     {
         public static void Main(string[] args)
         {
-            AppDomain.CurrentDomain.UnhandledException += (s, e) => Log.Fatal(e.ExceptionObject as Exception, "Terminate");
+            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+            {
+                Log.Fatal(e.ExceptionObject as Exception, "Terminate");
+                Log.CloseAndFlush();
+            };
             LoggerConfig.Init();
             ProgramArgs.Handle(args);
 
@@ -35,6 +39,14 @@ namespace CrawlerApp
         public static void KillDrivers()
         {
             foreach (var process in Process.GetProcessesByName("chromedriver"))
+            {
+                process.Kill();
+            }
+        }
+
+        public static void KillChrome()
+        {
+            foreach (var process in Process.GetProcessesByName("chrome"))
             {
                 process.Kill();
             }

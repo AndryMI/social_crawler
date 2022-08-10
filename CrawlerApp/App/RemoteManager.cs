@@ -34,6 +34,7 @@ namespace CrawlerApp
             {
                 try
                 {
+                    //TODO stop crawling on command disabled
                     var commands = client.Sync(tasks.Progress);
                     foreach (var command in commands)
                     {

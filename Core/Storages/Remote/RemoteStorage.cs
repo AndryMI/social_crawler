@@ -10,6 +10,7 @@ namespace Core.Storages
 {
     public class RemoteStorage : Threaded, IDataStorage, IMediaStorage
     {
+        //TODO slowdown crawling on too much count (or backup?)
         private readonly ConcurrentQueue<RequestChunk> chunks = new ConcurrentQueue<RequestChunk>();
         private readonly UniqueMediaFilter unique = new UniqueMediaFilter();
 
@@ -55,6 +56,7 @@ namespace Core.Storages
                 }
                 catch (Exception ex)
                 {
+                    //TODO local data backup (and skip?)
                     Log.Fatal(ex, "Failed to store data");
                     Thread.Sleep(TimeSpan.FromSeconds(Config.Instance.RetryTimeout));
                 }

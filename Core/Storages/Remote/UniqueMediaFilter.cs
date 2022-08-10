@@ -9,6 +9,7 @@ namespace Core.Storages.Remote
 {
     public class UniqueMediaFilter
     {
+        //TODO trim cache periodically
         private readonly Dictionary<string, string> storage = ServerConfig.Instance.MediaWarmup;
 
         public bool NeedStore(ImageUrl image)

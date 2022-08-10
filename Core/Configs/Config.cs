@@ -34,6 +34,9 @@ namespace Core
         [JsonProperty]
         public double StorageApiSendInterval { get; private set; } = 1;
 
+        [JsonProperty]
+        public bool BrowserHeadless { get; private set; } = false;
+
         private static Config Init()
         {
             if (File.Exists("Configs/config.json"))

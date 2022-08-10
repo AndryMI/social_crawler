@@ -2,6 +2,7 @@
 using Serilog;
 using Serilog.Filters;
 using Serilog.Formatting.Compact;
+using Serilog.Sinks.File.GZip;
 
 public class LogConfig
 {
@@ -9,7 +10,7 @@ public class LogConfig
     {
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Verbose()
-            .WriteTo.File(new CompactJsonFormatter(), "Logs/.log", rollingInterval: RollingInterval.Day)
+            .WriteTo.File(new CompactJsonFormatter(), "Logs/.gz", rollingInterval: RollingInterval.Day, hooks: new GZipHooks())
             .WriteTo.Logger(log => log
                 .Filter.ByExcluding(Matching.FromSource<BrowserNetwork>())
                 .WriteTo.Console()

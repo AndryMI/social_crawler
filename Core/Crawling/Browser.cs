@@ -42,6 +42,10 @@ namespace Core.Crawling
                 var timeout = TimeSpan.FromSeconds(Config.Instance.WaitTimeout);
                 var options = new ChromeOptions();
                 options.AddArgument("--lang=en");
+                if (Config.Instance.BrowserHeadless)
+                {
+                    options.AddArgument("headless");
+                }
                 if (profile != null)
                 {
                     options.AddArgument("user-data-dir=" + Path.GetFullPath("Browsers/" + profile));
