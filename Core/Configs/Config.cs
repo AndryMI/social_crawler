@@ -8,7 +8,7 @@ namespace Core
         public static readonly Config Instance = Init();
 
         [JsonProperty]
-        public string ApiUrl { get; private set; } = "https://sc-api-srv.albertroi.com/api";
+        public string ApiUrl { get; private set; } = "https://sc-api-srv.profcatalyst.com/api";
 
         [JsonProperty]
         public string ApiMail { get; private set; } = "qa@roibees.com";
@@ -29,7 +29,10 @@ namespace Core
         public int StorageApiSizeThreshold { get; private set; } = 1000000;
 
         [JsonProperty]
-        public int StorageApiSendInterval { get; private set; } = 1;
+        public int StorageApiFilesThreshold { get; private set; } = 20;
+
+        [JsonProperty]
+        public double StorageApiSendInterval { get; private set; } = 1;
 
         private static Config Init()
         {

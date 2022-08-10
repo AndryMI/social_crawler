@@ -11,31 +11,25 @@ namespace CrawlerApp
     {
         public static void Main(string[] args)
         {
-            try
-            {
-                LoggerConfig.Init();
-                ProgramArgs.Handle(args);
+            AppDomain.CurrentDomain.UnhandledException += (s, e) => Log.Fatal(e.ExceptionObject as Exception, "Terminate");
+            LoggerConfig.Init();
+            ProgramArgs.Handle(args);
 
-                var tasks = new TaskManager();
-                var storage = new RemoteStorage();
-                var errors = new LocalErrorStorage("Errors");
+            ServerConfig.Load();
 
-                for (var i = 0; i < Config.Instance.Threads; i++)
-                {
-                    new CrawlerThread(tasks, storage, storage, errors);
-                }
+            var tasks = new TaskManager();
+            var storage = new RemoteStorage();
+            var errors = new LocalErrorStorage("Errors");
 
-                RemoteManager.Run(tasks);
-            }
-            catch (Exception ex)
+            for (var i = 0; i < Config.Instance.Threads; i++)
             {
-                Log.Fatal(ex, "Terminate");
+                new CrawlerThread(tasks, storage, storage, errors);
             }
-            finally
-            {
-                Threaded.StopAll();
-                Log.CloseAndFlush();
-            }
+
+            RemoteManager.Run(tasks);
+
+            Threaded.StopAll();
+            Log.CloseAndFlush();
         }
 
         public static void KillDrivers()

@@ -16,7 +16,8 @@ namespace Core
         public string ContentType => "multipart/form-data; boundary=" + boundary;
 
         public int Size => items.Sum(x => x.Size ?? 0);
-        public int Count => items.Count;
+        public int FilesCount => items.Count(x => x.file != null);
+        public int TotalCount => items.Count;
 
         public void Add(string name, string data, string filename = null, string type = null)
         {
@@ -78,7 +79,9 @@ namespace Core
             [JsonIgnore]
             public readonly byte[] data;
             public readonly string name;
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly string file;
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly string type;
 
             public int? Size => data?.Length;

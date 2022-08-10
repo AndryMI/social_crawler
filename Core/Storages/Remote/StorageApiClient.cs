@@ -6,7 +6,7 @@ namespace Core.Storages
     {
         private MultipartData data = new MultipartData();
 
-        public bool IsReady => data.Size > Config.Instance.StorageApiSizeThreshold;
+        public bool IsReady => data.Size >= Config.Instance.StorageApiSizeThreshold || data.FilesCount >= Config.Instance.StorageApiFilesThreshold;
 
         public void Add(RequestChunk chunk)
         {
@@ -15,7 +15,7 @@ namespace Core.Storages
 
         public void Send()
         {
-            if (data.Count > 0)
+            if (data.TotalCount > 0)
             {
                 Request("POST", "/crawler/data", data);
                 data = new MultipartData();

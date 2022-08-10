@@ -56,7 +56,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config.cs" />
+    <Compile Include="Configs\Config.cs" />
+    <Compile Include="Configs\ServerConfig.cs" />
     <Compile Include="Crawling\Accounts.cs" />
     <Compile Include="Crawling\Browser.cs" />
     <Compile Include="Crawling\BrowserConsole.cs" />

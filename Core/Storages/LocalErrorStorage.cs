@@ -25,7 +25,7 @@ namespace Core.Storages
                 error.AppendLine();
             }
 
-            var path = $"{folder}/{DateTimeOffset.Now:yyyy-MM-dd_HH:mm}_{nextUid++}";
+            var path = $"{folder}/{DateTimeOffset.Now:yyyy-MM-dd_HH-mm}_{nextUid++}";
             Directory.CreateDirectory(path);
 
             File.WriteAllText(path + "/task.json", JsonConvert.SerializeObject(ex.Task, Formatting.Indented));

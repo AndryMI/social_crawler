@@ -9,7 +9,7 @@ namespace Core.Storages.Remote
 {
     public class UniqueMediaFilter
     {
-        private readonly Dictionary<string, string> storage = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> storage = ServerConfig.Instance.MediaWarmup;
 
         public bool NeedStore(ImageUrl image)
         {
