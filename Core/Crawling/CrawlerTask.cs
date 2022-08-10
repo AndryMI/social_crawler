@@ -26,6 +26,20 @@ namespace Core.Crawling
             return JsonConvert.SerializeObject(this);
         }
 
+        public override int GetHashCode()
+        {
+            return Command.GetHashCode() ^ Url.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is CrawlerTask task)
+            {
+                return task.Command == Command && task.Url == Url;
+            }
+            return false;
+        }
+
         public static string DefaultPriority => DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.000Z");
     }
 }

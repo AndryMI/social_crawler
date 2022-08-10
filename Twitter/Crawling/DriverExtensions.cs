@@ -29,5 +29,10 @@ namespace Twitter.Crawling
         {
             driver.ExecuteScript("Array.from(document.querySelectorAll('[data-testid=UserCell]')).pop()?.scrollIntoView()");
         }
+
+        public static bool IsSomethingWrong(this ChromeDriver driver)
+        {
+            return (bool)driver.ExecuteScript("return !!document.querySelector('[data-testid=\"error-detail\"]')");
+        }
     }
 }

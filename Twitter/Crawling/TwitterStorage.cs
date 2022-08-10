@@ -1,5 +1,4 @@
-﻿using Core;
-using Core.Crawling;
+﻿using Core.Crawling;
 using Core.Storages;
 using Twitter.Data;
 
@@ -40,9 +39,9 @@ namespace Twitter.Crawling
 
                     if (task.IsSearch)
                     {
-                        tasks.Add(new TwitterTask(tweet.ProfileLink, CrawlerTask.DefaultPriority, task)
+                        tasks.Add(new TwitterTask(tweet.ProfileLink, tweet.Time, task)
                         {
-                            CrawlTweets = false
+                            CrawlTweetsOnce = true
                         });
                     }
                 }

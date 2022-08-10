@@ -40,6 +40,7 @@ namespace Twitter.Crawling
         public bool NeedAuthorization;
         public bool CrawlProfile;
         public bool CrawlTweets;
+        public bool CrawlTweetsOnce;
         public bool CrawlFollowers;
 
         public string ProfileLink => Parent != null && !new Uri(Parent.Url).LocalPath.StartsWith("/search") ? TwitterUtils.ExtractProfileLink(Parent.Url) : null;

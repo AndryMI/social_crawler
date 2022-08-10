@@ -53,6 +53,10 @@ namespace Twitter.Crawling
                     {
                         storage.StoreTweets(task, tweets);
                     }
+                    if (task.CrawlTweetsOnce)
+                    {
+                        break;
+                    }
                     driver.ScrollToLastArticle();
                     driver.WaitForLoading();
                 }
@@ -70,6 +74,11 @@ namespace Twitter.Crawling
                     }
                     driver.ScrollToLastFollower();
                     driver.WaitForLoading();
+                }
+
+                if (driver.IsSomethingWrong())
+                {
+                    throw new Exception("Something wrong");
                 }
             }
             catch (Exception e)
