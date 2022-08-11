@@ -26,6 +26,9 @@ namespace Core
         public int RetryTimeout { get; private set; } = 60;
 
         [JsonProperty]
+        public int RetryAttempts { get; private set; } = 15;
+
+        [JsonProperty]
         public int StorageApiSizeThreshold { get; private set; } = 1000000;
 
         [JsonProperty]
