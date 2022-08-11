@@ -1,5 +1,6 @@
 ﻿using Core.Crawling;
 using Core.Data;
+using System;
 
 namespace Core.Storages
 {
@@ -20,6 +21,10 @@ namespace Core.Storages
         }
 
         public void StoreException(CrawlingException ex)
+        {
+        }
+
+        public void StoreMultipart(Exception ex, MultipartData data)
         {
         }
 

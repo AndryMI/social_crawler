@@ -21,5 +21,12 @@ namespace Core.Storages
                 data = new MultipartData();
             }
         }
+
+        public MultipartData Reset()
+        {
+            var result = data;
+            data = new MultipartData();
+            return result;
+        }
     }
 }

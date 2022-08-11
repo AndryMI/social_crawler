@@ -4,10 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
 namespace Core
 {
+    [Serializable]
     public class MultipartData
     {
         private readonly string boundary = "--------" + DateTimeOffset.UtcNow.Ticks.ToString("x");
@@ -74,6 +76,23 @@ namespace Core
             return JsonConvert.SerializeObject(items);
         }
 
+        public void Save(string path)
+        {
+            using (var stream = File.OpenWrite(path))
+            {
+                new BinaryFormatter().Serialize(stream, this);
+            }
+        }
+
+        public static MultipartData Load(string path)
+        {
+            using (var stream = File.OpenRead(path))
+            {
+                return (MultipartData)new BinaryFormatter().Deserialize(stream);
+            }
+        }
+
+        [Serializable]
         private struct Item
         {
             [JsonIgnore]

@@ -13,6 +13,12 @@ namespace Core.Storages
         //TODO slowdown crawling on too much count (or backup?)
         private readonly ConcurrentQueue<RequestChunk> chunks = new ConcurrentQueue<RequestChunk>();
         private readonly UniqueMediaFilter unique = new UniqueMediaFilter();
+        private readonly IErrorStorage errors;
+
+        public RemoteStorage(IErrorStorage errors)
+        {
+            this.errors = errors;
+        }
 
         public bool WaitForBrowserLoading => true;
 
@@ -59,8 +65,8 @@ namespace Core.Storages
                 }
                 catch (Exception ex)
                 {
-                    //TODO local data backup (and skip?)
                     Log.Fatal(ex, "Failed to store data");
+                    errors.StoreMultipart(ex, client.Reset());
                     Thread.Sleep(TimeSpan.FromSeconds(Config.Instance.RetryTimeout));
                 }
             }
