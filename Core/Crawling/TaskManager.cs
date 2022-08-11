@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -56,7 +57,7 @@ namespace Core.Crawling
             }
         }
 
-        public void Retry(CrawlerTask task)
+        public void Delay(CrawlerTask task)
         {
             lock (locker)
             {
@@ -66,6 +67,15 @@ namespace Core.Crawling
                     progress.Add(task);
                 }
             }
+        }
+
+        public void Retry(CrawlerTask task)
+        {
+            if (task.RunFails++ < Config.Instance.RetryAttempts)
+            {
+                Delay(task);
+            }
+            else Log.Error("Task skipped: {task}", task);
         }
 
         public void Complete(CrawlerTask task)

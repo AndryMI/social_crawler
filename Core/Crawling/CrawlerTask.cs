@@ -13,6 +13,7 @@ namespace Core.Crawling
         public string Type => GetType().Name;
 
         public DateTimeOffset RunAt = DateTimeOffset.UtcNow;
+        public uint RunFails = 0;
 
         public abstract void Run(Browser browser, IDataStorage storage, TaskManager tasks);
 
