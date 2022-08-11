@@ -70,7 +70,13 @@ namespace Core.Crawling
 
         public string GetMimeType(string url)
         {
-            return GetItem(url)?.mime;
+            var item = GetItem(url);
+            if (item != null)
+            {
+                return item.mime;
+            }
+            log.Warning("Response mime-type not found: {url}", url);
+            return null;
         }
 
         private void OnRequestWillBeSent(object sender, RequestWillBeSentEventArgs e)

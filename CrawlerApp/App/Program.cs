@@ -22,8 +22,8 @@ namespace CrawlerApp
             ServerConfig.Load();
 
             var tasks = new TaskManager();
-            var storage = new RemoteStorage();
             var errors = new LocalErrorStorage("Errors");
+            var storage = new RemoteStorage(errors);
 
             for (var i = 0; i < Config.Instance.Threads; i++)
             {
