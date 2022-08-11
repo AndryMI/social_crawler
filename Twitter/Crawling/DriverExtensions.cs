@@ -32,7 +32,7 @@ namespace Twitter.Crawling
 
         public static bool IsSomethingWrong(this ChromeDriver driver)
         {
-            return (bool)driver.ExecuteScript("return !!document.querySelector('[data-testid=\"error-detail\"]')");
+            return (bool)driver.ExecuteScript("return !document.querySelector('[data-testid=tweet]') && document.querySelector('main').innerText.length < 100");
         }
     }
 }
