@@ -3,6 +3,7 @@ using System.IO;
 
 namespace Core
 {
+    //TODO config hot reload
     public class Config
     {
         public static readonly Config Instance = Init();

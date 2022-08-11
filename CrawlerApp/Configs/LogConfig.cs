@@ -1,8 +1,8 @@
 ﻿using Core.Crawling;
+using CrawlerApp.Utils;
 using Serilog;
 using Serilog.Filters;
 using Serilog.Formatting.Compact;
-using Serilog.Sinks.File.GZip;
 
 public class LogConfig
 {
