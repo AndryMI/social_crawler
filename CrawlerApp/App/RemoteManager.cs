@@ -16,11 +16,12 @@ namespace CrawlerApp
 
         private RemoteManager()
         {
+            factory.Register<CancelCommand>("command:cancel");
             factory.Register<TwitterCommand>("twitter:by_profile_link");
             factory.Register<TwitterCommand>("twitter:by_keyword");
         }
 
-        private ICommand[] Sync(List<TaskProgress.Item> progress)
+        private ICommand[] Sync(List<TaskManager.Status> progress)
         {
             var response = Request("POST", "/crawler", new { guid, progress, types = factory.Types });
             var data = JsonConvert.DeserializeObject<SyncResponse>(response, factory);

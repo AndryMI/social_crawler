@@ -7,20 +7,14 @@ namespace Twitter.Crawling
 {
     public class TwitterCommand : ICommand
     {
-        [JsonProperty("_id")]
-        public string Id { get; set; }
+        public string Id { get; private set; }
+        public string Type { get; private set; }
 
-        [JsonProperty("type")]
-        public string Type { get; set; }
+        [JsonProperty("link", NullValueHandling = NullValueHandling.Ignore)]
+        public readonly string Link;
 
-        [JsonProperty("uid")]
-        public string Uid;
-
-        [JsonProperty("link")]
-        public string Link;
-
-        [JsonProperty("keywords")]
-        public string[] Keywords;
+        [JsonProperty("keywords", NullValueHandling = NullValueHandling.Ignore)]
+        public readonly string[] Keywords;
 
         public IEnumerable<CrawlerTask> CreateTasks()
         {

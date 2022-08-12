@@ -1,4 +1,5 @@
-﻿using Core.Crawling;
+﻿using Core;
+using Core.Crawling;
 using Instagram.Crawling;
 using Newtonsoft.Json;
 using System;
@@ -45,12 +46,12 @@ namespace CrawlerApp
         private class Command : ICommand
         {
             public string Id { get; private set; }
-            public string Type => "Console";
+            public string Type => "console";
             public readonly string Url;
 
             public Command(string url)
             {
-                Id = Guid.NewGuid().ToString();
+                Id = ObjectId.New();
                 Url = url;
             }
 
