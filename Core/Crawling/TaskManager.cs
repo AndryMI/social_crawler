@@ -41,7 +41,7 @@ namespace Core.Crawling
                         states.Remove(key);
                     }
                 }
-                else
+                else if (command != null)
                 {
                     if (!states.TryGetValue(command, out var state))
                     {

@@ -25,7 +25,7 @@ namespace Core.Crawling
         public void WaitForLoading()
         {
             var urls = images.Select(x => x.Original).ToList();
-            while (!network.IsComplete(urls))
+            for (var i = 0; !network.IsComplete(urls) && i < Config.Instance.WaitTimeout; i++)
             {
                 Thread.Sleep(1000);
             }

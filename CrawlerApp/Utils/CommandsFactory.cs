@@ -1,6 +1,7 @@
 ﻿using Core.Crawling;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Serilog;
 using System;
 using System.Collections.Generic;
 
@@ -19,13 +20,21 @@ namespace CrawlerApp
 
         public override ICommand ReadJson(JsonReader reader, Type objectType, ICommand existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            var json = serializer.Deserialize<JObject>(reader);
-            var type = types[json["type"].ToString()];
-            if (json["_id"] is JObject)
+            try
             {
-                json["_id"] = json["_id"]["$oid"];
+                var json = serializer.Deserialize<JObject>(reader);
+                var type = types[json["type"].ToString()];
+                if (json["_id"] is JObject)
+                {
+                    json["_id"] = json["_id"]["$oid"];
+                }
+                return (ICommand)json.ToObject(type);
             }
-            return (ICommand)json.ToObject(type);
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to deserialize command");
+                return null;
+            }
         }
 
         public override void WriteJson(JsonWriter writer, ICommand value, JsonSerializer serializer)
