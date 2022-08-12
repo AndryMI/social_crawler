@@ -10,8 +10,6 @@ namespace Core.Crawling
 {
     public class Browser
     {
-        private static readonly ChromeDriverService service = InitService();
-
         private readonly IMediaStorage media;
         private BrowserNetwork network = null;
         private BrowserConsole console = null;
@@ -50,6 +48,9 @@ namespace Core.Crawling
                 {
                     options.AddArgument("user-data-dir=" + Path.GetFullPath("Browsers/" + profile));
                 }
+                var service = ChromeDriverService.CreateDefaultService();
+                service.HideCommandPromptWindow = true;
+
                 this.driver = new ChromeDriver(service, options, timeout);
                 this.network = new BrowserNetwork(driver);
                 this.console = new BrowserConsole(driver);
@@ -104,13 +105,6 @@ namespace Core.Crawling
             console?.Dispose();
             console = null;
             profile = null;
-        }
-
-        private static ChromeDriverService InitService()
-        {
-            var service = ChromeDriverService.CreateDefaultService();
-            service.HideCommandPromptWindow = true;
-            return service;
         }
     }
 }
