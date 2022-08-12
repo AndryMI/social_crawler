@@ -56,7 +56,7 @@ namespace Twitter.Crawling
         public bool CrawlTweetsOnce { get; protected set; }
         public bool CrawlFollowers { get; protected set; }
 
-        public string ProfileLink => Parent != null && !new Uri(Parent.Url).LocalPath.StartsWith("/search") ? TwitterUtils.ExtractProfileLink(Parent.Url) : null;
+        public string ProfileLink => Parent != null && !Parent.IsSearch ? TwitterUtils.ExtractProfileLink(Parent.Url) : null;
 
         public override void Run(Browser browser, IDataStorage storage, TaskManager tasks)
         {

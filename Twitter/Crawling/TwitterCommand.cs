@@ -18,7 +18,7 @@ namespace Twitter.Crawling
 
         public IEnumerable<CrawlerTask> CreateTasks()
         {
-            if (Link != null)
+            if (Link != null && Link.StartsWith("https://twitter.com/"))
             {
                 yield return new TwitterTask(Link, CrawlerTask.DefaultPriority, this);
             }
