@@ -85,6 +85,7 @@
     <Compile Include="Storages\Local\NullStorage.cs" />
     <Compile Include="Storages\UniqueMediaFilter.cs" />
     <Compile Include="Storages\Remote\RemoteStorageThread.cs" />
+    <Compile Include="Utils\AccountException.cs" />
     <Compile Include="Utils\ApiClient.cs" />
     <Compile Include="Utils\ApiServerClient.cs" />
     <Compile Include="Utils\CrawlingException.cs" />

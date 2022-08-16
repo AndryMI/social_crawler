@@ -1,5 +1,6 @@
 ﻿using Core.Crawling;
 using Core.Storages;
+using System;
 
 namespace Instagram.Crawling
 {
@@ -7,6 +8,18 @@ namespace Instagram.Crawling
     {
         public InstagramTask(string url, string priority, ICommand command) : base(url, priority, command)
         {
+            var uri = new Uri(url);
+            if (uri.LocalPath.StartsWith("/explore/"))
+            {
+                CrawlPosts = true;
+                CrawlComments = true;
+                return;
+            }
+            if (uri.LocalPath.StartsWith("/p/"))
+            {
+                //TODO not implemented (crawl post comments)
+                return;
+            }
             CrawlProfile = true;
             CrawlStories = true;
             CrawlPosts = true;

@@ -7,10 +7,11 @@ namespace Instagram.Data
     public class StoryInfo : IPostInfo
     {
         public string Social => "instagram";
+        public string Type => "story";
         public string ProfileLink { get; set; }
         public string Link { get; set; }
 
-        public string ImageUrl;
+        public ImageUrl ImageUrl;
         public string VideoUrl;
 
         public string Time { get; set; }

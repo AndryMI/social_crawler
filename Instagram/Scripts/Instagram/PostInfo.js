@@ -14,7 +14,7 @@ return JSON.stringify({
     ImageUrl: (video?.poster ?? image?.src),
     VideoUrl: video?.src,
 
-    Like: likes?.innerText,
+    RawLike: likes?.innerText,
 
     Time: time?.dateTime,
 });

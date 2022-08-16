@@ -66,13 +66,13 @@ namespace Instagram.Crawling
                     if (post == null)
                     {
                         //TODO posts not found
-                        return;
+                        throw new Exception("Something wrong");
                     }
                     var href = post.GetDomAttribute("href");
                     if (href == null || !href.StartsWith("/p/"))
                     {
                         //TODO posts not found
-                        return;
+                        throw new Exception("Something wrong");
                     }
                     post.Click();
                     driver.WaitForDialogLoading();

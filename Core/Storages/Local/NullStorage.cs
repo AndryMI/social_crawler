@@ -6,7 +6,12 @@ namespace Core.Storages
 {
     public class NullStorage : IDataStorage, IMediaStorage, IErrorStorage
     {
-        public bool WaitForBrowserLoading => false;
+        public bool WaitForBrowserLoading { get; private set; }
+
+        public NullStorage(bool wait = false)
+        {
+            WaitForBrowserLoading = wait;
+        }
 
         public void StoreProfile(CrawlerTask task, IProfileInfo data)
         {

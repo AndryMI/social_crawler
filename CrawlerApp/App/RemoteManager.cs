@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Crawling;
+using Instagram.Crawling;
 using Newtonsoft.Json;
 using Serilog;
 using System;
@@ -19,6 +20,8 @@ namespace CrawlerApp
             factory.Register<CancelCommand>("command:cancel");
             factory.Register<TwitterCommand>("twitter:by_profile_link");
             factory.Register<TwitterCommand>("twitter:by_keyword");
+            factory.Register<InstagramCommand>("instagram:by_profile_link");
+            factory.Register<InstagramCommand>("instagram:by_keyword");
         }
 
         private ICommand[] Sync(List<TaskManager.Status> progress)

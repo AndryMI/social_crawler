@@ -121,7 +121,7 @@ namespace Core.Crawling
         {
             lock (requests)
             {
-                requests.Add(item.id, item);
+                requests[item.id] = item;
                 requests[item.url] = item;
             }
         }

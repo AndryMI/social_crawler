@@ -1,4 +1,5 @@
-﻿using Core.Crawling;
+﻿using Core;
+using Core.Crawling;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Linq;
@@ -45,6 +46,12 @@ namespace Instagram.Crawling
 
             driver.WaitForUrlChange();
             driver.WaitForMain();
+
+            var message = driver.TryFindElement(By.CssSelector("main h3"))?.Text ?? "";
+            if (message.ToLower().Contains("add phone number"))
+            {
+                throw new AccountException(this);
+            }
         }
     }
 }

@@ -37,6 +37,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,9 +51,11 @@
   <ItemGroup>
     <Compile Include="Crawling\DriverExtensions.cs" />
     <Compile Include="Crawling\InstagramAccount.cs" />
+    <Compile Include="Crawling\InstagramCommand.cs" />
     <Compile Include="Crawling\InstagramCrawler.cs" />
     <Compile Include="Crawling\InstagramStorage.cs" />
     <Compile Include="Crawling\InstagramTask.cs" />
+    <Compile Include="Crawling\InstagramUtils.cs" />
     <Compile Include="Data\CommentInfo.cs" />
     <Compile Include="Data\PostInfo.cs" />
     <Compile Include="Data\ProfileInfo.cs" />

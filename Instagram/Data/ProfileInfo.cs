@@ -1,5 +1,6 @@
 ﻿using Core.Crawling;
 using Core.Data;
+using Instagram.Crawling;
 using System;
 
 namespace Instagram.Data
@@ -14,10 +15,13 @@ namespace Instagram.Data
         public string Description;
         public string Url;
 
-        public string PhotoImg;
+        public ImageUrl PhotoImg;
 
-        public string Following;
-        public string Followers;
+        public string RawFollowing;
+        public string RawFollowers;
+
+        public int Following => InstagramUtils.ParseCount(RawFollowing);
+        public int Followers => InstagramUtils.ParseCount(RawFollowers);
 
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 
