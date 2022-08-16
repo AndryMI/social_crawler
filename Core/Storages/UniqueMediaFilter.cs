@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace Core.Storages.Remote
+namespace Core.Storages
 {
     public class UniqueMediaFilter
     {

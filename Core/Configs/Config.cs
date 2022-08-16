@@ -30,10 +30,16 @@ namespace Core
         public int RetryAttempts { get; private set; } = 15;
 
         [JsonProperty]
-        public int StorageApiSizeThreshold { get; private set; } = 1000000;
+        public int MultipartSizeThreshold { get; private set; } = 1000000;
 
         [JsonProperty]
-        public int StorageApiFilesThreshold { get; private set; } = 20;
+        public int MultipartFilesThreshold { get; private set; } = 20;
+
+        [JsonProperty]
+        public int MultipartVarsThreshold { get; private set; } = 1000;
+
+        [JsonProperty]
+        public int StorageApiThreads { get; private set; } = 1;
 
         [JsonProperty]
         public double StorageApiSendInterval { get; private set; } = 1;

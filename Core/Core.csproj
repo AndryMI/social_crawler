@@ -75,16 +75,16 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Compile Include="Storages\IDataStorage.cs" />
-    <Compile Include="Storages\DebugStorage.cs" />
+    <Compile Include="Storages\Local\DebugStorage.cs" />
     <Compile Include="Storages\IErrorStorage.cs" />
     <Compile Include="Storages\IMediaStorage.cs" />
-    <Compile Include="Storages\LocalErrorStorage.cs" />
-    <Compile Include="Storages\LocalMediaStorage.cs" />
-    <Compile Include="Storages\NullStorage.cs" />
-    <Compile Include="Storages\Remote\UniqueMediaFilter.cs" />
-    <Compile Include="Storages\Remote\RemoteStorage.cs" />
-    <Compile Include="Storages\Remote\RequestChunk.cs" />
-    <Compile Include="Storages\Remote\StorageApiClient.cs" />
+    <Compile Include="Storages\Local\LocalErrorStorage.cs" />
+    <Compile Include="Storages\Local\LocalMultipartStorage.cs" />
+    <Compile Include="Storages\Local\MemoryMultipartStorage.cs" />
+    <Compile Include="Storages\Local\MultipartStorage.cs" />
+    <Compile Include="Storages\Local\NullStorage.cs" />
+    <Compile Include="Storages\UniqueMediaFilter.cs" />
+    <Compile Include="Storages\Remote\RemoteStorageThread.cs" />
     <Compile Include="Utils\ApiClient.cs" />
     <Compile Include="Utils\ApiServerClient.cs" />
     <Compile Include="Utils\CrawlingException.cs" />
