@@ -10,6 +10,7 @@ namespace Instagram.Crawling
     public class InstagramCrawler
     {
         private readonly UniqueFilter<CommentInfo> comment = new UniqueFilter<CommentInfo>(comment => comment.Link);
+        private const int MaxPosts = 800;
 
         private readonly Browser browser;
         private readonly InstagramStorage storage;
@@ -31,6 +32,7 @@ namespace Instagram.Crawling
 
                 driver.Url = task.Url;
                 driver.WaitForMain();
+                Crawler.Sleep(this, "open");
 
                 if (task.CrawlProfile)
                 {
@@ -56,9 +58,11 @@ namespace Instagram.Crawling
                         }
 
                         driver.FindElement(By.TagName("body")).SendKeys(Keys.ArrowRight);
+                        Crawler.Sleep(this, "next story");
                     }
                 }
 
+                var postCount = 0;
                 var postUrl = driver.Url;
                 if (task.CrawlPosts)
                 {
@@ -106,10 +110,16 @@ namespace Instagram.Crawling
                         }
                         driver.ScrollToLastComment();
                         driver.LoadMoreComments();
+                        Crawler.Sleep(this, "next comments");
                     }
 
+                    if (postCount++ > MaxPosts)
+                    {
+                        break;
+                    }
                     driver.FindElement(By.TagName("body")).SendKeys(Keys.ArrowRight);
                     driver.WaitForDialogLoading();
+                    Crawler.Sleep(this, "next post");
                 }
             }
             catch (Exception e)

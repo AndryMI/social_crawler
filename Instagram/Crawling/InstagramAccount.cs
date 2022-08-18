@@ -19,6 +19,7 @@ namespace Instagram.Crawling
                 {
                     if (img.GetAttribute("alt").Contains(Name))
                     {
+                        Crawler.Sleep(this, "open");
                         return;
                     }
                 }
@@ -26,9 +27,11 @@ namespace Instagram.Crawling
                 driver.Url = "https://www.instagram.com/accounts/login/";
                 driver.WaitForMain();
             }
+            Crawler.Sleep(this, "open");
 
             // Accept Cookies
             driver.FindElements(By.TagName("button")).LastOrDefault(button => button.Text.ToLower().Contains("cookie"))?.Click();
+            Crawler.Sleep(this, "accept cookies");
 
             driver.TryUntilExec(() =>
             {
@@ -43,6 +46,7 @@ namespace Instagram.Crawling
                 pass.Click();
                 pass.SendKeys(Password + "\n");
             });
+            Crawler.Sleep(this, "after credentials");
 
             driver.WaitForUrlChange();
             driver.WaitForMain();
@@ -52,6 +56,7 @@ namespace Instagram.Crawling
             {
                 throw new AccountException(this);
             }
+            Crawler.Sleep(this, "after login");
         }
     }
 }
