@@ -87,7 +87,7 @@ namespace Core.Crawling
 
         private void OnResponseReceived(object sender, ResponseReceivedEventArgs e)
         {
-            log.Verbose("Net Response {RequestId} {Type}", e.RequestId, e.Type);
+            log.Verbose("Net Response {RequestId} {Type} {Status}", e.RequestId, e.Type, e.Response.Status);
             var item = GetItem(e.RequestId);
             if (item != null)
             {
