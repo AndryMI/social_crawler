@@ -1,6 +1,5 @@
 ﻿using Core.Crawling;
 using Core.Data;
-using Instagram.Crawling;
 using System;
 
 namespace Instagram.Data
@@ -10,20 +9,24 @@ namespace Instagram.Data
         public string Social => "instagram";
         public string ProfileLink { get; set; }
         public string Link { get; set; }
-        
-        public ImageUrl ImageUrl;
-        public string VideoUrl;
-        public string Time { get; set; }
 
-        public string RawLike;
+        public string Text;
+        public ImageUrl[] Images;
+        public string[] Videos;
 
-        public int Like => InstagramUtils.ParseCount(RawLike);
+        public int Comments;
+        public int Like;
+
+        public long UnixTime;
+
+        public string Time => DateTimeOffset.FromUnixTimeSeconds(UnixTime).ToString("yyyy-MM-ddTHH:mm:ss.000Z");
 
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 
-        public static PostInfo Collect(Browser browser)
+        public static PostInfo[] Collect(Browser browser)
         {
-            return browser.RunCollector<PostInfo>("Scripts/Instagram/PostInfo.js");
+            browser.InjectUtils("Scripts/Instagram/Utils.js");
+            return browser.RunCollector<PostInfo[]>("Scripts/Instagram/PostInfo.js");
         }
     }
 }

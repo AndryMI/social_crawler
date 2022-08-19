@@ -1,20 +1,39 @@
 ﻿
-var profile = document.querySelector('[role=dialog] header a');
+var posts = [];
 
-var video = document.querySelector('[role=dialog] article video');
-var image = document.querySelector('[role=dialog] article img');
+__FindProps(document.querySelector('article'), p => p.posts)?.posts?.slice(-100)?.forEach(post => {
 
-var likes = document.querySelector('[href="' + document.location.pathname + 'liked_by/"] span')
-var time = document.querySelector('[href="' + document.location.pathname + '"] time')
+    const images = {};
+    const videos = {};
 
-return JSON.stringify({
-    ProfileLink: profile?.href,
-    Link: document.location.href,
+    images[post.src ?? ''] = true;
+    videos[post.videoUrl ?? ''] = true;
 
-    ImageUrl: (video?.poster ?? image?.src),
-    VideoUrl: video?.src,
+    post.sidecarChildren?.forEach(media => {
+        images[media.src ?? ''] = true;
+        videos[media.videoUrl ?? ''] = true;
+    });
 
-    RawLike: likes?.innerText,
+    delete images[''];
+    delete videos[''];
 
-    Time: time?.dateTime,
-});
+    for (const url in images) {
+        fetch(url);
+    }
+
+    posts.push({
+        Link: (new URL('/p/' + post.code + '/', document.location.href)).href,
+        ProfileLink: (new URL('/' + post.owner.username + '/', document.location.href)).href,
+
+        Text: post.caption,
+        Images: Object.keys(images),
+        Videos: Object.keys(videos),
+
+        Comments: post.numComments,
+        Like: post.numLikes,
+
+        UnixTime: post.postedAt,
+    })
+})
+
+return JSON.stringify(posts);

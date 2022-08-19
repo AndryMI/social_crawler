@@ -7,7 +7,7 @@ var time = document.querySelector('section time');
 return JSON.stringify({
     ProfileLink: profile?.href,
     Link: document.location.href,
-    ImageUrl: image?.src,
+    StoryImg: image?.src,
     VideoUrl: video?.src || video?.querySelector('source')?.src,
     Time: time?.dateTime,
 });

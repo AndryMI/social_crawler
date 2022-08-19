@@ -1,6 +1,5 @@
 ﻿using Core.Crawling;
 using Core.Data;
-using Instagram.Crawling;
 using System;
 
 namespace Instagram.Data
@@ -15,18 +14,21 @@ namespace Instagram.Data
         public string Description;
         public string Url;
 
+        public bool IsBusinessAccount;
+        public bool IsPrivate;
+        public bool IsProfessionalAccount;
+        public bool IsVerified;
+
         public ImageUrl PhotoImg;
 
-        public string RawFollowing;
-        public string RawFollowers;
-
-        public int Following => InstagramUtils.ParseCount(RawFollowing);
-        public int Followers => InstagramUtils.ParseCount(RawFollowers);
+        public int Following;
+        public int Followers;
 
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 
         public static ProfileInfo Collect(Browser browser)
         {
+            browser.InjectUtils("Scripts/Instagram/Utils.js");
             return browser.RunCollector<ProfileInfo>("Scripts/Instagram/ProfileInfo.js");
         }
     }

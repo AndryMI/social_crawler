@@ -1,27 +1,24 @@
 ﻿
-var id = document.querySelector('h2');
-if (!id) {
+var header = __FindProps(document.querySelector('header'), props => props.user);
+if (!header) {
     return "null";
 }
-
-var url = document.querySelector('header section a[target=_blank]');
-var photo = document.querySelector('header img');
-var name = document.querySelector('header section > div:last-child > span');
-var description = document.querySelector('header section > div:last-child');
-
-var following = document.querySelector('[href="' + document.location.pathname + 'following/"] span');
-var followers = document.querySelector('[href="' + document.location.pathname + 'followers/"] span');
 
 return JSON.stringify({
     Link: document.location.href,
 
-    Id: id?.innerText?.trim(),
-    Name: name?.innerText?.trim(),
-    Description: description?.innerText?.trim(),
-    Url: url?.href,
+    Id: header.user.username,
+    Name: header.user.fullName,
+    Description: header.user.bio,
+    Url: header.user.website,
 
-    PhotoImg: photo?.src,
+    IsBusinessAccount: header.user.isBusinessAccount,
+    IsPrivate: header.user.isPrivate,
+    IsProfessionalAccount: header.user.isProfessionalAccount,
+    IsVerified: header.user.isVerified,
 
-    RawFollowing: following?.title || following?.innerText,
-    RawFollowers: followers?.title || followers?.innerText
-})
+    PhotoImg: header.user.profilePictureUrl,
+
+    Following: header.user.counts?.follows ?? 0,
+    Followers: header.user.counts?.followedBy ?? 0,
+});

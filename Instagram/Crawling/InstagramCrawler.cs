@@ -10,7 +10,8 @@ namespace Instagram.Crawling
     public class InstagramCrawler
     {
         private readonly UniqueFilter<CommentInfo> comment = new UniqueFilter<CommentInfo>(comment => comment.Link);
-        private const int MaxPosts = 800;
+        private readonly UniqueFilter<PostInfo> post = new UniqueFilter<PostInfo>(post => post.Link);
+        private const int PostsTreshold = 300;
 
         private readonly Browser browser;
         private readonly InstagramStorage storage;
@@ -62,64 +63,42 @@ namespace Instagram.Crawling
                     }
                 }
 
-                var postCount = 0;
-                var postUrl = driver.Url;
-                if (task.CrawlPosts)
-                {
-                    var post = driver.TryFindElement(By.CssSelector("article a"));
-                    if (post == null)
-                    {
-                        //TODO posts not found
-                        throw new Exception("Something wrong");
-                    }
-                    var href = post.GetDomAttribute("href");
-                    if (href == null || !href.StartsWith("/p/"))
-                    {
-                        //TODO posts not found
-                        throw new Exception("Something wrong");
-                    }
-                    post.Click();
-                    driver.WaitForDialogLoading();
-                }
+                var totalPosts = 0;
                 while (task.CrawlPosts)
                 {
-                    if (postUrl == driver.Url)
+                    var posts = post.Filter(PostInfo.Collect(browser));
+                    if (posts != null && posts.Length == 0)
                     {
                         break;
                     }
-                    postUrl = driver.Url;
-
-                    var post = PostInfo.Collect(browser);
-                    if (post != null)
+                    if (posts != null && posts.Length > 0)
                     {
-                        storage.StorePost(task, post);
+                        storage.StorePosts(task, posts);
                     }
-
-                    while (task.CrawlComments)
-                    {
-                        driver.WaitForCommentsLoading();
-
-                        var comments = comment.Filter(CommentInfo.Collect(browser));
-                        if (comments != null && comments.Length == 0)
-                        {
-                            break;
-                        }
-                        if (comments != null && comments.Length > 0)
-                        {
-                            storage.StoreComments(task, comments);
-                        }
-                        driver.ScrollToLastComment();
-                        driver.LoadMoreComments();
-                        Crawler.Sleep(this, "next comments");
-                    }
-
-                    if (postCount++ > MaxPosts)
+                    totalPosts += posts.Length;
+                    if (totalPosts > PostsTreshold)
                     {
                         break;
                     }
-                    driver.FindElement(By.TagName("body")).SendKeys(Keys.ArrowRight);
-                    driver.WaitForDialogLoading();
-                    Crawler.Sleep(this, "next post");
+                    driver.ScrollToPageBottom();
+                    driver.WaitForPostsLoading();
+                    Crawler.Sleep(this, "next posts");
+                }
+
+                while (task.CrawlComments)
+                {
+                    var comments = comment.Filter(CommentInfo.Collect(browser));
+                    if (comments != null && comments.Length == 0)
+                    {
+                        break;
+                    }
+                    if (comments != null && comments.Length > 0)
+                    {
+                        storage.StoreComments(task, comments);
+                    }
+                    driver.LoadMoreComments();
+                    driver.WaitForCommentsLoading();
+                    Crawler.Sleep(this, "next comments");
                 }
             }
             catch (Exception e)

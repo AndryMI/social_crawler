@@ -3,12 +3,32 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.IO;
+using System.Text;
 using System.Threading;
 
 namespace Core.Crawling
 {
     public static class DriverExtensions
     {
+        public static void InjectUtils(this ChromeDriver driver, string path)
+        {
+            var script = new StringBuilder()
+                .Append("try {")
+                .Append(" return (function __FN__() {")
+                .Append(File.ReadAllText(path))
+                .Append(" })()")
+                .Append("}")
+                .Append("catch (error) {")
+                .Append(" return '!' + error.stack")
+                .Append("}");
+
+            var json = driver.ExecuteScript(script.ToString()) as string;
+            if (json != null)
+            {
+                throw new JavaScriptException(json.Replace("__FN__", path));
+            }
+        }
+
         public static void WaitForReady(this ChromeDriver driver)
         {
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Config.Instance.WaitTimeout));

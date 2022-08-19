@@ -69,6 +69,11 @@ namespace Core.Crawling
             return driver;
         }
 
+        public void InjectUtils(string path)
+        {
+            driver.InjectUtils(path);
+        }
+
         public T RunCollector<T>(string path)
         {
             var script = new StringBuilder()

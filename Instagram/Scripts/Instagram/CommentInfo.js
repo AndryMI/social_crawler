@@ -1,24 +1,35 @@
 ﻿
-var profile = document.querySelector('[role=dialog] header a');
-var comments = [];
+var article = __FindProps(document.querySelector('article'), p => p.post);
+if (!article) {
+    return '[]';
+}
 
-document.querySelectorAll('[role=dialog] article ul > div').forEach(function (comment) {
+var comments = []
 
-    var text = comment.innerText.split('\n');
-    var header = text.shift();
-    var footer = text.pop();
-    var time = comment.querySelector('time');
-
-    comments.push({
-        ProfileLink: profile?.href,
-        PostLink: document.location.href,
-        Link: time.closest('a')?.href || document.location.href,
-
-        Header: header,
-        Body: text.join('\n'),
-        Footer: footer,
-        Time: time.dateTime,
-    });
+var comment_fibers = {};
+__WalkFiberRecursive(__GetFiber(document.querySelector('article')), cf => {
+    if (cf.pendingProps.parentComment) {
+        comment_fibers[cf.pendingProps.parentComment.id] = cf;
+    }
 });
+Object.values(comment_fibers).forEach(cf => {
+    const comment = cf.pendingProps.parentComment;
+
+    __WalkFiberRecursive(cf, uf => {
+        if (uf.pendingProps.username) {
+            comments.push({
+                Link: (new URL('/p/' + article.post.code + '/c/' + comment.id + '/', document.location.href)).href,
+                PostLink: (new URL('/p/' + article.post.code + '/', document.location.href)).href,
+                ProfileLink: (new URL('/' + article.post.owner.username + '/', document.location.href)).href,
+
+                Author: uf.pendingProps.username,
+                Text: comment.text,
+                Like: comment.likeCount,
+                UnixTime: comment.postedAt,
+            })
+            return true;
+        }
+    })
+})
 
 return JSON.stringify(comments);

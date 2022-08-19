@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Crawling;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
@@ -22,30 +23,44 @@ namespace Instagram.Crawling
 
         public static void WaitForCommentsLoading(this ChromeDriver driver)
         {
+            driver.WaitForLoading(
+                "return !__WalkFiberRecursive(__GetFiber(document.querySelector('article')), cf => {" +
+                "  if (cf.pendingProps.commentsIsFetching) return true" +
+                "})"
+            );
+        }
+
+        public static void WaitForPostsLoading(this ChromeDriver driver)
+        {
+            driver.WaitForLoading("return !__FindProps(document.querySelector('article'), p => 'isFetching' in p).isFetching");
+        }
+
+        private static void WaitForLoading(this ChromeDriver driver, string script)
+        {
+            driver.InjectUtils("Scripts/Instagram/Utils.js");
             Thread.Sleep(100);
-            while (driver.FindElements(By.CssSelector("[role=dialog] [data-visualcompletion=\"loading-state\"]")).Count > 0)
+            while (!(bool)driver.ExecuteScript(script))
             {
                 var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Config.Instance.WaitTimeout));
-                wait.Until(x => x.FindElements(By.CssSelector("[role=dialog] [data-visualcompletion=\"loading-state\"]")).Count == 0);
+                wait.Until(x => (bool)driver.ExecuteScript(script));
                 Thread.Sleep(100);
             }
         }
 
-        public static void WaitForDialogLoading(this ChromeDriver driver)
+        public static void ScrollToPageBottom(this ChromeDriver driver)
         {
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Config.Instance.WaitTimeout));
-            wait.Until(x => x.FindElements(By.CssSelector("[role=dialog] header")).Count > 0);
-            Thread.Sleep(100);
-        }
-
-        public static void ScrollToLastComment(this ChromeDriver driver)
-        {
-            driver.ExecuteScript("document.querySelector('[role=dialog] article ul > li')?.scrollIntoView()");
+            driver.ExecuteScript("window.scrollTo(0, document.body.scrollHeight)");
         }
 
         public static void LoadMoreComments(this ChromeDriver driver)
         {
-            driver.ExecuteScript("document.querySelector('[role=dialog] article ul > li')?.click()");
+            driver.InjectUtils("Scripts/Instagram/Utils.js");
+            driver.ExecuteScript(
+                "var cf = __WalkFiberRecursive(__GetFiber(document.querySelector('article')), cf => {" +
+                "  if (cf.pendingProps?.handleLoadMoreCommentsClick) return cf" +
+                "});" +
+                "if (cf) cf.pendingProps.handleLoadMoreCommentsClick()"
+            );
         }
 
         public static void TryOpenStories(this ChromeDriver driver)
