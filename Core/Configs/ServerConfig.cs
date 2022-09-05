@@ -16,11 +16,14 @@ namespace Core
         public static void Load()
         {
             var json = new ApiServerClient().Request("GET", "/crawler");
+            json = json.Replace("\"media_warmup\":[]", "\"media_warmup\":{}");
             Instance = JsonConvert.DeserializeObject<ServerConfig>(json);
         }
 
         public class ServerInfo
         {
+            [JsonProperty("max_input_vars")]
+            public readonly int MaxInputVars;
             [JsonProperty("max_file_uploads")]
             public readonly int MaxFileUploads;
             [JsonProperty("max_execution_time")]

@@ -8,6 +8,13 @@ window.__WalkFiberRecursive = function (fiber, fn) {
         || (fiber?.child ? fn(fiber.child) || __WalkFiberRecursive(fiber.child, fn) : null)
 }
 
+window.__FindClosestFiber = function (fiber, fn) {
+    while (fiber != null && !fn(fiber)) {
+        fiber = fiber.return
+    }
+    return fiber
+}
+
 window.__FindProps = function (dom, fn) {
     for (let fiber = __GetFiber(dom); fiber != null; fiber = fiber.return) {
         if (fn(fiber.pendingProps)) {

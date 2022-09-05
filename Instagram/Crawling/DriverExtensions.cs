@@ -24,9 +24,11 @@ namespace Instagram.Crawling
         public static void WaitForCommentsLoading(this ChromeDriver driver)
         {
             driver.WaitForLoading(
-                "return !__WalkFiberRecursive(__GetFiber(document.querySelector('article')), cf => {" +
-                "  if (cf.pendingProps.commentsIsFetching) return true" +
-                "})"
+                "var cf = __WalkFiberRecursive(__GetFiber(document.querySelector('article')), cf => {" +
+                "  if (cf.pendingProps?.commentsIsFetching) return cf" +
+                "});" +
+                "cf?.stateNode?.forceUpdate?.();" +
+                "return !cf"
             );
         }
 
@@ -59,7 +61,12 @@ namespace Instagram.Crawling
                 "var cf = __WalkFiberRecursive(__GetFiber(document.querySelector('article')), cf => {" +
                 "  if (cf.pendingProps?.handleLoadMoreCommentsClick) return cf" +
                 "});" +
-                "if (cf) cf.pendingProps.handleLoadMoreCommentsClick()"
+                "var li = __FindClosestFiber(cf, x => x.stateNode)?.stateNode;" +
+                "if (li) {" +
+                "  li.scrollIntoView();" +
+                "  window.scrollTo(0, 0);" +
+                "  li.querySelector('button')?.click();" +
+                "}"
             );
         }
 
