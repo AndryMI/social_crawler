@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.DevTools.V103.Console;
-using OpenQA.Selenium.DevTools.V103;
+using OpenQA.Selenium.DevTools.V104.Console;
+using OpenQA.Selenium.DevTools.V104;
 using System;
 using Serilog;
 using Serilog.Events;
