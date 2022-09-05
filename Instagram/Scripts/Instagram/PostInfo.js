@@ -2,8 +2,8 @@
 var posts = [];
 
 var queue = [];
-queue.push(...(__FindProps(document.querySelector('article'), p => p.topPosts)?.topPosts ?? []))
-queue.push(...(__FindProps(document.querySelector('article'), p => p.posts)?.posts ?? []))
+queue.push(...(__FindProps(document.querySelector('article'), p => p?.topPosts)?.topPosts ?? []))
+queue.push(...(__FindProps(document.querySelector('article'), p => p?.posts)?.posts ?? []))
 queue.slice(-100).forEach(post => {
 
     const images = {};

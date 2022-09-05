@@ -8,7 +8,7 @@ var comments = []
 
 var comment_fibers = {};
 __WalkFiberRecursive(__GetFiber(document.querySelector('article')), cf => {
-    if (cf.pendingProps.parentComment) {
+    if (cf.pendingProps?.parentComment) {
         comment_fibers[cf.pendingProps.parentComment.id] = cf;
     }
 });

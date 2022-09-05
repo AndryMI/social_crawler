@@ -10,6 +10,18 @@ namespace Instagram.Crawling
     {
         public override void Login(ChromeDriver driver)
         {
+            if (driver.Url.StartsWith("https://www.instagram.com"))
+            {
+                foreach (var img in driver.FindElements(By.CssSelector("nav img")))
+                {
+                    if (img.GetAttribute("alt").Contains(Name))
+                    {
+                        Crawler.Sleep(this, "open");
+                        return;
+                    }
+                }
+            }
+
             driver.Url = "https://www.instagram.com/accounts/login/";
             driver.WaitForMain();
 

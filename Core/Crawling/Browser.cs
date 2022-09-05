@@ -39,10 +39,11 @@ namespace Core.Crawling
             {
                 var timeout = TimeSpan.FromSeconds(Config.Instance.WaitTimeout);
                 var options = new ChromeOptions();
+                options.AddArgument("--lang=en");
 
+                //TODO options.AddArgument("--host-rules=MAP www.instagram.com example.com");
                 //TODO options.AddArgument("--proxy-server=88.119.175.141:3128");
 
-                options.AddArgument("--lang=en");
                 if (Config.Instance.BrowserHeadless)
                 {
                     options.AddArgument("headless");
