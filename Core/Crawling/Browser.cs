@@ -13,8 +13,8 @@ namespace Core.Crawling
         private readonly IMediaStorage media;
         private BrowserNetwork network = null;
         private BrowserConsole console = null;
+        private BrowserProfile profile = default;
         private ChromeDriver driver = null;
-        private string profile = null;
 
         public Browser(IMediaStorage media)
         {
@@ -29,11 +29,12 @@ namespace Core.Crawling
             return driver;
         }
 
-        public ChromeDriver Driver(string profile = null)
+        public ChromeDriver Driver(string profileName = null)
         {
-            if (this.profile != profile)
+            if (profile.Name != profileName)
             {
                 Close();
+                profile = new BrowserProfile(profileName);
             }
             if (driver == null)
             {
@@ -48,20 +49,19 @@ namespace Core.Crawling
                 {
                     options.AddArgument("headless");
                 }
-                if (profile != null)
+                if (!profile.IsAnonymous)
                 {
-                    options.AddArgument("user-data-dir=" + Path.GetFullPath("Browsers/" + profile));
+                    options.AddArgument("user-data-dir=" + profile.FullPath);
                 }
                 var service = ChromeDriverService.CreateDefaultService();
                 service.HideCommandPromptWindow = true;
 
-                this.driver = new ChromeDriver(service, options, timeout);
-                this.network = new BrowserNetwork(driver);
-                this.console = new BrowserConsole(driver);
-                this.profile = profile;
+                driver = new ChromeDriver(service, options, timeout);
+                network = new BrowserNetwork(driver);
+                console = new BrowserConsole(driver);
 
                 //TODO tempfix https://github.com/SeleniumHQ/selenium/issues/10799
-                if (profile != null)
+                if (!profile.IsAnonymous)
                 {
                     System.Threading.Thread.Sleep(1000);
                 }
@@ -113,7 +113,8 @@ namespace Core.Crawling
             network = null;
             console?.Dispose();
             console = null;
-            profile = null;
+            profile.Dispose();
+            profile = default;
         }
     }
 }
