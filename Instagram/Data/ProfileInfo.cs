@@ -28,7 +28,7 @@ namespace Instagram.Data
 
         public static ProfileInfo Collect(Browser browser)
         {
-            browser.InjectUtils("Scripts/Instagram/Utils.js");
+            browser.InjectUtils("Scripts/ReactUtils.js");
             return browser.RunCollector<ProfileInfo>("Scripts/Instagram/ProfileInfo.js");
         }
     }

@@ -25,7 +25,7 @@ namespace Instagram.Data
 
         public static PostInfo[] Collect(Browser browser)
         {
-            browser.InjectUtils("Scripts/Instagram/Utils.js");
+            browser.InjectUtils("Scripts/ReactUtils.js");
             return browser.RunCollector<PostInfo[]>("Scripts/Instagram/PostInfo.js");
         }
     }

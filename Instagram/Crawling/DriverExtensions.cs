@@ -39,7 +39,7 @@ namespace Instagram.Crawling
 
         private static void WaitForLoading(this ChromeDriver driver, string script)
         {
-            driver.InjectUtils("Scripts/Instagram/Utils.js");
+            driver.InjectUtils("Scripts/ReactUtils.js");
             Thread.Sleep(100);
             while (!(bool)driver.ExecuteScript(script))
             {
@@ -56,7 +56,7 @@ namespace Instagram.Crawling
 
         public static void LoadMoreComments(this ChromeDriver driver)
         {
-            driver.InjectUtils("Scripts/Instagram/Utils.js");
+            driver.InjectUtils("Scripts/ReactUtils.js");
             driver.ExecuteScript(
                 "var cf = __WalkFiberRecursive(__GetFiber(document.querySelector('article')), cf => {" +
                 "  if (cf.pendingProps?.handleLoadMoreCommentsClick) return cf" +

@@ -24,7 +24,7 @@ namespace Instagram.Data
 
         public static CommentInfo[] Collect(Browser browser)
         {
-            browser.InjectUtils("Scripts/Instagram/Utils.js");
+            browser.InjectUtils("Scripts/ReactUtils.js");
             return browser.RunCollector<CommentInfo[]>("Scripts/Instagram/CommentInfo.js");
         }
     }
