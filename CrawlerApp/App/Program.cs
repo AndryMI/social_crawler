@@ -40,6 +40,11 @@ namespace CrawlerApp
             Log.CloseAndFlush();
         }
 
+        public static void ValidateVersion()
+        {
+            BrowserValidate.Run();
+        }
+
         public static void KillDrivers()
         {
             foreach (var process in Process.GetProcessesByName("chromedriver"))
