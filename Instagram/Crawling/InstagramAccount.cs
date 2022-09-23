@@ -8,18 +8,24 @@ namespace Instagram.Crawling
 {
     public class InstagramAccount : Account
     {
+        private bool IsLoggedIn(ChromeDriver driver)
+        {
+            foreach (var img in driver.FindElements(By.CssSelector("nav img")))
+            {
+                if (img.GetAttribute("alt").Contains(Name))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public override void Login(ChromeDriver driver)
         {
-            if (driver.Url.StartsWith("https://www.instagram.com"))
+            if (driver.Url.StartsWith("https://www.instagram.com") && IsLoggedIn(driver))
             {
-                foreach (var img in driver.FindElements(By.CssSelector("nav img")))
-                {
-                    if (img.GetAttribute("alt").Contains(Name))
-                    {
-                        Crawler.Sleep(this, "open");
-                        return;
-                    }
-                }
+                Crawler.Sleep(this, "open");
+                return;
             }
 
             driver.Url = "https://www.instagram.com/accounts/login/";
@@ -27,13 +33,10 @@ namespace Instagram.Crawling
 
             if (!driver.Url.Contains("/login/"))
             {
-                foreach (var img in driver.FindElements(By.CssSelector("nav img")))
+                if (IsLoggedIn(driver))
                 {
-                    if (img.GetAttribute("alt").Contains(Name))
-                    {
-                        Crawler.Sleep(this, "open");
-                        return;
-                    }
+                    Crawler.Sleep(this, "open");
+                    return;
                 }
                 driver.DeleteCurrentCookies();
                 driver.Url = "https://www.instagram.com/accounts/login/";

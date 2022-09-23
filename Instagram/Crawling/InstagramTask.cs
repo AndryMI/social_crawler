@@ -9,6 +9,14 @@ namespace Instagram.Crawling
         public PostCommentsTask(string url, string priority, InstagramTask parent) : base(url, priority, parent) { }
     }
 
+    public class PostProfileTask : InstagramTask
+    {
+        public PostProfileTask(string url, string priority, InstagramTask parent) : base(url, priority, parent)
+        {
+            CrawlPostsOnce = true;
+        }
+    }
+
     public class InstagramTask : CrawlerTask
     {
         public InstagramTask(string url, string priority, InstagramTask parent) : this(url, priority, parent.Command)
@@ -22,6 +30,7 @@ namespace Instagram.Crawling
             if (uri.LocalPath.StartsWith("/explore/"))
             {
                 CrawlPosts = true;
+                IsExplore = true;
                 return;
             }
             if (uri.LocalPath.StartsWith("/p/"))
@@ -35,10 +44,12 @@ namespace Instagram.Crawling
         }
 
         public readonly InstagramTask Parent;
+        public bool IsExplore { get; protected set; }
 
         public bool CrawlProfile { get; protected set; }
         public bool CrawlStories { get; protected set; }
         public bool CrawlPosts { get; protected set; }
+        public bool CrawlPostsOnce { get; protected set; }
         public bool CrawlComments { get; protected set; }
 
         public override void Run(Browser browser, IDataStorage storage, TaskManager tasks)

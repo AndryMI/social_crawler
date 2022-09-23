@@ -76,7 +76,7 @@ namespace Instagram.Crawling
                         storage.StorePosts(task, posts);
                     }
                     totalPosts += posts.Length;
-                    if (totalPosts > PostsTreshold)
+                    if (task.CrawlPostsOnce || totalPosts > PostsTreshold)
                     {
                         break;
                     }

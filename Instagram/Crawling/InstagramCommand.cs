@@ -27,7 +27,7 @@ namespace Instagram.Crawling
                 foreach (var keyword in Keywords)
                 {
                     var link = "https://www.instagram.com/explore/tags/" + HttpUtility.UrlEncode(keyword);
-                    yield return new InstagramTask(keyword, CrawlerTask.DefaultPriority, this);
+                    yield return new InstagramTask(link, CrawlerTask.DefaultPriority, this);
                 }
             }
         }
