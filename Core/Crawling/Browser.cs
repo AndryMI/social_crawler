@@ -2,8 +2,8 @@
 using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using Serilog;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -11,8 +11,8 @@ namespace Core.Crawling
 {
     public class Browser
     {
-        private readonly List<IDisposable> disposables = new List<IDisposable>();
         private readonly IMediaStorage media;
+        private BrowserRequestsDump dumper = null;
         private BrowserNetwork network = null;
         private BrowserConsole console = null;
         private BrowserProfile profile = default;
@@ -69,6 +69,8 @@ namespace Core.Crawling
                     System.Threading.Thread.Sleep(1000);
                 }
             }
+            dumper?.Dispose();
+            dumper = null;
             network.Clear();
             return driver;
         }
@@ -110,27 +112,26 @@ namespace Core.Crawling
 
         public BrowserRequestsDump DumpRequests(Predicate<string> predicate)
         {
-            var result = new BrowserRequestsDump(driver, predicate);
-            disposables.Add(result);
-            return result;
+            if (dumper != null)
+            {
+                Log.Error(new Exception(), "Overriding requests dumper");
+                dumper.Dispose();
+            }
+            return dumper = new BrowserRequestsDump(driver, predicate);
         }
 
         public void Close()
         {
             driver?.Quit();
             driver = null;
+            dumper?.Dispose();
+            dumper = null;
             network?.Dispose();
             network = null;
             console?.Dispose();
             console = null;
             profile.Dispose();
             profile = default;
-
-            foreach (var disposable in disposables)
-            {
-                disposable.Dispose();
-            }
-            disposables.Clear();
         }
     }
 }
