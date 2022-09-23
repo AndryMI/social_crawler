@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -10,6 +11,7 @@ namespace Core.Crawling
 {
     public class Browser
     {
+        private readonly List<IDisposable> disposables = new List<IDisposable>();
         private readonly IMediaStorage media;
         private BrowserNetwork network = null;
         private BrowserConsole console = null;
@@ -106,6 +108,13 @@ namespace Core.Crawling
             return result;
         }
 
+        public BrowserRequestsDump DumpRequests(Predicate<string> predicate)
+        {
+            var result = new BrowserRequestsDump(driver, predicate);
+            disposables.Add(result);
+            return result;
+        }
+
         public void Close()
         {
             driver?.Quit();
@@ -116,6 +125,12 @@ namespace Core.Crawling
             console = null;
             profile.Dispose();
             profile = default;
+
+            foreach (var disposable in disposables)
+            {
+                disposable.Dispose();
+            }
+            disposables.Clear();
         }
     }
 }
