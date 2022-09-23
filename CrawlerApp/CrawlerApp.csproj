@@ -90,6 +90,10 @@
       <Project>{0C792CC2-66A9-4661-97EC-1F1DFF16F6A8}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Facebook\Facebook.csproj">
+      <Project>{0f659891-a266-41f5-a6c3-c4301eecb0f6}</Project>
+      <Name>Facebook</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Instagram\Instagram.csproj">
       <Project>{32729284-784d-438d-8137-0fe06b2436b6}</Project>
       <Name>Instagram</Name>

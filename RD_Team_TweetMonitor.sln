@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Instagram", "Instagram\Inst
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VK", "VK\VK.csproj", "{2490C20D-AA9A-495E-98DE-6AFE33A34EDD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facebook", "Facebook\Facebook.csproj", "{0F659891-A266-41F5-A6C3-C4301EECB0F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2490C20D-AA9A-495E-98DE-6AFE33A34EDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2490C20D-AA9A-495E-98DE-6AFE33A34EDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2490C20D-AA9A-495E-98DE-6AFE33A34EDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F659891-A266-41F5-A6C3-C4301EECB0F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F659891-A266-41F5-A6C3-C4301EECB0F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F659891-A266-41F5-A6C3-C4301EECB0F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F659891-A266-41F5-A6C3-C4301EECB0F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

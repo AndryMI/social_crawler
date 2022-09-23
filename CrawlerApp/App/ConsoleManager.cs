@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Crawling;
+using Facebook.Crawling;
 using Instagram.Crawling;
 using Newtonsoft.Json;
 using System;
@@ -68,6 +69,10 @@ namespace CrawlerApp
                 if (Url.StartsWith("https://www.instagram.com/"))
                 {
                     yield return new InstagramTask(Url, CrawlerTask.DefaultPriority, this);
+                }
+                if (Url.StartsWith("https://www.facebook.com/"))
+                {
+                    yield return new FacebookTask(Url, CrawlerTask.DefaultPriority, this);
                 }
             }
         }
