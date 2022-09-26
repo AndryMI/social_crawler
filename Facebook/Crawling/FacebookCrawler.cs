@@ -31,37 +31,23 @@ namespace Facebook.Crawling
             {
                 driver = browser.Driver<FacebookAccount>(task.Url);
 
+                var requests = browser.DumpRequests(url => url.Contains("/graphql/"));
+
                 driver.Url = task.Url;
                 driver.WaitForMain();
                 Crawler.Sleep(this, "open");
 
-                //if (task.CrawlProfile)
-                //{
-                //    var profile = ProfileInfo.Collect(browser);
-                //    if (profile != null)
-                //    {
-                //        storage.StoreProfile(task, profile);
-                //    }
-                //}
+                driver.DumpPrefetchedRequests();
+                requests.WaitForComplete();
 
-                //if (task.CrawlStories)
-                //{
-                //    driver.TryOpenStories();
-
-                //    while (driver.Url.Contains("/stories/"))
-                //    {
-                //        driver.WaitForStoryLoading();
-
-                //        var story = StoryInfo.Collect(browser);
-                //        if (story != null)
-                //        {
-                //            storage.StoreStory(task, story);
-                //        }
-
-                //        driver.FindElement(By.TagName("body")).SendKeys(Keys.ArrowRight);
-                //        Crawler.Sleep(this, "next story");
-                //    }
-                //}
+                if (task.CrawlProfile)
+                {
+                    var profile = ProfileInfo.Collect(browser);
+                    if (profile != null)
+                    {
+                        storage.StoreProfile(task, profile);
+                    }
+                }
 
                 //var totalPosts = 0;
                 //while (task.CrawlPosts)
@@ -76,7 +62,7 @@ namespace Facebook.Crawling
                 //        storage.StorePosts(task, posts);
                 //    }
                 //    totalPosts += posts.Length;
-                //    if (totalPosts > PostsTreshold)
+                //    if (task.CrawlPostsOnce || totalPosts > PostsTreshold)
                 //    {
                 //        break;
                 //    }

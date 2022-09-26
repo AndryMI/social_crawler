@@ -6,11 +6,13 @@ using Serilog;
 using System;
 using System.IO;
 using System.Text;
+using System.Threading;
 
 namespace Core.Crawling
 {
     public class Browser
     {
+        private static ulong nextUid = 0;
         private readonly IMediaStorage media;
         private BrowserRequestsDump dumper = null;
         private BrowserNetwork network = null;
@@ -42,6 +44,8 @@ namespace Core.Crawling
             {
                 var timeout = TimeSpan.FromSeconds(Config.Instance.WaitTimeout);
                 var options = new ChromeOptions();
+                options.AddArgument("--crawler-thread=" + Thread.CurrentThread.ManagedThreadId);
+                options.AddArgument("--crawler-instance=" + nextUid++);
                 options.AddArgument("--lang=en");
                 options.AddUserProfilePreference("profile.default_content_setting_values.notifications", 2);
 

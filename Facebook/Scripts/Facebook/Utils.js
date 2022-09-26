@@ -16,3 +16,18 @@ window.__FindFacebookViewer = function () {
     }
     return result
 }
+
+window.__DumpPrefetchedFacebookRequests = function () {
+    document.querySelectorAll('[data-sjs]').forEach(script => {
+        __WalkObjectRecursive(JSON.parse(script.text), (key, value) => {
+            if (key == 'result' && value && typeof value == 'object') {
+                const scr = document.createElement('script')
+                scr.setAttribute('data-dump', 'prefetch')
+                scr.type = 'text/plain'
+                scr.text = JSON.stringify(value)
+                document.body.appendChild(scr)
+                return true
+            }
+        })
+    })
+}

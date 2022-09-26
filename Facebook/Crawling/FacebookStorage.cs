@@ -22,10 +22,25 @@ namespace Facebook.Crawling
 
         public void StorePosts(FacebookTask task, PostInfo[] posts)
         {
+            if (task is PostProfileTask || task is PostCommentsTask)
+            {
+                foreach (var post in posts)
+                {
+                    storage.StorePost(task, post);
+                }
+                return;
+            }
             foreach (var post in posts)
             {
                 storage.StorePost(task, post);
                 tasks.Add(new PostCommentsTask(post.Link, post.Time, task));
+            }
+            if (task.IsSearch)
+            {
+                foreach (var post in posts)
+                {
+                    tasks.Add(new PostProfileTask(post.ProfileLink, post.Time, task));
+                }
             }
         }
 

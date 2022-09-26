@@ -67,8 +67,8 @@ namespace Core.Crawling
                             .Append(p.Key)
                             .Append("');")
                             .Append("scr.type = 'text/plain';")
-                            .Append("scr.text = atob('")
-                            .Append(data.Base64Encoded ? data.Body : Convert.ToBase64String(Encoding.UTF8.GetBytes(data.Body)))
+                            .Append("scr.text = '")
+                            .Append(data.Body.Replace("'", "\u0027"))
                             .Append("');")
                             .Append("document.body.appendChild(scr);");
                         driver.ExecuteScript(sb.ToString());

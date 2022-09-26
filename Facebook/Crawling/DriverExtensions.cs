@@ -16,5 +16,12 @@ namespace Facebook.Crawling
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Config.Instance.WaitTimeout));
             wait.Until(x => x.FindElements(By.CssSelector("[role=main]")).Count > 0);
         }
+
+        public static void DumpPrefetchedRequests(this ChromeDriver driver)
+        {
+            driver.InjectUtils("Scripts/JsUtils.js");
+            driver.InjectUtils("Scripts/Facebook/Utils.js");
+            driver.ExecuteScript("return __DumpPrefetchedFacebookRequests()");
+        }
     }
 }
