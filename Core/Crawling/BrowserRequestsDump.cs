@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Web;
 
 namespace Core.Crawling
 {
@@ -54,27 +55,32 @@ namespace Core.Crawling
             {
                 Thread.Sleep(1000);
             }
+            var requestIds = new List<string>(requests.Count);
             lock (requests)
             {
                 foreach (var p in requests)
                 {
                     if (p.Value)
                     {
-                        var data = domains.Network.GetResponseBody(new GetResponseBodyCommandSettings { RequestId = p.Key }).Result;
-                        var sb = new StringBuilder()
-                            .Append("const scr = document.createElement('script');")
-                            .Append("scr.setAttribute('data-dump', '")
-                            .Append(p.Key)
-                            .Append("');")
-                            .Append("scr.type = 'text/plain';")
-                            .Append("scr.text = '")
-                            .Append(data.Body.Replace("'", "\u0027"))
-                            .Append("');")
-                            .Append("document.body.appendChild(scr);");
-                        driver.ExecuteScript(sb.ToString());
+                        requestIds.Add(p.Key);
                     }
                 }
                 requests.Clear();
+            }
+            foreach (var requestId in requestIds)
+            {
+                var data = domains.Network.GetResponseBody(new GetResponseBodyCommandSettings { RequestId = requestId }).Result;
+                var sb = new StringBuilder()
+                    .Append("const scr = document.createElement('script');")
+                    .Append("scr.setAttribute('data-dump', '")
+                    .Append(requestId)
+                    .Append("');")
+                    .Append("scr.type = 'text/plain';")
+                    .Append("scr.text = decodeURIComponent('")
+                    .Append(HttpUtility.UrlEncode(data.Body))
+                    .Append("');")
+                    .Append("document.body.appendChild(scr);");
+                driver.ExecuteScript(sb.ToString());
             }
         }
 

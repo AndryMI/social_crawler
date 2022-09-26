@@ -1,6 +1,10 @@
 ﻿
 function ExtractUsername(link) {
     const url = new URL(link ?? '', 'http://localhost')
+    const match = url.href.match(/\/profile\.php\?\W*id=(\d+)/)
+    if (match) {
+        return match[1]
+    }
     return url.pathname.replace(/^\/+|\/+$/g, '') || null
 }
 function Validated(item) {
@@ -60,65 +64,52 @@ if (user && page) {
     throw new Error('Page have both "user" and "page" definitions')
 }
 
-if (user) {
-    return JSON.stringify({
-        Link: user.url,
-        Type: user.__typename,
+user = user ?? page
 
-        FacebookId: user.id,
-        Id: ExtractUsername(user.url),
-        Name: user.name,
-        Gender: user.gender,
-        Description: profile_status_text,
+return JSON.stringify({
+    Link: user.url,
+    Type: user.__typename,
 
-        HeaderImg: user.cover_photo?.photo?.image?.uri,
-        PhotoImg: user.profilePicLarge?.uri,
+    FacebookId: user.id,
+    Id: ExtractUsername(user.url),
+    Name: user.name,
+    Gender: user.gender,
+    Description: [
+        profile_status_text,
+        user.page_about_fields?.blurb,
+        user.page_about_fields?.description?.text,
+        user.page_about_fields?.impressum?.text,
+    ].filter(x => x).join('\n\n'),
 
-        IsVerified: user.is_verified,
-        IsVisiblyMemorialized: user.is_visibly_memorialized,
-        IsAdditionalProfilePlus: user.is_additional_profile_plus,
+    HeaderImg: user.cover_photo?.photo?.image?.uri
+        || user.comet_page_cover_renderer?.content?.[0]?.photo?.image?.uri,
 
-        RawLike: ScanProfileSocialContext(user.profile_social_context, '/friends_likes/'),
-        RawFollowers: ScanProfileSocialContext(user.profile_social_context, '/followers/'),
+    PhotoImg: user.profilePicLarge?.uri
+        || user.profile_picture?.uri,
 
-        Info: timeline_context_items.filter(x => x),
-    });
-}
+    IsVerified: user.is_verified,
+    IsVisiblyMemorialized: user.is_visibly_memorialized,
+    IsAdditionalProfilePlus: user.is_additional_profile_plus,
 
-if (page) {
-    return JSON.stringify({
-        Link: page.url,
-        Type: page.__typename,
+    RawLike: user.page_likers?.global_likers_count?.toString()
+        || ScanProfileSocialContext(user.profile_social_context, 'friends_likes'),
 
-        FacebookId: page.id,
-        Id: ExtractUsername(page.url),
-        Name: page.name,
-        Description: [
-            page.page_about_fields?.blurb,
-            page.page_about_fields?.description?.text,
-            page.page_about_fields?.impressum?.text,
-        ].filter(x => x).join('\n\n'),
+    RawFollowers: user.follower_count?.toString() 
+        || ScanProfileSocialContext(user.profile_social_context, 'followers'),
 
-        HeaderImg: page.comet_page_cover_renderer?.content?.[0]?.photo?.image?.uri,
-        PhotoImg: page.profile_picture?.uri,
+    Info: [
+        user.were_here_count && { Key: 'were_here_count', Value: user.were_here_count.toString() },
+        user.overall_star_rating && { Key: 'overall_star_rating', Value: user.overall_star_rating.value + '/' + user.overall_star_rating.opinion_count },
 
-        IsVerified: page.is_verified,
+        user.page_about_fields?.email && { Key: 'email', Value: user.page_about_fields.email.text },
+        user.page_about_fields?.website && { Key: 'website', Value: user.page_about_fields.website },
+        user.page_about_fields?.formatted_phone_number && { Key: 'phone', Value: user.page_about_fields.formatted_phone_number },
 
-        RawLike: page.page_likers?.global_likers_count?.toString(),
-        RawFollowers: page.follower_count?.toString(),
+        ...user.page_about_fields?.page_categories?.map(cat => ({ Key: 'category_name', Value: cat?.text })) ?? [],
 
-        Info: [
-            page.were_here_count && { Key: 'were_here_count', Value: page.were_here_count.toString() },
-            page.overall_star_rating && { Key: 'overall_star_rating', Value: page.overall_star_rating.value + '/' + page.overall_star_rating.opinion_count },
+        ...user.page_about_fields?.other_accounts?.map(acc => ({ Key: 'other_accounts', Value: acc?.uri?.url })) ?? [],
 
-            page.page_about_fields?.email && { Key: 'email', Value: page.page_about_fields.email.text },
-            page.page_about_fields?.website && { Key: 'website', Value: page.page_about_fields.website },
-            page.page_about_fields?.formatted_phone_number && { Key: 'phone', Value: page.page_about_fields.formatted_phone_number },
+        ...timeline_context_items,
 
-            ...page.page_about_fields?.page_categories?.map(cat => ({ Key: 'category_name', Value: cat?.text })),
-
-            ...page.page_about_fields?.other_accounts?.map(acc => ({ Key: 'other_accounts', Value: acc?.uri?.url }))
-
-        ].filter(x => x),
-    });
-}
+    ].filter(x => x),
+});

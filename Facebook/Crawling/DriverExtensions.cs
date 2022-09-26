@@ -23,5 +23,10 @@ namespace Facebook.Crawling
             driver.InjectUtils("Scripts/Facebook/Utils.js");
             driver.ExecuteScript("return __DumpPrefetchedFacebookRequests()");
         }
+
+        public static void ScrollToPageBottom(this ChromeDriver driver)
+        {
+            driver.ExecuteScript("window.scrollTo(0, document.body.scrollHeight)");
+        }
     }
 }
