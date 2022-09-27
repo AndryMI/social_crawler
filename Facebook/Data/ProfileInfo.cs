@@ -41,6 +41,7 @@ namespace Facebook.Data
         public static ProfileInfo Collect(Browser browser)
         {
             browser.InjectUtils("Scripts/JsUtils.js");
+            browser.InjectUtils("Scripts/Facebook/Utils.js");
             return browser.RunCollector<ProfileInfo>("Scripts/Facebook/ProfileInfo.js");
         }
     }

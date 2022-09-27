@@ -1,6 +1,6 @@
 ﻿
 function ExtractUsername(link) {
-    const url = new URL(link ?? '', 'http://localhost')
+    const url = new URL(link ?? '', document.location.origin)
     const match = url.href.match(/\/profile\.php\?\W*id=(\d+)/)
     if (match) {
         return match[1]
@@ -40,7 +40,7 @@ var timeline_context_items = []
 var profile_status_text = null
 var user = {}
 var page = {}
-__WalkObjectRecursive(Array.from(document.querySelectorAll('[data-dump]')).map(x => JSON.parse(x.text)), (key, value) => {
+__WalkObjectRecursive(__GetCurrentFacebookRequestsDump(), (key, value) => {
     if (key == 'user') {
         user = Object.assign({}, value, user)
     }

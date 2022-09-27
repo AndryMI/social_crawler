@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using System.Web;
 
 namespace Core.Crawling
 {
@@ -77,7 +76,7 @@ namespace Core.Crawling
                     .Append("');")
                     .Append("scr.type = 'text/plain';")
                     .Append("scr.text = decodeURIComponent('")
-                    .Append(HttpUtility.UrlEncode(data.Body))
+                    .Append(MinimalUrlEncode(data.Body))
                     .Append("');")
                     .Append("document.body.appendChild(scr);");
                 driver.ExecuteScript(sb.ToString());
@@ -112,6 +111,36 @@ namespace Core.Crawling
                     requests[e.RequestId] = true;
                 }
             }
+        }
+
+        public static string MinimalUrlEncode(string data)
+        {
+            var sb = new StringBuilder(data.Length + data.Length / 4);
+            foreach (var ch in data)
+            {
+                switch (ch)
+                {
+                    case '%':
+                        sb.Append("%25");
+                        break;
+                    case '\n':
+                        sb.Append("%0A");
+                        break;
+                    case '\r':
+                        sb.Append("%0D");
+                        break;
+                    case '\'':
+                        sb.Append("%27");
+                        break;
+                    case '\\':
+                        sb.Append("%5C");
+                        break;
+                    default:
+                        sb.Append(ch);
+                        break;
+                }
+            }
+            return sb.ToString();
         }
     }
 }

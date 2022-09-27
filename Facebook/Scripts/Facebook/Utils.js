@@ -31,3 +31,9 @@ window.__DumpPrefetchedFacebookRequests = function () {
         })
     })
 }
+
+window.__GetCurrentFacebookRequestsDump = function () {
+    const texts = []
+    document.querySelectorAll('[data-dump]').forEach(dump => texts.push(...dump.text.split('\n').filter(x => x)))
+    return texts.map(JSON.parse)
+}

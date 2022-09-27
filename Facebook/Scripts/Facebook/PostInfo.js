@@ -1,42 +1,78 @@
 ﻿
 var posts = [];
 
-var queue = [];
-queue.push(...(__FindProps(document.querySelector('article'), p => p?.topPosts)?.topPosts ?? []))
-queue.push(...(__FindProps(document.querySelector('article'), p => p?.posts)?.posts ?? []))
-queue.slice(-100).forEach(post => {
-
-    const images = {};
-    const videos = {};
-
-    images[post.src ?? ''] = true;
-    videos[post.videoUrl ?? ''] = true;
-
-    post.sidecarChildren?.forEach(media => {
-        images[media.src ?? ''] = true;
-        videos[media.videoUrl ?? ''] = true;
-    });
-
-    delete images[''];
-    delete videos[''];
-
-    for (const url in images) {
-        fetch(url);
+function ExtractProfileFromPostUrl(link) {
+    const url = new URL(link ?? '', document.location.origin)
+    return url.origin + url.pathname.match(/\/[^/]+/)
+}
+function ProcessStory(story) {
+    const post = __FindFirstInObjectRecursive(story, (key, value) => value?.wwwURL ? value : undefined)
+    if (!post) {
+        return false
     }
+    const time = __FindFirstInObjectRecursive(post.comet_sections, (key, value) => {
+        return key == 'creation_time' && typeof value == 'number' ? value : undefined
+    })
+    const reactions = __FindFirstInObjectRecursive(story, (key, value) => {
+        return key == 'reaction_count' ? value.count : undefined
+    })
+    const comments = __FindFirstInObjectRecursive(story, (key, value) => {
+        return key == 'comment_count' ? value.total_count : undefined
+    })
+    const shares = __FindFirstInObjectRecursive(story, (key, value) => {
+        return key == 'share_count' ? value.count : undefined
+    })
+    const profile = post.actors?.[0]?.url ?? ExtractProfileFromPostUrl(post.wwwURL)
+
+    const links = {}
+    const images = []
+    const videos = []
+    const attachments = post.attachments.map(x => x.styles.attachment)
+    //TODO attached story
+    //if (post.attached_story) {
+    //    attachments.push(post.attached_story)
+    //}
+    __WalkObjectRecursive(attachments, (key, value) => {
+        if (key == 'media') {
+            const image = value.photo_image?.uri
+                || value.large_share_image?.uri
+                || value.image?.uri
+            if (image) {
+                images.push(image)
+            }
+
+            const video = value.playable_url
+            if (video) {
+                videos.push(video)
+            }
+            return true
+        }
+        else if (key == 'url' && typeof value == 'string') {
+            links[value] = true
+        }
+    })
 
     posts.push({
-        Link: (new URL('/p/' + post.code + '/', document.location.href)).href,
-        ProfileLink: (new URL('/' + post.owner.username + '/', document.location.href)).href,
+        ProfileLink: profile,
+        Link: post.wwwURL,
 
-        Text: post.caption,
-        Images: Object.keys(images),
-        Videos: Object.keys(videos),
+        UnixTime: time ?? 0,
+        Text: post.message?.text,
 
-        Comments: post.numComments,
-        Like: post.numLikes,
+        Images: images,
+        Videos: videos,
+        Links: Object.keys(links),
 
-        UnixTime: post.postedAt,
+        Reactions: reactions ?? 0,
+        Comments: comments ?? 0,
+        Shares: shares ?? 0,
     })
+    return true
+}
+__WalkObjectRecursive(__GetCurrentFacebookRequestsDump(), (key, value) => {
+    if (key == 'node' && value.__isFeedUnit == 'Story') {
+        return ProcessStory(value)
+    }
 })
 
 return JSON.stringify(posts);

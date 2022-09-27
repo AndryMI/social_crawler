@@ -33,11 +33,12 @@ namespace Instagram.Crawling
             foreach (var post in posts)
             {
                 storage.StorePost(task, post);
-                tasks.Add(new PostCommentsTask(post.Link, post.Time, task));
-            }
-            if (task.IsExplore)
-            {
-                foreach (var post in posts)
+
+                if (post.Comments > 0)
+                {
+                    tasks.Add(new PostCommentsTask(post.Link, post.Time, task));
+                }
+                if (task.IsExplore)
                 {
                     tasks.Add(new PostProfileTask(post.ProfileLink, post.Time, task));
                 }

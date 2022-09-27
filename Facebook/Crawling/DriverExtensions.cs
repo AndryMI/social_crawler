@@ -24,6 +24,11 @@ namespace Facebook.Crawling
             driver.ExecuteScript("return __DumpPrefetchedFacebookRequests()");
         }
 
+        public static void ClearRequestsDump(this ChromeDriver driver)
+        {
+            driver.ExecuteScript("document.querySelectorAll('[data-dump]').forEach(dump => dump.remove())");
+        }
+
         public static void ScrollToPageBottom(this ChromeDriver driver)
         {
             driver.ExecuteScript("window.scrollTo(0, document.body.scrollHeight)");
