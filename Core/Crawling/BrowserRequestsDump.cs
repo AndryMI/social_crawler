@@ -50,6 +50,7 @@ namespace Core.Crawling
 
         public void WaitForComplete()
         {
+            Thread.Sleep(1000);
             for (var i = 0; !IsComplete() && i < Config.Instance.WaitTimeout; i++)
             {
                 Thread.Sleep(1000);

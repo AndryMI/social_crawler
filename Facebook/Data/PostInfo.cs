@@ -13,7 +13,7 @@ namespace Facebook.Data
         public string Text;
         public ImageUrl[] Images;
         public string[] Videos;
-        public string AttachText;//TODO ?
+        public string[] Links;
 
         public int Reactions;
         public int Comments;

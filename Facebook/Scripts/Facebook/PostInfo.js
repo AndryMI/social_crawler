@@ -33,7 +33,7 @@ function ProcessStory(story) {
     //    attachments.push(post.attached_story)
     //}
     __WalkObjectRecursive(attachments, (key, value) => {
-        if (key == 'media') {
+        if (key == 'media' && value) {
             const image = value.photo_image?.uri
                 || value.large_share_image?.uri
                 || value.image?.uri

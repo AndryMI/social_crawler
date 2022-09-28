@@ -33,5 +33,20 @@ namespace Facebook.Crawling
         {
             driver.ExecuteScript("window.scrollTo(0, document.body.scrollHeight)");
         }
+
+        public static void LoadMoreComments(this ChromeDriver driver)
+        {
+            driver.InjectUtils("Scripts/ReactUtils.js");
+            driver.ExecuteScript(
+                "var cf = __WalkFiberRecursive(__GetFiber(document.querySelector('[role=main]')), cf => {" +
+                "  if (cf.pendingProps?.loadMoreComments) return cf" +
+                "});" +
+                "var li = __FindClosestFiber(cf, x => x.stateNode)?.stateNode;" +
+                "if (li) {" +
+                "  li.scrollIntoView();" +
+                "  li.querySelector('[role=button]')?.click();" +
+                "}"
+            );
+        }
     }
 }

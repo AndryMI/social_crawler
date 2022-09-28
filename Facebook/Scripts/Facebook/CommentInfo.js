@@ -1,35 +1,59 @@
 ﻿
-var article = __FindProps(document.querySelector('article'), p => p.post);
-if (!article) {
-    return '[]';
-}
-
 var comments = []
 
-var comment_fibers = {};
-__WalkFiberRecursive(__GetFiber(document.querySelector('article')), cf => {
-    if (cf.pendingProps?.parentComment) {
-        comment_fibers[cf.pendingProps.parentComment.id] = cf;
+function ExtractProfileFromPostUrl(link) {
+    const url = new URL(link ?? '', document.location.origin)
+    return url.origin + url.pathname.match(/\/[^/]+/)
+}
+function ProcessComment(comment) {
+    const comment_link = __FindFirstInObjectRecursive(comment, (key, value) => {
+        return key == 'comment' && typeof value.url == 'string' ? value.url : undefined
+    })
+    if (!comment_link) {
+        return
     }
-});
-Object.values(comment_fibers).forEach(cf => {
-    const comment = cf.pendingProps.parentComment;
+    const reactions = __FindFirstInObjectRecursive(comment, (key, value) => {
+        return key == 'reactors' ? value.count : undefined
+    })
+    const attachments = comment.attachments?.map(x => x.style_type_renderer.attachment)
+    const images = []
+    const videos = []
+    __WalkObjectRecursive(attachments, (key, value) => {
+        if (key == 'media' && value) {
+            const image = value.photo_image?.uri
+                || value.large_share_image?.uri
+                || value.image?.uri
+            if (image) {
+                images.push(image)
+            }
 
-    __WalkFiberRecursive(cf, uf => {
-        if (uf.pendingProps.username) {
-            comments.push({
-                Link: (new URL('/p/' + article.post.code + '/c/' + comment.id + '/', document.location.href)).href,
-                PostLink: (new URL('/p/' + article.post.code + '/', document.location.href)).href,
-                ProfileLink: (new URL('/' + article.post.owner.username + '/', document.location.href)).href,
-
-                Author: uf.pendingProps.username,
-                Text: comment.text,
-                Like: comment.likeCount,
-                UnixTime: comment.postedAt,
-            })
-            return true;
+            const video = value.playable_url
+            if (video) {
+                videos.push(video)
+            }
+            return true
         }
     })
+
+    comments.push({
+        ProfileLink: ExtractProfileFromPostUrl(document.location.href),
+        PostLink: document.location.href,
+        Link: comment_link,
+
+        AuthorLink: comment.author?.url,
+        Text: comment.body?.text,
+
+        UnixTime: comment.created_time ?? 0,
+        Reactions: reactions ?? 0,
+
+        Images: images,
+        Videos: videos,
+    })
+}
+__WalkObjectRecursive(__GetCurrentFacebookRequestsDump(), (key, value) => {
+    if (value?.__typename == 'Comment') {
+        ProcessComment(value)
+    }
 })
 
 return JSON.stringify(comments);
