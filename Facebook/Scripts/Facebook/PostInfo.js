@@ -28,10 +28,18 @@ function ProcessStory(story) {
     const images = []
     const videos = []
     const attachments = post.attachments.map(x => x.styles.attachment)
+
     //TODO attached story
     //if (post.attached_story) {
     //    attachments.push(post.attached_story)
     //}
+    const attached_story = __FindFirstInObjectRecursive(post.attached_story, (key, value) => {
+        return typeof value?.creation_time == 'number' ? value.url : undefined
+    })
+    if (attached_story) {
+        links.push(attached_story)
+    }
+
     __WalkObjectRecursive(attachments, (key, value) => {
         if (key == 'media' && value) {
             const image = value.photo_image?.uri
@@ -48,7 +56,9 @@ function ProcessStory(story) {
             return true
         }
         else if (key == 'url' && typeof value == 'string') {
-            links[value] = true
+            if (!value.startsWith(document.location.origin)) {
+                links[value] = true
+            }
         }
     })
 
@@ -70,7 +80,7 @@ function ProcessStory(story) {
     return true
 }
 __WalkObjectRecursive(__GetCurrentFacebookRequestsDump(), (key, value) => {
-    if (key == 'node' && value.__isFeedUnit == 'Story') {
+    if (value?.__isFeedUnit == 'Story') {
         return ProcessStory(value)
     }
 })

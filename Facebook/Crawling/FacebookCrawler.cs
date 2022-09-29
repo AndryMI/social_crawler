@@ -1,7 +1,6 @@
 ﻿using Core;
 using Core.Crawling;
 using Facebook.Data;
-using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 
@@ -11,7 +10,7 @@ namespace Facebook.Crawling
     {
         private readonly UniqueFilter<CommentInfo> comment = new UniqueFilter<CommentInfo>(comment => comment.Link);
         private readonly UniqueFilter<PostInfo> post = new UniqueFilter<PostInfo>(post => post.Link);
-        private const int PostsTreshold = 300;
+        private const int PostsTreshold = 50;
 
         private readonly Browser browser;
         private readonly FacebookStorage storage;
@@ -49,44 +48,46 @@ namespace Facebook.Crawling
                     }
                 }
 
-                //var totalPosts = 0;
-                //while (task.CrawlPosts)
-                //{
-                //    var posts = post.Filter(PostInfo.Collect(browser));
-                //    if (posts != null && posts.Length == 0)
-                //    {
-                //        break;
-                //    }
-                //    if (posts != null && posts.Length > 0)
-                //    {
-                //        storage.StorePosts(task, posts);
-                //    }
-                //    totalPosts += posts.Length;
-                //    if (task.CrawlPostsOnce || totalPosts > PostsTreshold)
-                //    {
-                //        break;
-                //    }
-                //    driver.ScrollToPageBottom();
-                //    driver.WaitForPostsLoading();
-                //    Crawler.Sleep(this, "next posts");
-                //}
+                var totalPosts = 0;
+                while (task.CrawlPosts)
+                {
+                    var posts = post.Filter(PostInfo.Collect(browser));
+                    if (posts != null && posts.Length == 0)
+                    {
+                        break;
+                    }
+                    if (posts != null && posts.Length > 0)
+                    {
+                        storage.StorePosts(task, posts);
+                    }
+                    totalPosts += posts.Length;
+                    if (task.CrawlPostsOnce || totalPosts > PostsTreshold)
+                    {
+                        break;
+                    }
+                    requests.ClearDump();
+                    driver.ScrollToPageBottom();
+                    requests.WaitForComplete();
+                    Crawler.Sleep(this, "next posts");
+                }
 
-                //while (task.CrawlComments)
-                //{
-                //    var comments = comment.Filter(CommentInfo.Collect(browser));
-                //    if (comments != null && comments.Length == 0)
-                //    {
-                //        break;
-                //    }
-                //    if (comments != null && comments.Length > 0)
-                //    {
-                //        storage.StoreComments(task, comments);
-                //    }
-                //    driver.LoadMoreComments();
-                //    driver.WaitForCommentsLoading();
-                //    Crawler.Sleep(this, "next comments");
-                //}
-                //TODO asd
+                while (task.CrawlComments)
+                {
+                    var comments = comment.Filter(CommentInfo.Collect(browser));
+                    if (comments != null && comments.Length == 0)
+                    {
+                        break;
+                    }
+                    if (comments != null && comments.Length > 0)
+                    {
+                        storage.StoreComments(task, comments);
+                    }
+                    requests.ClearDump();
+                    driver.ScrollToPageBottom();
+                    driver.LoadMoreComments();
+                    requests.WaitForComplete();
+                    Crawler.Sleep(this, "next comments");
+                }
             }
             catch (Exception e)
             {

@@ -84,6 +84,11 @@ namespace Core.Crawling
             }
         }
 
+        public void ClearDump()
+        {
+            driver.ExecuteScript("document.querySelectorAll('[data-dump]').forEach(dump => dump.remove())");
+        }
+
         private void OnRequestWillBeSent(object sender, RequestWillBeSentEventArgs e)
         {
             if (predicate(e.Request.Url))

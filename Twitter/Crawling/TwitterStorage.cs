@@ -39,18 +39,18 @@ namespace Twitter.Crawling
                 }
                 return;
             }
-
-            if (task.IsSearch)
-            {
-                foreach (var tweet in tweets)
-                {
-                    tasks.Add(new PostProfileTask(tweet.ProfileLink, tweet.Time, task));
-                }
-            }
             foreach (var tweet in tweets)
             {
                 storage.StorePost(task, tweet);
-                tasks.Add(new PostCommentsTask(tweet.Link, tweet.Time, task));
+
+                if (tweet.Reply > 0)
+                {
+                    tasks.Add(new PostCommentsTask(tweet.Link, tweet.Time, task));
+                }
+                if (task.IsSearch)
+                {
+                    tasks.Add(new PostProfileTask(tweet.ProfileLink, tweet.Time, task));
+                }
             }
         }
 

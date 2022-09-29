@@ -18,20 +18,15 @@ namespace Facebook.Crawling
 
         public IEnumerable<CrawlerTask> CreateTasks()
         {
-            //TODO asd
-            yield break;
-            //if (Link != null && Link.StartsWith("https://www.instagram.com/"))
-            //{
-            //    yield return new FacebookTask(Link, CrawlerTask.DefaultPriority, this);
-            //}
-            //if (Keywords != null)
-            //{
-            //    foreach (var keyword in Keywords)
-            //    {
-            //        var link = "https://www.instagram.com/explore/tags/" + HttpUtility.UrlEncode(keyword);
-            //        yield return new FacebookTask(keyword, CrawlerTask.DefaultPriority, this);
-            //    }
-            //}
+            if (Link != null && Link.StartsWith("https://www.facebook.com/"))
+            {
+                yield return new FacebookTask(Link, CrawlerTask.DefaultPriority, this);
+            }
+            if (Keywords != null)
+            {
+                var link = "https://www.facebook.com/search/posts/?q=" + HttpUtility.UrlEncode(string.Join(" ", Keywords));
+                yield return new FacebookTask(link, CrawlerTask.DefaultPriority, this);
+            }
         }
     }
 }
