@@ -1,7 +1,6 @@
 ﻿using Core.Crawling;
 using Core.Data;
 using System;
-using System.Collections.Generic;
 
 namespace VK.Data
 {
@@ -21,7 +20,7 @@ namespace VK.Data
         public ProfileType Type;
         public string Name;
         public string Status;
-        public List<KeyValuePair<string, string>> Description;
+        public KeyValueList<string, string> Description;
         public string Url;
 
         public string PhotoImg;

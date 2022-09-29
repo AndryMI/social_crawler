@@ -55,7 +55,6 @@
     <Compile Include="Crawling\InstagramCrawler.cs" />
     <Compile Include="Crawling\InstagramStorage.cs" />
     <Compile Include="Crawling\InstagramTask.cs" />
-    <Compile Include="Crawling\InstagramUtils.cs" />
     <Compile Include="Data\CommentInfo.cs" />
     <Compile Include="Data\PostInfo.cs" />
     <Compile Include="Data\ProfileInfo.cs" />

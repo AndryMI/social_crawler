@@ -1,8 +1,6 @@
 ﻿using Core.Crawling;
 using Core.Data;
-using Facebook.Crawling;
 using System;
-using System.Collections.Generic;
 
 namespace Facebook.Data
 {
@@ -17,15 +15,15 @@ namespace Facebook.Data
         public string Name;
         public string Gender;
         public string Description;
-        public string Url => Info.TryGetInfo("INTRO_CARD_WEBSITE", "website");
-        public string JoinDate => Info.TryGetInfo("INTRO_CARD_MEMBER_SINCE");
-        public string Location => Info.TryGetInfo("INTRO_CARD_CURRENT_CITY", "INTRO_CARD_HOMETOWN");
+        public string Url => Info.TryGet("INTRO_CARD_WEBSITE", "website");
+        public string JoinDate => Info.TryGet("INTRO_CARD_MEMBER_SINCE");
+        public string Location => Info.TryGet("INTRO_CARD_CURRENT_CITY", "INTRO_CARD_HOMETOWN");
 
         public ImageUrl HeaderImg;
         public ImageUrl PhotoImg;
 
-        public int Like => FacebookUtils.ParseCount(RawLike); //TODO try find in Info
-        public int Followers => FacebookUtils.ParseCount(RawFollowers); //TODO try find in Info eg INTRO_CARD_FOLLOWERS
+        public int Like => NumberUtils.ParseCount(RawLike);
+        public int Followers => NumberUtils.ParseCount(RawFollowers ?? Info.TryGet("INTRO_CARD_FOLLOWERS"));
 
         public string RawLike;
         public string RawFollowers;
@@ -34,7 +32,7 @@ namespace Facebook.Data
         public bool IsVisiblyMemorialized;
         public bool IsAdditionalProfilePlus;
 
-        public List<KeyValuePair<string, string>> Info;
+        public KeyValueList<string, string> Info;
         
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 

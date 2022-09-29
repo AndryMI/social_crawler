@@ -22,8 +22,8 @@ namespace Twitter.Data
         public string RawFollowing;
         public string RawFollowers;
 
-        public int Following => TwitterUtils.ParseFollow(RawFollowing);
-        public int Followers => TwitterUtils.ParseFollow(RawFollowers);
+        public int Following => NumberUtils.ParseCount(RawFollowing);
+        public int Followers => NumberUtils.ParseCount(RawFollowers);
 
         public DateTimeOffset CreatedAt = DateTimeOffset.UtcNow;
 
