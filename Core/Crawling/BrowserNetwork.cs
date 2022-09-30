@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.DevTools.V104;
-using OpenQA.Selenium.DevTools.V104.Network;
+using OpenQA.Selenium.DevTools.V106;
+using OpenQA.Selenium.DevTools.V106.Network;
 using Serilog;
 using System;
 using System.Collections.Generic;
