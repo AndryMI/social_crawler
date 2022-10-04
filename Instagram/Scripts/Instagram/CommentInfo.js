@@ -23,6 +23,8 @@ Object.values(comment_fibers).forEach(cf => {
                 ProfileLink: (new URL('/' + article.post.owner.username + '/', document.location.href)).href,
 
                 Author: uf.pendingProps.username,
+                AuthorLink: (new URL('/' + uf.pendingProps.username + '/', document.location.href)).href,
+
                 Text: comment.text,
                 Like: comment.likeCount,
                 UnixTime: comment.postedAt,

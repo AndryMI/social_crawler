@@ -19,6 +19,12 @@ namespace Twitter.Data
         public string PostLink { get; set; }
         public string Link { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Author => PostLink != null ? TwitterUtils.ExtractProfileName(Link) : null;
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string AuthorLink => PostLink != null ? TwitterUtils.ExtractProfileLink(Link) : null;
+
         public string Text;
         public string Time { get; set; }
 

@@ -1,6 +1,7 @@
 ﻿using Core.Crawling;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace Instagram.Crawling
@@ -24,10 +25,11 @@ namespace Instagram.Crawling
             }
             if (Keywords != null)
             {
+                //TODO Создать специальную задачу: открыть инсту, набрать keyword в поиск (мб в случайном порядке), собрать ссылки на результаты
                 foreach (var keyword in Keywords)
                 {
-                    var link = "https://www.instagram.com/explore/tags/" + HttpUtility.UrlEncode(keyword);
-                    yield return new InstagramTask(link, CrawlerTask.DefaultPriority, this);
+                    var query = HttpUtility.UrlEncode(Regex.Replace(keyword, @"\s+", ""));
+                    yield return new InstagramTask("https://www.instagram.com/explore/tags/" + query, CrawlerTask.DefaultPriority, this);
                 }
             }
         }

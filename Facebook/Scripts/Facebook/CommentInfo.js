@@ -40,6 +40,7 @@ function ProcessComment(comment) {
         PostLink: document.location.href,
         Link: comment_link,
 
+        Author: comment.author?.name,
         AuthorLink: comment.author?.url,
         Text: comment.body?.text,
 

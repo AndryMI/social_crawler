@@ -11,7 +11,8 @@ namespace Instagram.Data
         public string PostLink { get; set; }
         public string Link { get; set; }
 
-        public string Author;
+        public string Author { get; set; }
+        public string AuthorLink { get; set; }
         public string Text;
 
         public int Like;

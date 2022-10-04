@@ -43,7 +43,7 @@ Array.from(document.querySelectorAll('.reply')).slice(-500).forEach(reply => {
         Link: date.href,
 
         Author: author?.innerText?.trim(),
-        AuthorUrl: author?.href,
+        AuthorLink: author?.href,
         MentionUrl: mention?.href,
         Media: media,
         Text: text?.innerText?.trim(),
