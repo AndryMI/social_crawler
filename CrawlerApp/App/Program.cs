@@ -40,6 +40,13 @@ namespace CrawlerApp
             Log.CloseAndFlush();
         }
 
+        public static void RunBrowser(string profile)
+        {
+            var browser = new Browser(new NullStorage());
+            browser.Driver(profile);
+            Environment.Exit(0);
+        }
+
         public static void ValidateVersion()
         {
             BrowserValidate.Run();
