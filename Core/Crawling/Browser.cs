@@ -70,7 +70,7 @@ namespace Core.Crawling
                 //TODO tempfix https://github.com/SeleniumHQ/selenium/issues/10799
                 if (!profile.IsAnonymous)
                 {
-                    System.Threading.Thread.Sleep(1000);
+                    Thread.Sleep(1000);
                 }
             }
             dumper?.Dispose();

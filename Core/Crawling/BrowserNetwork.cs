@@ -17,6 +17,7 @@ namespace Core.Crawling
         public BrowserNetwork(ChromeDriver driver)
         {
             log = Log.Logger.ForContext<BrowserNetwork>().ForContext("SessionId", driver.SessionId);
+            log.Verbose("Net Init");
             domains = driver.GetDevToolsSession().GetVersionSpecificDomains<DevToolsSessionDomains>();
             domains.Network.Enable(new EnableCommandSettings()).Wait();
             domains.Network.RequestWillBeSent += OnRequestWillBeSent;

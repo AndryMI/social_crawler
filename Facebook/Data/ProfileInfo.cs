@@ -16,7 +16,7 @@ namespace Facebook.Data
         public string Gender;
         public string Description;
         public string Url => Info.TryGet("INTRO_CARD_WEBSITE", "website");
-        public string JoinDate => Info.TryGet("INTRO_CARD_MEMBER_SINCE");
+        public string JoinDate => DateUtils.TryParseDate(Info.TryGet("INTRO_CARD_MEMBER_SINCE"));
         public string Location => Info.TryGet("INTRO_CARD_CURRENT_CITY", "INTRO_CARD_HOMETOWN");
 
         public ImageUrl HeaderImg;

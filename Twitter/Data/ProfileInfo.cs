@@ -14,13 +14,14 @@ namespace Twitter.Data
         public string Description;
         public string Location;
         public string Url;
-        public string JoinDate;
+        public string JoinDate => DateUtils.TryParseDate(RawJoinDate);
 
         public ImageUrl HeaderImg;
         public ImageUrl PhotoImg;
 
         public string RawFollowing;
         public string RawFollowers;
+        public string RawJoinDate;
 
         public int Following => NumberUtils.ParseCount(RawFollowing);
         public int Followers => NumberUtils.ParseCount(RawFollowers);

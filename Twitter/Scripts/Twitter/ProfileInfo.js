@@ -36,11 +36,11 @@ return JSON.stringify({
     Description: description?.innerText?.trim(),
     Location: location?.innerText?.trim(),
     Url: url?.href,
-    JoinDate: joindate?.innerText?.trim(),
 
     HeaderImg: header?.src,
     PhotoImg: photo?.src,
 
     RawFollowing: following?.querySelector('span')?.innerText,
     RawFollowers: followers?.querySelector('span')?.innerText,
+    RawJoinDate: joindate?.innerText?.trim(),
 })

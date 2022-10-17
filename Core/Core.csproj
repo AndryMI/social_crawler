@@ -93,6 +93,7 @@
     <Compile Include="Utils\ApiClient.cs" />
     <Compile Include="Utils\ApiServerClient.cs" />
     <Compile Include="Utils\CrawlingException.cs" />
+    <Compile Include="Utils\DateUtils.cs" />
     <Compile Include="Utils\DriverExtensions.cs" />
     <Compile Include="Crawling\ImageUrlCollector.cs" />
     <Compile Include="Utils\KeyValueList.cs" />
