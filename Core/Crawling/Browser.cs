@@ -28,17 +28,17 @@ namespace Core.Crawling
         public ChromeDriver Driver<T>(string url) where T : Account, new()
         {
             var account = Accounts<T>.Instance.Get(url);
-            var driver = Driver(account.BrowserProfile);
+            var driver = Driver(account);
             account.Login(driver);
             return driver;
         }
 
-        public ChromeDriver Driver(string profileName = null)
+        public ChromeDriver Driver(Account account = null)
         {
-            if (profile.Name != profileName)
+            if (profile.Name != account?.BrowserProfile)
             {
                 Close();
-                profile = new BrowserProfile(profileName);
+                profile = new BrowserProfile(account?.BrowserProfile);
             }
             if (driver == null)
             {
@@ -76,6 +76,7 @@ namespace Core.Crawling
             dumper?.Dispose();
             dumper = null;
             network.Clear();
+            network.RequestCounter = account?.Limits;
             return driver;
         }
 

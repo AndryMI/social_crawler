@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="Configs\Config.cs" />
     <Compile Include="Configs\ServerConfig.cs" />
+    <Compile Include="Crawling\Account.cs" />
     <Compile Include="Crawling\Accounts.cs" />
     <Compile Include="Crawling\Browser.cs" />
     <Compile Include="Crawling\BrowserConsole.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Crawling\BrowserProfile.cs" />
     <Compile Include="Crawling\Crawler.cs" />
     <Compile Include="Crawling\CrawlerThread.cs" />
+    <Compile Include="Crawling\RequestLimits.cs" />
     <Compile Include="Data\ICommentInfo.cs" />
     <Compile Include="Data\ImageUrl.cs" />
     <Compile Include="Data\IPostInfo.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="Utils\NumberUtils.cs" />
     <Compile Include="Utils\ObjectId.cs" />
     <Compile Include="Utils\Threaded.cs" />
+    <Compile Include="Utils\TryLaterException.cs" />
     <Compile Include="Utils\UniqueFilter.cs" />
     <Content Include="Scripts\ReactUtils.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -42,8 +42,7 @@ namespace CrawlerApp
 
         public static void RunBrowser(string profile)
         {
-            var browser = new Browser(new NullStorage());
-            browser.Driver(profile);
+            BrowserRun.Profile(profile);
             Environment.Exit(0);
         }
 

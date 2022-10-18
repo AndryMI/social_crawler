@@ -8,11 +8,18 @@ using System.Text;
 
 namespace Core.Crawling
 {
+    public interface IRequestCounter
+    {
+        void OnRequest(string url);
+    }
+
     public class BrowserNetwork : IDisposable
     {
         private readonly ILogger log;
         private readonly Dictionary<string, Item> requests = new Dictionary<string, Item>();
         private readonly DevToolsSessionDomains domains;
+
+        public IRequestCounter RequestCounter;
 
         public BrowserNetwork(ChromeDriver driver)
         {
@@ -84,6 +91,7 @@ namespace Core.Crawling
         {
             log.Verbose("Net Send {RequestId} {Type} {Url}", e.RequestId, e.Type, e.Request.Url);
             AddItem(new Item { id = e.RequestId, url = e.Request.Url, type = e.Type });
+            RequestCounter?.OnRequest(e.Request.Url);
         }
 
         private void OnResponseReceived(object sender, ResponseReceivedEventArgs e)

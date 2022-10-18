@@ -80,23 +80,27 @@ namespace Core.Crawling
             }
         }
 
-        public void Delay(CrawlerTask task)
+        public void Delay(CrawlerTask task, DateTimeOffset time = default)
         {
             lock (locker)
             {
                 if (states.TryGetValue(task.Command, out var state))
                 {
                     task.RunAt = DateTimeOffset.UtcNow.AddSeconds(Config.Instance.RetryTimeout);
+                    if (task.RunAt < time)
+                    {
+                        task.RunAt = time;
+                    }
                     state.Add(task);
                 }
             }
         }
 
-        public void Retry(CrawlerTask task)
+        public void Retry(CrawlerTask task, DateTimeOffset time = default)
         {
             if (task.RunFails++ < Config.Instance.RetryAttempts)
             {
-                Delay(task);
+                Delay(task, time);
             }
             else Log.Error("Task skipped: {task}", task);
         }

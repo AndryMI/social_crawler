@@ -78,6 +78,7 @@
     <Compile Include="App\ConsoleManager.cs" />
     <Compile Include="App\Program.cs" />
     <Compile Include="Utils\GZipHooks.cs" />
+    <Compile Include="Utils\BrowserRun.cs" />
     <Compile Include="Utils\ProgramArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="App\RemoteManager.cs" />

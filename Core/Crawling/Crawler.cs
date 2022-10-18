@@ -9,7 +9,7 @@ namespace Core.Crawling
 
         public static void Sleep(object context, string action)
         {
-            Thread.Sleep(random.Next(1000, 3000));
+            Thread.Sleep(random.Next(3000, 5000));
         }
     }
 }

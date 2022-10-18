@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,25 +6,6 @@ using System.Linq;
 
 namespace Core.Crawling
 {
-    public abstract class Account
-    {
-        public virtual string BrowserProfile => (Email.GetHashCode() & 0xff).ToString("X2");
-
-        public string Name;
-        public string Email;
-        public string Password;
-
-        public readonly HashSet<string> AssignedUids = new HashSet<string>();
-
-        public abstract void Login(ChromeDriver driver);
-
-        public virtual string ToUid(string url)
-        {
-            var uri = new Uri(url);
-            return uri.Host + uri.LocalPath;
-        }
-    }
-
     public class Accounts<T> where T : Account, new()
     {
         private static readonly T Sample = new T();
@@ -61,13 +41,26 @@ namespace Core.Crawling
             lock (locker)
             {
                 var uid = Sample.ToUid(url);
-                var account = accounts.Find(x => x.AssignedUids.Contains(uid));
+
+                var account = (
+                    from acc in accounts
+                    let available = acc.Limits.GetAvailableCount()
+                    where available > 0
+                    let assigned = acc.AssignedUids.Contains(uid)
+                    let uids = assigned ? 0 : acc.AssignedUids.Count
+                    let rand = random.Next()
+                    orderby assigned descending, available descending, uids ascending, rand ascending
+                    select acc
+                ).FirstOrDefault();
+
                 if (account == null)
                 {
-                    var uids = accounts.Min(x => x.AssignedUids.Count);
-                    var selected = accounts.Where(x => x.AssignedUids.Count == uids).ToArray();
-                    account = selected[random.Next(selected.Length)];
-                    account.AssignedUids.Add(uid);
+                    var time = accounts.Min(acc => acc.Limits.GetAvailableTime());
+                    throw new TryLaterException(time);
+                }
+
+                if (account.AssignedUids.Add(uid))
+                {
                     File.WriteAllText(FileName, JsonConvert.SerializeObject(accounts, Formatting.Indented));
                 }
                 return account;

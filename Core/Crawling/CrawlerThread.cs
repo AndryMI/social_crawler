@@ -35,11 +35,20 @@ namespace Core.Crawling
                     }
                     catch (CrawlingException ex)
                     {
-                        Log.Warning(ex, "Task failed");
-                        errors.StoreException(ex);
-                        browser.Close();
-                        tasks.Complete(task);
-                        tasks.Retry(ex.Task);
+                        if (ex.InnerException is TryLaterException later)
+                        {
+                            Log.Warning(ex, "Task delayed: {Time}", later.Time);
+                            tasks.Complete(task);
+                            tasks.Delay(ex.Task, later.Time);
+                        }
+                        else
+                        {
+                            Log.Warning(ex, "Task failed");
+                            errors.StoreException(ex);
+                            browser.Close();
+                            tasks.Complete(task);
+                            tasks.Retry(ex.Task);
+                        }
                     }
                 }
                 else
