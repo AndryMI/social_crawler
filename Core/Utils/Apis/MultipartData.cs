@@ -10,7 +10,7 @@ using System.Text;
 namespace Core
 {
     [Serializable]
-    public class MultipartData
+    public class MultipartData : IRequestData
     {
         private readonly string boundary = "--------" + DateTimeOffset.UtcNow.Ticks.ToString("x");
         private readonly List<Item> items = new List<Item>();

@@ -18,7 +18,7 @@ namespace Core
             set => SharedAuthHeader = value;
         }
 
-        public override string Request(string method, string path, object data = null)
+        public override string Request(string method, string path, IRequestData data = null)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace Core
 
         public void Login()
         {
-            var json = base.Request("POST", "/auth/login", new { email = Config.Instance.ApiMail, password = Config.Instance.ApiPass });
+            var json = base.Request("POST", "/auth/login", new JsonData(new { email = Config.Instance.ApiMail, password = Config.Instance.ApiPass }));
             var auth = JsonConvert.DeserializeObject<Auth>(json);
             AuthHeader = $"{auth.token_type} {auth.access_token}";
         }

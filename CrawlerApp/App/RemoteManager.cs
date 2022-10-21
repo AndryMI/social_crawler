@@ -29,7 +29,7 @@ namespace CrawlerApp
 
         private ICommand[] Sync(List<TaskManager.Status> progress)
         {
-            var response = Request("POST", "/crawler", new { guid, progress, types = factory.Types });
+            var response = Request("POST", "/crawler", new JsonData(new { guid, progress, types = factory.Types }));
             var data = JsonConvert.DeserializeObject<SyncResponse>(response, factory);
             return data.commands;
         }

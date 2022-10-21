@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Serilog;
+﻿using Serilog;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -19,33 +18,25 @@ namespace Core
             this.host = host;
         }
 
-        public virtual string Request(string method, string path, object data = null)
+        public virtual string Request(string method, string path, IRequestData data = null)
         {
-            var multipart = data as MultipartData;
             var request = (HttpWebRequest)WebRequest.Create(host + path);
             request.Method = method;
-            request.ContentType = multipart?.ContentType ?? "application/json";
+            request.ContentType = data?.ContentType;
 
             if (!string.IsNullOrEmpty(AuthHeader))
             {
                 request.Headers.Add(HttpRequestHeader.Authorization, AuthHeader);
             }
+
+            log.Verbose("Send {method} {path} {data}", method, path, data);
+
             if (data != null)
             {
                 using (var stream = request.GetRequestStream())
                 using (var writer = new StreamWriter(stream))
                 {
-                    if (multipart == null)
-                    {
-                        var json = JsonConvert.SerializeObject(data);
-                        log.Verbose("Send {method} {path} {json}", method, path, json);
-                        writer.Write(json);
-                    }
-                    else
-                    {
-                        log.Verbose("Send {method} {path} {multipart}", method, path, multipart);
-                        multipart.Serialize(writer);
-                    }
+                    data.Serialize(writer);
                 }
             }
 
