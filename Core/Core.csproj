@@ -91,6 +91,7 @@
     <Compile Include="Storages\Local\NullStorage.cs" />
     <Compile Include="Storages\UniqueMediaFilter.cs" />
     <Compile Include="Storages\Remote\RemoteStorageThread.cs" />
+    <Compile Include="Utils\Apis\AntyLocalApi.cs" />
     <Compile Include="Utils\Apis\AntyRemoteApi.cs" />
     <Compile Include="Utils\Apis\IRequestData.cs" />
     <Compile Include="Utils\Apis\JsonData.cs" />
