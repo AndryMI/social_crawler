@@ -61,11 +61,11 @@
     <Compile Include="Configs\ServerConfig.cs" />
     <Compile Include="Crawling\Account.cs" />
     <Compile Include="Crawling\Accounts.cs" />
-    <Compile Include="Crawling\Browser.cs" />
-    <Compile Include="Crawling\BrowserConsole.cs" />
-    <Compile Include="Crawling\BrowserRequestsDump.cs" />
-    <Compile Include="Crawling\BrowserNetwork.cs" />
-    <Compile Include="Crawling\BrowserProfile.cs" />
+    <Compile Include="Browsers\Browser.cs" />
+    <Compile Include="Browsers\BrowserConsole.cs" />
+    <Compile Include="Browsers\BrowserRequestsDump.cs" />
+    <Compile Include="Browsers\BrowserNetwork.cs" />
+    <Compile Include="Browsers\BrowserProfile.cs" />
     <Compile Include="Crawling\Crawler.cs" />
     <Compile Include="Crawling\CrawlerThread.cs" />
     <Compile Include="Crawling\RequestLimits.cs" />
