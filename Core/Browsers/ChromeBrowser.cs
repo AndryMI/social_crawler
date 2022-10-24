@@ -1,22 +1,15 @@
 ﻿using Core.Crawling;
 using OpenQA.Selenium.Chrome;
-using System;
-using System.Diagnostics;
-using System.Threading;
 
-namespace Core
+namespace Core.Browsers
 {
     public static class ChromeBrowser
     {
-        private const string ChromePath = @"C:\Program Files\Google\Chrome\Application\chrome.exe";
-        private static ulong nextUid = 0;
+        private static string LastVersion;
 
         public static ChromeDriver Start(BrowserProfile profile)
         {
-            var timeout = TimeSpan.FromSeconds(Config.Instance.WaitTimeout);
             var options = new ChromeOptions();
-            options.AddArgument("--crawler-thread=" + Thread.CurrentThread.ManagedThreadId);
-            options.AddArgument("--crawler-instance=" + nextUid++);
             options.AddArgument("--lang=en");
             options.AddUserProfilePreference("profile.default_content_setting_values.notifications", 2);
 
@@ -32,9 +25,7 @@ namespace Core
                 options.AddArgument("user-data-dir=" + profile.FullPath);
             }
 
-            var ver = FileVersionInfo.GetVersionInfo(ChromePath).FileVersion;
-
-            return new ChromeDriver(DriverService.AutoRun(ver), options, timeout);
+            return DriverService.Run(ref LastVersion, options);
         }
     }
 }

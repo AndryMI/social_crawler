@@ -12,6 +12,11 @@ namespace Core
 
         public Automation Start(int browserProfileId)
         {
+            return Start(browserProfileId.ToString());
+        }
+
+        public Automation Start(string browserProfileId)
+        {
             try
             {
                 var info = JsonConvert.DeserializeObject<Info>(Request("GET", $"/browser_profiles/{browserProfileId}/start?automation=1"));

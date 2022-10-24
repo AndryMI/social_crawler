@@ -1,12 +1,15 @@
-﻿using OpenQA.Selenium.Chrome;
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
-using System.Runtime.ConstrainedExecution;
+using System.Text.RegularExpressions;
 
-namespace Core
+namespace Core.Browsers
 {
     public static class DriverService
     {
@@ -16,9 +19,56 @@ namespace Core
         private static readonly Dictionary<string, VersionInfo> versions = new Dictionary<string, VersionInfo>();
         private static readonly WebClient client = new WebClient();
 
-        public static ChromeDriverService AutoRun(string version)
+        public static ChromeDriver Run(ref string version, ChromeOptions options)
         {
-            var major = version.Substring(0, version.IndexOf('.'));
+            if (string.IsNullOrEmpty(version))
+            {
+                version = GetDevToolsVersion();
+            }
+            var timeout = TimeSpan.FromSeconds(Config.Instance.WaitTimeout);
+            var service = CreateService(version);
+            try
+            {
+                var driver = new ChromeDriver(service, options, timeout);
+                var caps = driver.Capabilities;
+
+                if (GetMajorVersion(version) != GetMajorVersion(caps["browserVersion"].ToString()))
+                {
+                    if (string.IsNullOrEmpty(options.DebuggerAddress))
+                    {
+                        driver.Close();
+                    }
+                    driver.Dispose();
+
+                    throw new WebDriverException($"Browser and Driver versions may be incompatible. Use {caps["browserVersion"]}");
+                }
+                return driver;
+            }
+            catch (WebDriverException e)
+            {
+                service.Dispose();
+
+                var match = Regex.Match(e.Message, @"\d+\.\d+\.\d+\.\d+", RegexOptions.RightToLeft);
+                if (!match.Success)
+                {
+                    throw;
+                }
+                try
+                {
+                    service = CreateService(version = match.Value);
+                    return new ChromeDriver(service, options, timeout);
+                }
+                catch
+                {
+                    service.Dispose();
+                    throw;
+                }
+            }
+        }
+
+        private static ChromeDriverService CreateService(string version)
+        {
+            var major = GetMajorVersion(version);
             var latest = GetLatestVersion(major);
 
             var file = new FileInfo($"{Folder}/{latest}/chromedriver.exe");
@@ -28,6 +78,7 @@ namespace Core
                 {
                     if (!file.Exists)
                     {
+                        Log.Information("Downloading chrome driver {Version}", latest);
                         var archive = $"{file.Directory.FullName}/chromedriver_win32.zip";
                         Directory.CreateDirectory(file.Directory.FullName);
                         client.DownloadFile($"{BaseUrl}/{latest}/chromedriver_win32.zip", archive);
@@ -41,6 +92,22 @@ namespace Core
             return service;
         }
 
+        private static string GetDevToolsVersion()
+        {
+            var regex = new Regex(@"Selenium.DevTools.V(\d+)", RegexOptions.Compiled);
+
+            var latest = typeof(OpenQA.Selenium.DevTools.DevToolsSession).Assembly.GetExportedTypes()
+                .Select(x => regex.Match(x.Namespace))
+                .Max(x => x.Success && int.TryParse(x.Groups[1].Value, out var ver) ? ver : 0);
+
+            return $"{latest}.0.0.0";
+        }
+
+        private static string GetMajorVersion(string version)
+        {
+            return version.Substring(0, version.IndexOf('.'));
+        }
+
         private static string GetLatestVersion(string major)
         {
             lock (versions)
@@ -52,7 +119,7 @@ namespace Core
                 if (info.NextCheck < DateTimeOffset.Now)
                 {
                     info.LatestVersion = client.DownloadString($"{BaseUrl}/LATEST_RELEASE_{major}");
-                    info.NextCheck = DateTimeOffset.Now.AddDays(1);
+                    info.NextCheck = DateTimeOffset.Now.AddHours(1);
                 }
                 return info.LatestVersion;
             }

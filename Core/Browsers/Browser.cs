@@ -1,4 +1,5 @@
-﻿using Core.Storages;
+﻿using Core.Browsers;
+using Core.Storages;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -112,7 +113,8 @@ namespace Core.Crawling
 
         public void Close()
         {
-            driver?.Quit();
+            driver?.Close();
+            driver?.Dispose();
             driver = null;
             dumper?.Dispose();
             dumper = null;

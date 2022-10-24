@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Browsers\AntyBrowser.cs" />
     <Compile Include="Browsers\ChromeBrowser.cs" />
     <Compile Include="Browsers\DriverService.cs" />
     <Compile Include="Configs\Config.cs" />
