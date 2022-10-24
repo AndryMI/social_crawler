@@ -12,7 +12,6 @@ namespace Core.Crawling
 {
     public class Browser
     {
-        private static ulong nextUid = 0;
         private readonly IMediaStorage media;
         private BrowserRequestsDump dumper = null;
         private BrowserNetwork network = null;
@@ -42,28 +41,14 @@ namespace Core.Crawling
             }
             if (driver == null)
             {
-                var timeout = TimeSpan.FromSeconds(Config.Instance.WaitTimeout);
-                var options = new ChromeOptions();
-                options.AddArgument("--crawler-thread=" + Thread.CurrentThread.ManagedThreadId);
-                options.AddArgument("--crawler-instance=" + nextUid++);
-                options.AddArgument("--lang=en");
-                options.AddUserProfilePreference("profile.default_content_setting_values.notifications", 2);
-
-                //TODO options.AddArgument("--host-rules=MAP www.instagram.com example.com");
-                //TODO options.AddArgument("--proxy-server=88.119.175.141:3128");
-
-                if (Config.Instance.BrowserHeadless)
+                if (profile.IsAnonymous)
                 {
-                    options.AddArgument("headless");
+                    driver = ChromeBrowser.Start(profile);
                 }
-                if (!profile.IsAnonymous)
+                else
                 {
-                    options.AddArgument("user-data-dir=" + profile.FullPath);
+                    driver = ChromeBrowser.Start(profile);
                 }
-                var service = ChromeDriverService.CreateDefaultService();
-                service.HideCommandPromptWindow = true;
-
-                driver = new ChromeDriver(service, options, timeout);
                 network = new BrowserNetwork(driver);
                 console = new BrowserConsole(driver);
 
