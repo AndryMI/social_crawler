@@ -5,11 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 
-namespace Core.Browsers
+namespace Core.Browsers.Specific
 {
     public static class DriverService
     {
@@ -23,7 +22,7 @@ namespace Core.Browsers
         {
             if (string.IsNullOrEmpty(version))
             {
-                version = GetDevToolsVersion();
+                version = $"{DevTools.LatestVersion}.0.0.0";
             }
             var timeout = TimeSpan.FromSeconds(Config.Instance.WaitTimeout);
             var service = CreateService(version);
@@ -90,17 +89,6 @@ namespace Core.Browsers
             var service = ChromeDriverService.CreateDefaultService(file.Directory.FullName, file.Name);
             service.HideCommandPromptWindow = true;
             return service;
-        }
-
-        private static string GetDevToolsVersion()
-        {
-            var regex = new Regex(@"Selenium.DevTools.V(\d+)", RegexOptions.Compiled);
-
-            var latest = typeof(OpenQA.Selenium.DevTools.DevToolsSession).Assembly.GetExportedTypes()
-                .Select(x => regex.Match(x.Namespace))
-                .Max(x => x.Success && int.TryParse(x.Groups[1].Value, out var ver) ? ver : 0);
-
-            return $"{latest}.0.0.0";
         }
 
         private static string GetMajorVersion(string version)

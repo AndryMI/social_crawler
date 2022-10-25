@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Browsers.Specific;
 using Core.Crawling;
 using Core.Storages;
 using Serilog;
@@ -19,6 +20,7 @@ namespace CrawlerApp
             LoggerConfig.Init();
             ProgramArgs.Handle(args);
 
+            DevTools.ValidateAll();
             ServerConfig.Load();
 
             var tasks = new TaskManager();
@@ -44,11 +46,6 @@ namespace CrawlerApp
         {
             BrowserRun.Profile(profile);
             Environment.Exit(0);
-        }
-
-        public static void ValidateVersion()
-        {
-            BrowserValidate.Run();
         }
 
         public static void KillDrivers()

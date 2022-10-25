@@ -1,4 +1,5 @@
 ﻿using Core.Crawling;
+using Core.Browsers.Specific;
 using OpenQA.Selenium.Chrome;
 
 namespace Core.Browsers

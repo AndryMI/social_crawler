@@ -1,6 +1,5 @@
-﻿using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.DevTools.V106;
-using OpenQA.Selenium.DevTools.V106.Network;
+﻿using Core.Browsers.Specific;
+using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,26 +10,24 @@ namespace Core.Crawling
     public class BrowserRequestsDump : IDisposable
     {
         private readonly Dictionary<string, bool> requests = new Dictionary<string, bool>();
-        private readonly DevToolsSessionDomains domains;
         private readonly Predicate<string> predicate;
         private readonly ChromeDriver driver;
+        private readonly Network network;
 
         public BrowserRequestsDump(ChromeDriver driver, Predicate<string> predicate)
         {
             this.predicate = predicate;
             this.driver = driver;
 
-            domains = driver.GetDevToolsSession().GetVersionSpecificDomains<DevToolsSessionDomains>();
-            domains.Network.RequestWillBeSent += OnRequestWillBeSent;
-            domains.Network.LoadingFailed += OnLoadingFailed;
-            domains.Network.LoadingFinished += OnLoadingFinished;
+            network = Network.Create(driver);
+            network.OnRequestWillBeSent = OnRequestWillBeSent;
+            network.OnLoadingFailed = OnLoadingFailed;
+            network.OnLoadingFinished = OnLoadingFinished;
         }
 
         public void Dispose()
         {
-            domains.Network.RequestWillBeSent -= OnRequestWillBeSent;
-            domains.Network.LoadingFailed -= OnLoadingFailed;
-            domains.Network.LoadingFinished -= OnLoadingFinished;
+            network.Dispose();
         }
 
         public bool IsComplete()
@@ -69,7 +66,7 @@ namespace Core.Crawling
             }
             foreach (var requestId in requestIds)
             {
-                var data = domains.Network.GetResponseBody(new GetResponseBodyCommandSettings { RequestId = requestId }).Result;
+                var data = network.GetResponseBody(requestId);
                 var sb = new StringBuilder()
                     .Append("const scr = document.createElement('script');")
                     .Append("scr.setAttribute('data-dump', '")
@@ -89,32 +86,32 @@ namespace Core.Crawling
             driver.ExecuteScript("document.querySelectorAll('[data-dump]').forEach(dump => dump.remove())");
         }
 
-        private void OnRequestWillBeSent(object sender, RequestWillBeSentEventArgs e)
+        private void OnRequestWillBeSent(string requestId, string type, string requestUrl)
         {
-            if (predicate(e.Request.Url))
+            if (predicate(requestUrl))
             {
                 lock (requests)
                 {
-                    requests[e.RequestId] = false;
+                    requests[requestId] = false;
                 }
             }
         }
 
-        private void OnLoadingFailed(object sender, LoadingFailedEventArgs e)
+        private void OnLoadingFailed(string requestId, string errorText)
         {
             lock (requests)
             {
-                requests.Remove(e.RequestId);
+                requests.Remove(requestId);
             }
         }
 
-        private void OnLoadingFinished(object sender, LoadingFinishedEventArgs e)
+        private void OnLoadingFinished(string requestId)
         {
             lock (requests)
             {
-                if (requests.ContainsKey(e.RequestId))
+                if (requests.ContainsKey(requestId))
                 {
-                    requests[e.RequestId] = true;
+                    requests[requestId] = true;
                 }
             }
         }

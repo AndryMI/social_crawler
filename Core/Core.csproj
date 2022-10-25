@@ -60,7 +60,18 @@
   <ItemGroup>
     <Compile Include="Browsers\AntyBrowser.cs" />
     <Compile Include="Browsers\ChromeBrowser.cs" />
-    <Compile Include="Browsers\DriverService.cs" />
+    <Compile Include="Browsers\Specific\DriverService.cs" />
+    <Compile Include="Browsers\Specific\Console.cs" />
+    <Compile Include="Browsers\Specific\DevTools.cs" />
+    <Compile Include="Browsers\Specific\Network.cs" />
+    <Compile Include="Browsers\Specific\V106\ConsoleV106.cs" />
+    <Compile Include="Browsers\Specific\V105\ConsoleV105.cs" />
+    <Compile Include="Browsers\Specific\V104\ConsoleV104.cs" />
+    <Compile Include="Browsers\Specific\V85\ConsoleV85.cs" />
+    <Compile Include="Browsers\Specific\V105\NetworkV105.cs" />
+    <Compile Include="Browsers\Specific\V106\NetworkV106.cs" />
+    <Compile Include="Browsers\Specific\V104\NetworkV104.cs" />
+    <Compile Include="Browsers\Specific\V85\NetworkV85.cs" />
     <Compile Include="Configs\Config.cs" />
     <Compile Include="Configs\ServerConfig.cs" />
     <Compile Include="Crawling\Account.cs" />
