@@ -37,7 +37,7 @@ namespace Core.Crawling
                     {
                         if (ex.InnerException is TryLaterException later)
                         {
-                            Log.Warning(ex, "Task delayed: {Time}", later.Time);
+                            Log.Warning(ex, "Task delayed: {Time} {Reason}", later.Time, later.Message);
                             tasks.Complete(task);
                             tasks.Delay(ex.Task, later.Time);
                         }

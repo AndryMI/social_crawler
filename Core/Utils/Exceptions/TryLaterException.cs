@@ -6,9 +6,14 @@ namespace Core
     {
         public readonly DateTimeOffset Time;
 
-        public TryLaterException(DateTimeOffset time)
+        public TryLaterException(string reason, DateTimeOffset time) : base(reason)
         {
             Time = time;
+        }
+
+        public TryLaterException(string reason, TimeSpan time) : base(reason)
+        {
+            Time = DateTimeOffset.Now + time;
         }
     }
 }

@@ -16,6 +16,11 @@ namespace Core
             AuthHeader = "Bearer " + auth.token;
         }
 
+        public AntyRemoteApi(string token, string host = "https://anty-api.com") : base(host)
+        {
+            AuthHeader = token;
+        }
+
         public Page<T> Next<T>(Page<T> page)
         {
             return JsonConvert.DeserializeObject<Page<T>>(Request("GET", new Uri(page.next).PathAndQuery));
@@ -56,6 +61,12 @@ namespace Core
             return response.data;
         }
 
+        public UserProfile GetUserProfile()
+        {
+            var response = JsonConvert.DeserializeObject<Data<UserProfile>>(Request("GET", "/profile"));
+            return response.data;
+        }
+
         public enum Platform { undefined, windows, linux, macos }
 
         public class Status
@@ -65,6 +76,11 @@ namespace Core
             public string name;
             public string color;
             public bool deleted;
+        }
+
+        public class UserProfile
+        {
+            public string username;
         }
 
         public class BrowserProfile

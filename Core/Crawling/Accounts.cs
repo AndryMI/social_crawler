@@ -56,7 +56,7 @@ namespace Core.Crawling
                 if (account == null)
                 {
                     var time = accounts.Min(acc => acc.Limits.GetAvailableTime());
-                    throw new TryLaterException(time);
+                    throw new TryLaterException("No available accounts: " + url, time);
                 }
 
                 if (account.AssignedUids.Add(uid))

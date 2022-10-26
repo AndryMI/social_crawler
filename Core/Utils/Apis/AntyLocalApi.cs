@@ -10,6 +10,12 @@ namespace Core
         {
         }
 
+        public string RemoteApiToken()
+        {
+            var info = JsonConvert.DeserializeObject<Token>(Request("GET", $"/remote_api_token"));
+            return info.token;
+        }
+
         public Automation Start(int browserProfileId)
         {
             return Start(browserProfileId.ToString());
@@ -47,6 +53,11 @@ namespace Core
         {
             public bool success = false;
             public Automation automation = null;
+        }
+
+        private class Token
+        {
+            public string token;
         }
     }
 }
