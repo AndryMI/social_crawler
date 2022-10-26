@@ -12,6 +12,9 @@ function ProcessComment(comment) {
     if (!comment_link) {
         return
     }
+    if (!comment_link.startsWith(document.location.origin + document.location.pathname)) {
+        return
+    }
     const reactions = __FindFirstInObjectRecursive(comment, (key, value) => {
         return key == 'reactors' ? value.count : undefined
     })

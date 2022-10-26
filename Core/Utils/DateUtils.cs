@@ -7,6 +7,10 @@ namespace Core.Crawling
     {
         public static string TryParseDate(string line)
         {
+            if (string.IsNullOrEmpty(line))
+            {
+                return null;
+            }
             var time = default(TimeSpan);
             var date = default(DateTimeOffset);
 

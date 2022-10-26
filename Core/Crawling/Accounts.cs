@@ -60,10 +60,9 @@ namespace Core.Crawling
                     throw new TryLaterException("No available accounts: " + url, time);
                 }
 
-                if (account.AssignedUids.Add(uid))
-                {
-                    File.WriteAllText(FileName, JsonConvert.SerializeObject(accounts, Formatting.Indented));
-                }
+                account.AssignedUids.Add(uid);
+                File.WriteAllText(FileName, JsonConvert.SerializeObject(accounts, Formatting.Indented));
+
                 return account;
             }
         }
