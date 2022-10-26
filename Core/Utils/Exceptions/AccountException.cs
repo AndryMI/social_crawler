@@ -7,7 +7,7 @@ namespace Core
     {
         public Account Account { get; private set; }
 
-        public AccountException(Account account)
+        public AccountException(string reason, Account account) : base(reason)
         {
             Account = account;
         }

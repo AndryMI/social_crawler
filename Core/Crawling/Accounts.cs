@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Core.Browsers.Profiles;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,7 +24,7 @@ namespace Core.Crawling
             {
                 if (File.Exists(FileName))
                 {
-                    accounts = JsonConvert.DeserializeObject<List<T>>(File.ReadAllText(FileName));
+                    accounts = JsonConvert.DeserializeObject<List<T>>(File.ReadAllText(FileName), new BrowserProfileJson());
                 }
                 if (accounts == null)
                 {
@@ -44,7 +45,7 @@ namespace Core.Crawling
 
                 var account = (
                     from acc in accounts
-                    let available = acc.Limits.GetAvailableCount()
+                    let available = acc.Limits?.GetAvailableCount() ?? int.MaxValue
                     where available > 0
                     let assigned = acc.AssignedUids.Contains(uid)
                     let uids = assigned ? 0 : acc.AssignedUids.Count

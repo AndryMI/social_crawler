@@ -1,5 +1,9 @@
 ﻿[
   {
+    "BrowserProfile": {
+      "Type": "Chrome",
+      "Id": "Test"
+    },
     "Name": "bubenvasya",
     "Email": "bubenvasya",
     "Password": "gfsdfsfdsfds"

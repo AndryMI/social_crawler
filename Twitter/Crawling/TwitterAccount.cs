@@ -1,4 +1,5 @@
-﻿using Core.Crawling;
+﻿using Core;
+using Core.Crawling;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
@@ -40,6 +41,10 @@ namespace Twitter.Crawling
                 driver.WaitForLoading();
             }
 
+            if (string.IsNullOrEmpty(Email) && string.IsNullOrEmpty(Password))
+            {
+                throw new AccountException("Email or Password are empty", this);
+            }
             var user = driver.FindElement(By.CssSelector("[autocomplete=username]"));
             user.Click();
             user.SendKeys(Email + "\n");

@@ -1,4 +1,5 @@
 ﻿using Core.Browsers.DevTools;
+using Newtonsoft.Json;
 using OpenQA.Selenium.Chrome;
 
 namespace Core.Browsers.Profiles
@@ -10,6 +11,9 @@ namespace Core.Browsers.Profiles
 
         public string Type => "Anty";
         public string Id { get; private set; }
+
+        [JsonProperty]
+        public string AntyUser { get; private set; }
 
         public ChromeDriver Start()
         {

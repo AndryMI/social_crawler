@@ -8,6 +8,7 @@ namespace Core.Crawling
 {
     public abstract class Account
     {
+        [JsonProperty(Required = Required.Always)]
         public IBrowserProfile BrowserProfile;
 
         public string Name;

@@ -1,11 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Core.Crawling
 {
     [JsonConverter(typeof(Json))]
+    [DebuggerDisplay("{Count} / {Duration}")]
     public class RequestLimits : IRequestCounter
     {
         private readonly Queue<DateTimeOffset> requests = new Queue<DateTimeOffset>();
