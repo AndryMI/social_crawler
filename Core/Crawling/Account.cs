@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Core.Browsers.Profiles;
+using Newtonsoft.Json;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ namespace Core.Crawling
 {
     public abstract class Account
     {
-        public virtual string BrowserProfile => (Email.GetHashCode() & 0xff).ToString("X2");
+        public IBrowserProfile BrowserProfile;
 
         public string Name;
         public string Email;

@@ -1,4 +1,5 @@
-﻿using Core.Crawling;
+﻿using Core.Browsers.Profiles;
+using Core.Crawling;
 using Core.Storages;
 using OpenQA.Selenium.Chrome;
 
@@ -14,13 +15,9 @@ namespace CrawlerApp
 
         private class Wrapper : Account
         {
-            public override string BrowserProfile => profile;
-
-            private readonly string profile;
-
             public Wrapper(string profile)
             {
-                this.profile = profile;
+                BrowserProfile = new ChromeProfile(profile);
             }
 
             public override void Login(ChromeDriver driver)

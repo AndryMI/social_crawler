@@ -58,8 +58,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Browsers\AntyBrowser.cs" />
-    <Compile Include="Browsers\ChromeBrowser.cs" />
+    <Compile Include="Browsers\Profiles\AnonymousProfile.cs" />
+    <Compile Include="Browsers\Profiles\AntyProfile.cs" />
+    <Compile Include="Browsers\Profiles\ChromeProfile.cs" />
     <Compile Include="Browsers\DevTools\DriverService.cs" />
     <Compile Include="Browsers\DevTools\Console.cs" />
     <Compile Include="Browsers\DevTools\DevTools.cs" />
@@ -72,15 +73,15 @@
     <Compile Include="Browsers\DevTools\V106\NetworkV106.cs" />
     <Compile Include="Browsers\DevTools\V104\NetworkV104.cs" />
     <Compile Include="Browsers\DevTools\V85\NetworkV85.cs" />
+    <Compile Include="Browsers\Profiles\IBrowserProfile.cs" />
     <Compile Include="Configs\Config.cs" />
     <Compile Include="Configs\ServerConfig.cs" />
     <Compile Include="Crawling\Account.cs" />
     <Compile Include="Crawling\Accounts.cs" />
-    <Compile Include="Browsers\Browser.cs" />
-    <Compile Include="Browsers\BrowserConsole.cs" />
-    <Compile Include="Browsers\BrowserRequestsDump.cs" />
-    <Compile Include="Browsers\BrowserNetwork.cs" />
-    <Compile Include="Browsers\BrowserProfile.cs" />
+    <Compile Include="Crawling\Browser.cs" />
+    <Compile Include="Crawling\BrowserConsole.cs" />
+    <Compile Include="Crawling\BrowserRequestsDump.cs" />
+    <Compile Include="Crawling\BrowserNetwork.cs" />
     <Compile Include="Crawling\Crawler.cs" />
     <Compile Include="Crawling\CrawlerThread.cs" />
     <Compile Include="Crawling\RequestLimits.cs" />

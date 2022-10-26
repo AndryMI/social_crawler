@@ -1,4 +1,4 @@
-﻿using Core.Browsers;
+﻿using Core.Browsers.Profiles;
 using Core.Storages;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
@@ -13,11 +13,13 @@ namespace Core.Crawling
 {
     public class Browser
     {
+        private static readonly IBrowserProfile Anonymous = new AnonymousProfile();
+
         private readonly IMediaStorage media;
         private BrowserRequestsDump dumper = null;
         private BrowserNetwork network = null;
         private BrowserConsole console = null;
-        private BrowserProfile profile = default;
+        private IBrowserProfile profile = Anonymous;
         private ChromeDriver driver = null;
 
         public Browser(IMediaStorage media)
@@ -35,29 +37,19 @@ namespace Core.Crawling
 
         public ChromeDriver Driver(Account account = null)
         {
-            if (profile.Name != account?.BrowserProfile)
+            if (!Equals(profile, account?.BrowserProfile ?? Anonymous))
             {
                 Close();
-                profile = new BrowserProfile(account?.BrowserProfile);
+                profile = account?.BrowserProfile ?? Anonymous;
             }
             if (driver == null)
             {
-                if (profile.IsAnonymous)
-                {
-                    driver = ChromeBrowser.Start(profile);
-                }
-                else
-                {
-                    driver = ChromeBrowser.Start(profile);
-                }
+                driver = profile.Start();
                 network = new BrowserNetwork(driver);
                 console = new BrowserConsole(driver);
 
                 //TODO tempfix https://github.com/SeleniumHQ/selenium/issues/10799
-                if (!profile.IsAnonymous)
-                {
-                    Thread.Sleep(1000);
-                }
+                Thread.Sleep(1000);
             }
             dumper?.Dispose();
             dumper = null;
@@ -122,8 +114,12 @@ namespace Core.Crawling
             network = null;
             console?.Dispose();
             console = null;
-            profile.Dispose();
-            profile = default;
+            profile = Anonymous;
+        }
+
+        private static bool Equals(IBrowserProfile a, IBrowserProfile b)
+        {
+            return a.Id == b.Id && a.Type == b.Type;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Core
 
         public string RemoteApiToken()
         {
-            var info = JsonConvert.DeserializeObject<Token>(Request("GET", $"/remote_api_token"));
+            var info = JsonConvert.DeserializeObject<Token>(Request("GET", "/remote_api_token"));
             return info.token;
         }
 
@@ -57,7 +57,7 @@ namespace Core
 
         private class Token
         {
-            public string token;
+            public string token = null;
         }
     }
 }

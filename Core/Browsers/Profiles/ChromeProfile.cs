@@ -1,14 +1,22 @@
-﻿using Core.Crawling;
-using Core.Browsers.DevTools;
+﻿using Core.Browsers.DevTools;
 using OpenQA.Selenium.Chrome;
+using System.IO;
 
-namespace Core.Browsers
+namespace Core.Browsers.Profiles
 {
-    public static class ChromeBrowser
+    public class ChromeProfile : IBrowserProfile
     {
         private static string LastVersion;
 
-        public static ChromeDriver Start(BrowserProfile profile)
+        public string Type => "Chrome";
+        public string Id { get; private set; }
+
+        public ChromeProfile(string id = null)
+        {
+            Id = id;
+        }
+
+        public ChromeDriver Start()
         {
             var options = new ChromeOptions();
             options.AddArgument("--lang=en");
@@ -21,9 +29,9 @@ namespace Core.Browsers
             {
                 options.AddArgument("headless");
             }
-            if (!profile.IsAnonymous)
+            if (!string.IsNullOrWhiteSpace(Id))
             {
-                options.AddArgument("user-data-dir=" + profile.FullPath);
+                options.AddArgument("user-data-dir=" + Path.GetFullPath("Browsers/" + Id));
             }
 
             return DriverService.Run(ref LastVersion, options);
