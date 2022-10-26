@@ -1,13 +1,13 @@
-﻿using OpenQA.Selenium.DevTools.V104;
-using OpenQA.Selenium.DevTools.V104.Network;
+﻿using OpenQA.Selenium.DevTools.V106;
+using OpenQA.Selenium.DevTools.V106.Network;
 
-namespace Core.Browsers.Specific.V104
+namespace Core.Browsers.DevTools.V106
 {
-    public class NetworkV104 : Network
+    public class NetworkV106 : Network
     {
         private readonly DevToolsSessionDomains domains;
 
-        public NetworkV104(V104Domains domain)
+        public NetworkV106(V106Domains domain)
         {
             domains = (DevToolsSessionDomains)domain.VersionSpecificDomains;
             domains.Network.Enable(new EnableCommandSettings()).Wait();

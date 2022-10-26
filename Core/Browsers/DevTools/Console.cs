@@ -1,7 +1,7 @@
 ﻿using Serilog.Events;
 using System;
 
-namespace Core.Browsers.Specific
+namespace Core.Browsers.DevTools
 {
     public abstract class Console : DevTools<Console>, IDisposable
     {

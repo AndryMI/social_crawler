@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.Browsers.Specific
+namespace Core.Browsers.DevTools
 {
     public abstract class Network : DevTools<Network>, IDisposable
     {

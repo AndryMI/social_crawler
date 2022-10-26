@@ -1,5 +1,5 @@
 ﻿using Core;
-using Core.Browsers.Specific;
+using Core.Browsers.DevTools;
 using Core.Crawling;
 using Core.Storages;
 using Serilog;

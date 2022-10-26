@@ -1,14 +1,14 @@
-﻿using OpenQA.Selenium.DevTools.V106;
-using OpenQA.Selenium.DevTools.V106.Console;
+﻿using OpenQA.Selenium.DevTools.V104;
+using OpenQA.Selenium.DevTools.V104.Console;
 using Serilog.Events;
 
-namespace Core.Browsers.Specific.V106
+namespace Core.Browsers.DevTools.V104
 {
-    public class ConsoleV106 : Console
+    public class ConsoleV104 : Console
     {
         private readonly DevToolsSessionDomains domains;
 
-        public ConsoleV106(V106Domains domain)
+        public ConsoleV104(V104Domains domain)
         {
             domains = (DevToolsSessionDomains)domain.VersionSpecificDomains;
             domains.Console.Enable(new EnableCommandSettings()).Wait();

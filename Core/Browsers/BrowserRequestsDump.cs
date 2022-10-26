@@ -1,4 +1,4 @@
-﻿using Core.Browsers.Specific;
+﻿using Core.Browsers.DevTools;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;

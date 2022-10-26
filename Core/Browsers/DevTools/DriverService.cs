@@ -8,7 +8,7 @@ using System.IO.Compression;
 using System.Net;
 using System.Text.RegularExpressions;
 
-namespace Core.Browsers.Specific
+namespace Core.Browsers.DevTools
 {
     public static class DriverService
     {

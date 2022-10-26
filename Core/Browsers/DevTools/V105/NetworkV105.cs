@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium.DevTools.V105;
 using OpenQA.Selenium.DevTools.V105.Network;
 
-namespace Core.Browsers.Specific.V105
+namespace Core.Browsers.DevTools.V105
 {
     public class NetworkV105 : Network
     {

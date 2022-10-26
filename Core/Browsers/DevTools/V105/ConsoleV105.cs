@@ -2,7 +2,7 @@
 using OpenQA.Selenium.DevTools.V105.Console;
 using Serilog.Events;
 
-namespace Core.Browsers.Specific.V105
+namespace Core.Browsers.DevTools.V105
 {
     public class ConsoleV105 : Console
     {
