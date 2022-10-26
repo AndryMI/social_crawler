@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Serilog;
-using System;
 
 namespace Core
 {
@@ -23,16 +21,8 @@ namespace Core
 
         public Automation Start(string browserProfileId)
         {
-            try
-            {
-                var info = JsonConvert.DeserializeObject<Info>(Request("GET", $"/browser_profiles/{browserProfileId}/start?automation=1"));
-                return info.automation;
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "Failed to start Anty {ProfileId}", browserProfileId);
-                return null;
-            }
+            var info = JsonConvert.DeserializeObject<Info>(Request("GET", $"/browser_profiles/{browserProfileId}/start?automation=1"));
+            return info.automation;
         }
 
         public bool Stop(int browserProfileId)

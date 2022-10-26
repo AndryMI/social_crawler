@@ -44,12 +44,19 @@ namespace Core.Crawling
             }
             if (driver == null)
             {
-                driver = profile.Start();
-                network = new BrowserNetwork(driver);
-                console = new BrowserConsole(driver);
+                try
+                {
+                    driver = profile.Start();
+                    network = new BrowserNetwork(driver);
+                    console = new BrowserConsole(driver);
 
-                //TODO tempfix https://github.com/SeleniumHQ/selenium/issues/10799
-                Thread.Sleep(1000);
+                    //TODO tempfix https://github.com/SeleniumHQ/selenium/issues/10799
+                    Thread.Sleep(1000);
+                }
+                catch (Exception e)
+                {
+                    throw new TryLaterException($"Failed to start browser: {profile.Type} {profile.Id}", e);
+                }
             }
             dumper?.Dispose();
             dumper = null;
