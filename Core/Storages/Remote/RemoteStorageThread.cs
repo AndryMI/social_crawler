@@ -17,6 +17,7 @@ namespace Core.Storages
 
         protected override void Run()
         {
+            Thread.Sleep(0);
             var data = default(MultipartData);
             var client = new ApiServerClient();
             while (IsWorking)

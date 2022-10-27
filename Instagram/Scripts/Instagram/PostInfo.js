@@ -21,7 +21,7 @@ queue.slice(-100).forEach(post => {
     delete videos[''];
 
     for (const url in images) {
-        fetch(url);
+        fetch(url, { cache: 'force-cache' });
     }
 
     posts.push({

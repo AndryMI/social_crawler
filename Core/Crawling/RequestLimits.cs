@@ -31,8 +31,17 @@ namespace Core.Crawling
 
         public DateTimeOffset GetAvailableTime()
         {
-            var first = TrimRequests();
-            return requests.Count < Count ? DateTimeOffset.Now : first + Duration;
+            TrimRequests();
+
+            var delta = requests.Count - Count;
+            if (delta < 0)
+            {
+                return DateTimeOffset.Now;
+            }
+            lock (requests)
+            {
+                return requests.Skip(delta).FirstOrDefault() + Duration;
+            }
         }
 
         public void OnRequest(string url)
@@ -46,7 +55,7 @@ namespace Core.Crawling
             }
         }
 
-        private DateTimeOffset TrimRequests(List<DateTimeOffset> output = null)
+        private void TrimRequests(List<DateTimeOffset> output = null)
         {
             lock (requests)
             {
@@ -59,7 +68,6 @@ namespace Core.Crawling
                 {
                     output.AddRange(requests);
                 }
-                return requests.Count > 0 ? requests.Peek() : default;
             }
         }
 

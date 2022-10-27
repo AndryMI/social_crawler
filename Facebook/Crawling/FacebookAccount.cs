@@ -12,7 +12,7 @@ namespace Facebook.Crawling
 
         public override RequestLimits GetRequestLimits()
         {
-            return new RequestLimits(200, TimeSpan.FromHours(1), url => url.Contains("/graphql/"));
+            return new RequestLimits(150, TimeSpan.FromHours(1), url => url.Contains("facebook.com"));
         }
 
         private bool IsLoggedIn(ChromeDriver driver)

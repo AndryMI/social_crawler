@@ -38,6 +38,10 @@ function ProcessComment(comment) {
         }
     })
 
+    for (const url in images) {
+        fetch(url, { cache: 'force-cache' });
+    }
+
     comments.push({
         ProfileLink: ExtractProfileFromPostUrl(document.location.href),
         PostLink: document.location.href,
