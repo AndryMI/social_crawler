@@ -18,13 +18,20 @@ namespace Core.Browsers.Profiles
         public ChromeDriver Start()
         {
             var automation = Api.Start(Id);
-
-            var options = new ChromeOptions
+            try
             {
-                DebuggerAddress = "127.0.0.1:" + automation.port
-            };
+                var options = new ChromeOptions
+                {
+                    DebuggerAddress = "127.0.0.1:" + automation.port
+                };
 
-            return DriverService.Run(ref LastVersion, options);
+                return DriverService.Run(ref LastVersion, options);
+            }
+            catch
+            {
+                Api.Stop(Id);
+                throw;
+            }
         }
     }
 }

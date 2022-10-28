@@ -29,7 +29,7 @@ namespace Core.Storages
                     var found = storage.TryGetValue(hash, out var path);
                     if (!found)
                     {
-                        path = DateTimeOffset.UtcNow.ToString(@"\/yyyy\/MM\/dd\/") + ObjectId.New() + MimeTypeMap.GetExtension(image.MimeType);
+                        path = DateTimeOffset.UtcNow.ToString(@"\/yyyy\/MM\/dd\/") + ObjectId.New() + MimeTypeMap.GetExtension(image.MimeType, false);
                         storage[hash] = path;
                         Trim(storage);
                     }

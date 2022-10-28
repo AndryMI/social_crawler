@@ -27,6 +27,11 @@ namespace Core
 
         public bool Stop(int browserProfileId)
         {
+            return Stop(browserProfileId.ToString());
+        }
+
+        public bool Stop(string browserProfileId)
+        {
             var info = JsonConvert.DeserializeObject<Info>(Request("GET", $"/browser_profiles/{browserProfileId}/stop"));
             return info.success;
         }
