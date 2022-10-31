@@ -66,6 +66,7 @@ namespace Facebook.Crawling
                         break;
                     }
                     requests.ClearDump();
+                    driver.FocusToWindow();
                     driver.ScrollToPageBottom();
                     requests.WaitForComplete();
                     Crawler.Sleep(this, "next posts");
@@ -83,6 +84,7 @@ namespace Facebook.Crawling
                         storage.StoreComments(task, comments);
                     }
                     requests.ClearDump();
+                    driver.FocusToWindow();
                     driver.ScrollToPageBottom();
                     driver.LoadMoreComments();
                     requests.WaitForComplete();
