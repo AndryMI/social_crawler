@@ -19,12 +19,21 @@ namespace CrawlerApp
         private RemoteManager()
         {
             factory.Register<CancelCommand>("command:cancel");
-            factory.Register<TwitterCommand>("twitter:by_profile_link");
-            factory.Register<TwitterCommand>("twitter:by_keyword");
-            factory.Register<InstagramCommand>("instagram:by_profile_link");
-            factory.Register<InstagramCommand>("instagram:by_keyword");
-            factory.Register<FacebookCommand>("facebook:by_profile_link");
-            factory.Register<FacebookCommand>("facebook:by_keyword");
+            if (Accounts<TwitterAccount>.Instance.Count > 0)
+            {
+                factory.Register<TwitterCommand>("twitter:by_profile_link");
+                factory.Register<TwitterCommand>("twitter:by_keyword");
+            }
+            if (Accounts<InstagramAccount>.Instance.Count > 0)
+            {
+                factory.Register<InstagramCommand>("instagram:by_profile_link");
+                factory.Register<InstagramCommand>("instagram:by_keyword");
+            }
+            if (Accounts<FacebookAccount>.Instance.Count > 0)
+            {
+                factory.Register<FacebookCommand>("facebook:by_profile_link");
+                factory.Register<FacebookCommand>("facebook:by_keyword");
+            }
         }
 
         private ICommand[] Sync(List<TaskManager.Status> progress)

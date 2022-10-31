@@ -112,7 +112,7 @@ namespace Core.Crawling
 
         public void Close()
         {
-            driver?.Close();
+            try { driver?.Close(); } catch { }
             driver?.Dispose();
             driver = null;
             dumper?.Dispose();

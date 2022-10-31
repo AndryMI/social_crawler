@@ -18,6 +18,8 @@ namespace Core.Crawling
 
         private string FileName => $"Configs/{typeof(T).Name}.json";
 
+        public int Count => accounts.Count;
+
         private Accounts()
         {
             lock (locker)
