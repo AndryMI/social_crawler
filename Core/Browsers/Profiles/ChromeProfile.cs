@@ -44,6 +44,10 @@ namespace Core.Browsers.Profiles
             return DriverService.Run(ref LastVersion, options);
         }
 
+        public void Stop()
+        {
+        }
+
         private static bool IsLocked(string path)
         {
             var lockfile = path + "/lockfile";

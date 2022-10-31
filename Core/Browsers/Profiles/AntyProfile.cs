@@ -1,6 +1,7 @@
 ﻿using Core.Browsers.DevTools;
 using Newtonsoft.Json;
 using OpenQA.Selenium.Chrome;
+using System.Threading;
 
 namespace Core.Browsers.Profiles
 {
@@ -18,6 +19,7 @@ namespace Core.Browsers.Profiles
         public ChromeDriver Start()
         {
             var automation = Api.Start(Id);
+            Thread.Sleep(5000);
             try
             {
                 var options = new ChromeOptions
@@ -32,6 +34,15 @@ namespace Core.Browsers.Profiles
                 Api.Stop(Id);
                 throw;
             }
+        }
+
+        public void Stop()
+        {
+            try
+            {
+                Api.Stop(Id);
+            }
+            catch { }
         }
     }
 }

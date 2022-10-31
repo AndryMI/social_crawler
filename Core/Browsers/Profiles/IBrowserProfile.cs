@@ -15,6 +15,8 @@ namespace Core.Browsers.Profiles
         string Id { get; }
 
         ChromeDriver Start();
+
+        void Stop();
     }
 
     public class BrowserProfileJson : JsonConverter<IBrowserProfile>

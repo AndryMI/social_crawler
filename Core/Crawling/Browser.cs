@@ -121,6 +121,7 @@ namespace Core.Crawling
             network = null;
             console?.Dispose();
             console = null;
+            profile?.Stop();
             profile = Anonymous;
         }
 

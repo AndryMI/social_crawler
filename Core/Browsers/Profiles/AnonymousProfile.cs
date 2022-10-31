@@ -13,5 +13,10 @@ namespace Core.Browsers.Profiles
         {
             return impl.Start();
         }
+
+        public void Stop()
+        {
+            impl.Stop();
+        }
     }
 }
