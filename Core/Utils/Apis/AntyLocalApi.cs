@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Core
 {
@@ -34,6 +35,17 @@ namespace Core
         {
             var info = JsonConvert.DeserializeObject<Info>(Request("GET", $"/browser_profiles/{browserProfileId}/stop"));
             return info.success;
+        }
+
+        public bool IsRunning(int browserProfileId)
+        {
+            return IsRunning(browserProfileId.ToString());
+        }
+
+        public bool IsRunning(string browserProfileId)
+        {
+            var json = JsonConvert.DeserializeObject<JObject>(Request("GET", "/browser_profiles/running"));
+            return json[browserProfileId] != null;
         }
 
         public class Automation

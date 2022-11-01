@@ -18,21 +18,32 @@ namespace Core.Browsers.Profiles
 
         public ChromeDriver Start()
         {
-            var automation = Api.Start(Id);
-            Thread.Sleep(5000);
             try
             {
                 var options = new ChromeOptions
                 {
-                    DebuggerAddress = "127.0.0.1:" + automation.port
+                    DebuggerAddress = "127.0.0.1:" + StartPort()
                 };
 
                 return DriverService.Run(ref LastVersion, options);
             }
             catch
             {
-                Api.Stop(Id);
+                Stop();
                 throw;
+            }
+        }
+
+        private int StartPort()
+        {
+            lock (Api)
+            {
+                var automation = Api.Start(Id);
+                for (var i = 0; !Api.IsRunning(Id) && i < Config.Instance.WaitTimeout; i++)
+                {
+                    Thread.Sleep(1000);
+                }
+                return automation.port;
             }
         }
 
@@ -40,7 +51,15 @@ namespace Core.Browsers.Profiles
         {
             try
             {
-                Api.Stop(Id);
+                lock (Api)
+                {
+                    Api.Stop(Id);
+
+                    for (var i = 0; Api.IsRunning(Id) && i < Config.Instance.WaitTimeout; i++)
+                    {
+                        Thread.Sleep(1000);
+                    }
+                }
             }
             catch { }
         }

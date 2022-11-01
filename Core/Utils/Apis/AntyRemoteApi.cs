@@ -46,6 +46,11 @@ namespace Core
 
         public BrowserProfile GetBrowserProfile(int id)
         {
+            return GetBrowserProfile(id.ToString());
+        }
+
+        public BrowserProfile GetBrowserProfile(string id)
+        {
             var response = JsonConvert.DeserializeObject<Data<BrowserProfile>>(Request("GET", "/browser_profiles/" + id));
             return response.data;
         }
