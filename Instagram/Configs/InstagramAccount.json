@@ -1,1 +1,17 @@
-﻿[]
+﻿[
+  {
+    "BrowserProfile": {
+      "Type": "Anty",
+      "Id": "23428563",
+      "AntyUser": "andrey@roibees.com"
+    },
+    "Name": "bubenvasya",
+    "Email": "bubenvasya",
+    "Password": "gfsdfsfdsfds12",
+    "AssignedUids": [
+      "www.instagram.com/explore/tags/عرينالاسود",
+      "www.instagram.com/explore/tags/rinaldonazzaro"
+    ],
+    "LastRequests": []
+  }
+]

@@ -16,14 +16,12 @@ namespace Instagram.Crawling
 
         private bool IsLoggedIn(ChromeDriver driver)
         {
-            foreach (var img in driver.FindElements(By.CssSelector("nav img")))
-            {
-                if (img.GetAttribute("alt").Contains(Name))
-                {
-                    return true;
-                }
-            }
-            return false;
+            var script =
+                "return __WalkFiberRecursive(__GetFiber(document.querySelector('body>div>div')), (fb) => {" +
+                "  return fb.pendingProps?.viewer?.username" +
+                "})";
+            driver.InjectUtils("Scripts/ReactUtils.js");
+            return driver.ExecuteScript(script)?.ToString() == Name;
         }
 
         public override void Login(ChromeDriver driver)

@@ -20,31 +20,42 @@ namespace Core
 
         public virtual string Request(string method, string path, IRequestData data = null)
         {
-            var request = (HttpWebRequest)WebRequest.Create(host + path);
-            request.Method = method;
-            request.ContentType = data?.ContentType;
-
-            if (!string.IsNullOrEmpty(AuthHeader))
+            try
             {
-                request.Headers.Add(HttpRequestHeader.Authorization, AuthHeader);
-            }
+                var request = (HttpWebRequest)WebRequest.Create(host + path);
+                request.Method = method;
+                request.ContentType = data?.ContentType;
 
-            log.Verbose("Send {method} {path} {data}", method, path, data);
-
-            if (data != null)
-            {
-                using (var stream = request.GetRequestStream())
-                using (var writer = new StreamWriter(stream))
+                if (!string.IsNullOrEmpty(AuthHeader))
                 {
-                    data.Serialize(writer);
+                    request.Headers.Add(HttpRequestHeader.Authorization, AuthHeader);
                 }
+
+                log.Verbose("Send {method} {path} {data}", method, path, data);
+
+                if (data != null)
+                {
+                    using (var stream = request.GetRequestStream())
+                    using (var writer = new StreamWriter(stream))
+                    {
+                        data.Serialize(writer);
+                    }
+                }
+
+                var response = request.GetResponse();
+                var result = ReadAllText(response);
+                log.Verbose("Receive {json}", result);
+
+                return result;
             }
-
-            var response = request.GetResponse();
-            var result = ReadAllText(response);
-            log.Verbose("Receive {json}", result);
-
-            return result;
+            catch (WebException e)
+            {
+                if (e.Response != null)
+                {
+                    Log.Verbose("Failed {Responce}", ReadAllText(e.Response));
+                }
+                throw;
+            }
         }
 
         protected static string ReadAllText(WebResponse response)
