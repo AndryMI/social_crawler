@@ -24,7 +24,6 @@ namespace Core.Browsers.Profiles
                 {
                     DebuggerAddress = "127.0.0.1:" + StartPort()
                 };
-
                 return DriverService.Run(ref LastVersion, options);
             }
             catch

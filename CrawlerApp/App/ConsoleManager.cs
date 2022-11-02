@@ -52,7 +52,7 @@ namespace CrawlerApp
 
             public Command(string url)
             {
-                Id = ObjectId.New();
+                Id = new ObjectId();
                 Url = url;
             }
 

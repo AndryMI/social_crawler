@@ -15,7 +15,7 @@ namespace VK.Crawling
 
             if (!driver.Url.Contains("/login"))
             {
-                if (driver.Url.Contains(Name))
+                if (driver.Url.Contains(UserId))
                 {
                     return;
                 }

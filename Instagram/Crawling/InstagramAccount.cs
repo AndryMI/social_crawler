@@ -21,7 +21,7 @@ namespace Instagram.Crawling
                 "  return fb.pendingProps?.viewer?.username" +
                 "})";
             driver.InjectUtils("Scripts/ReactUtils.js");
-            return driver.ExecuteScript(script)?.ToString() == Name;
+            return driver.ExecuteScript(script)?.ToString() == UserId;
         }
 
         public override void Login(ChromeDriver driver)

@@ -13,32 +13,22 @@ namespace CrawlerApp
 {
     public class RemoteManager : ApiServerClient
     {
-        private readonly string guid = Guid.NewGuid().ToString();
         private readonly CommandsFactory factory = new CommandsFactory();
 
         private RemoteManager()
         {
             factory.Register<CancelCommand>("command:cancel");
-            if (Accounts<TwitterAccount>.Instance.Count > 0)
-            {
-                factory.Register<TwitterCommand>("twitter:by_profile_link");
-                factory.Register<TwitterCommand>("twitter:by_keyword");
-            }
-            if (Accounts<InstagramAccount>.Instance.Count > 0)
-            {
-                factory.Register<InstagramCommand>("instagram:by_profile_link");
-                factory.Register<InstagramCommand>("instagram:by_keyword");
-            }
-            if (Accounts<FacebookAccount>.Instance.Count > 0)
-            {
-                factory.Register<FacebookCommand>("facebook:by_profile_link");
-                factory.Register<FacebookCommand>("facebook:by_keyword");
-            }
+            factory.Register<TwitterCommand>("twitter:by_profile_link");
+            factory.Register<TwitterCommand>("twitter:by_keyword");
+            factory.Register<InstagramCommand>("instagram:by_profile_link");
+            factory.Register<InstagramCommand>("instagram:by_keyword");
+            factory.Register<FacebookCommand>("facebook:by_profile_link");
+            factory.Register<FacebookCommand>("facebook:by_keyword");
         }
 
         private ICommand[] Sync(List<TaskManager.Status> progress)
         {
-            var response = Request("POST", "/crawler", new JsonData(new { guid, progress, types = factory.Types }));
+            var response = Request("POST", "/crawler", new JsonData(new { guid = Config.Guid, progress, types = factory.Types }));
             var data = JsonConvert.DeserializeObject<SyncResponse>(response, factory);
             return data.commands;
         }

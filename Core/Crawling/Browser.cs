@@ -16,20 +16,23 @@ namespace Core.Crawling
         private static readonly IBrowserProfile Anonymous = new AnonymousProfile();
 
         private readonly IMediaStorage media;
+        private readonly AccountManager accounts;
         private BrowserRequestsDump dumper = null;
         private BrowserNetwork network = null;
         private BrowserConsole console = null;
         private IBrowserProfile profile = Anonymous;
         private ChromeDriver driver = null;
+        private Account account = null;
 
-        public Browser(IMediaStorage media)
+        public Browser(IMediaStorage media, AccountManager accounts)
         {
             this.media = media;
+            this.accounts = accounts;
         }
 
-        public ChromeDriver Driver<T>(string url) where T : Account, new()
+        public ChromeDriver Driver<T>() where T : Account, new()
         {
-            var account = Accounts<T>.Instance.Get(url);
+            account = accounts.Take<T>();
             var driver = Driver(account);
             account.Login(driver);
             return driver;
@@ -123,6 +126,8 @@ namespace Core.Crawling
             console = null;
             profile?.Stop();
             profile = Anonymous;
+            accounts.Release(account);
+            account = null;
         }
 
         private static bool Equals(IBrowserProfile a, IBrowserProfile b)

@@ -72,9 +72,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Configs\VkAccount.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -27,7 +27,7 @@ namespace Twitter.Crawling
             ChromeDriver driver = null;
             try
             {
-                driver = task.NeedAuthorization ? browser.Driver<TwitterAccount>(task.Url) : browser.Driver();
+                driver = task.NeedAuthorization ? browser.Driver<TwitterAccount>() : browser.Driver();
 
                 driver.Url = task.Url;
                 driver.WaitForMain();

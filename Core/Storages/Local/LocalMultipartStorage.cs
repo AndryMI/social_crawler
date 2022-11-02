@@ -28,7 +28,7 @@ namespace Core.Storages
 
         protected override void Enqueue(MultipartData data)
         {
-            var path = folder + "/" + ObjectId.New() + ".part";
+            var path = folder + "/" + new ObjectId() + ".part";
             data.Save(path);
             files.Enqueue(path);
         }

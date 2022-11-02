@@ -26,10 +26,11 @@ namespace CrawlerApp
             var tasks = new TaskManager();
             var errors = new LocalErrorStorage("Errors");
             var storage = new LocalMultipartStorage("Data");
+            var accounts = new AccountManager();
 
             for (var i = 0; i < Config.Instance.Threads; i++)
             {
-                new CrawlerThread(tasks, storage, storage, errors);
+                new CrawlerThread(tasks, accounts, storage, storage, errors);
             }
             for (var i = 0; i < Config.Instance.StorageApiThreads; i++)
             {

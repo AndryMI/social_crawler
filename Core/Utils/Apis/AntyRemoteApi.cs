@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -55,15 +56,92 @@ namespace Core
             return response.data;
         }
 
-        public string GetNewUserAgent(Platform platform, int? version = null, string browserType = "anty")
+        public BrowserProfile CreateBrowserProfile(BrowserProfile reference)
         {
-            var response = JsonConvert.DeserializeObject<Data<string>>(Request("GET", "/fingerprints/useragent" + new UrlEncodedData
+            var json = Request("POST", "/browser_profiles", new JsonData(reference));
+            var response = JsonConvert.DeserializeObject<Data<BrowserProfile>>(json);
+            return response.data;
+        }
+
+        public BrowserProfile CreateBrowserProfile(Platform platform, string name, Fingerprint fingerprint)
+        {
+            var json = Request("POST", "/browser_profiles", new JsonData(new
             {
+                browserType = "anty",
+                platform = platform.ToString(),
+                name,
+                useragent = new
+                {
+                    mode = "manual",
+                    value = fingerprint["userAgent"].ToString().Replace("106.0.0.0", (string)fingerprint["uaFullVersion"]), //TODO hotfix Selenium with Dolphin Anty
+                },
+                webrtc = new { mode = "altered" },
+                canvas = new { mode = "real" },
+                webgl = new { mode = "real" },
+                webglInfo = new
+                {
+                    mode = "manual",
+                    vendor = fingerprint["webgl"]["unmaskedVendor"],
+                    renderer = fingerprint["webgl"]["unmaskedRenderer"],
+                    webgl2Maximum = fingerprint["webgl2Maximum"],
+                },
+                clientRect = new { mode = "real" },
+                timezone = new { mode = "auto" },
+                locale = new
+                {
+                    mode = "manual",
+                    value = "en",
+                },
+                geolocation = new { mode = "auto" },
+                cpu = new
+                {
+                    mode = "manual",
+                    value = fingerprint["hardwareConcurrency"],
+                },
+                memory = new
+                {
+                    mode = "manual",
+                    value = fingerprint["deviceMemory"],
+                },
+                screen = new { mode = "real" },
+                audio = new { mode = "real" },
+                mediaDevices = new { mode = "real" },
+                ports = new
+                {
+                    mode = "protect",
+                    blacklist = "3389,5900,5800,7070,6568,5938",
+                },
+                platformVersion = fingerprint["platformVersion"],
+                uaFullVersion = fingerprint["uaFullVersion"],
+                appCodeName = fingerprint["appCodeName"],
+                platformName = fingerprint["platform"],
+                connectionDownlink = fingerprint["connection"]["downlink"],
+                connectionEffectiveType = fingerprint["connection"]["effectiveType"],
+                connectionRtt = fingerprint["connection"]["rtt"],
+                connectionSaveData = fingerprint["connection"]["saveData"],
+                cpuArchitecture = fingerprint["cpu"]["architecture"],
+                osVersion = fingerprint["os"]["version"],
+                vendorSub = fingerprint["vendorSub"],
+                vendor = fingerprint["vendor"],
+                productSub = fingerprint["productSub"],
+                product = fingerprint["product"],
+            }));
+            var response = JsonConvert.DeserializeObject<Data<BrowserProfile>>(json);
+            return response.data;
+        }
+
+        //TODO Find version somewhere
+        public Fingerprint NewFingerprint(Platform platform, int version = 106, string browserType = "anty")
+        {
+            var json = Request("GET", "/fingerprints/fingerprint" + new UrlEncodedData
+            {
+                { "type", "fingerprint" },
+                { "screen", "1920x1080" },
                 { "browser_type", browserType },
                 { "browser_version", version },
-                { "platform", platform },
-            }));
-            return response.data;
+                { "platform", platform.ToString() },
+            });
+            return JsonConvert.DeserializeObject<Fingerprint>(json);
         }
 
         public UserProfile GetUserProfile()
@@ -73,86 +151,6 @@ namespace Core
         }
 
         public enum Platform { undefined, windows, linux, macos }
-
-        public class Status
-        {
-            public int id;
-            public int teamId;
-            public string name;
-            public string color;
-            public bool deleted;
-        }
-
-        public class UserProfile
-        {
-            public string username;
-        }
-
-        public class BrowserProfile
-        {
-            public int id;
-            public int userId;
-            public int teamId;
-            public string name;
-            public Platform platform;
-            public string browserType;
-            public int proxyId;
-            public string mainWebsite;
-
-            public Mode<string> useragent;
-            public IpMode webrtc;
-            public NoiseMode canvas;
-            public NoiseMode webgl;
-            public WebGlMode webglInfo;
-            public NoiseMode clientRect;
-            public Notes notes;
-            public Mode<string> timezone;
-            public Mode<string> locale;
-            public int totalSessionDuration;
-            public string userFields;
-            public GeoMode geolocation;
-            public bool doNotTrack;
-            public string[] args;
-            public Mode<int> cpu;
-            public Mode<int> memory;
-            public Mode<string> screen;
-            public BlacklistMode ports;
-            public string[] tabs;
-            public string created_at;
-            public string updated_at;
-            public string deleted_at;
-
-            public string platformName;
-            public string cpuArchitecture;
-            public int osVersion;
-            public string connectionDownlink;
-            public string connectionEffectiveType;
-            public int connectionRtt;
-            public int connectionSaveData;
-            public string vendorSub;
-            public int productSub;
-            public string vendor;
-            public string product;
-            public string appCodeName;
-            public MediaMode mediaDevices;
-            public string datadirHash;
-            public string cookiesHash;
-            public string storagePath;
-            public string lastRunningTime;
-            public string lastRunnedByUserId;
-            public string lastRunUuid;
-            public int running;
-            public string platformVersion;
-            public int archived;
-            public string login;
-            public string password;
-            public Access access;
-            public string name_digital;
-            public Status status;
-            public string[] tags;
-            public string[] tags_with_separator;
-            public bool pinned;
-        }
 
         public class Page<T>
         {
@@ -167,67 +165,66 @@ namespace Core
             public T[] data;
         }
 
-        public class Mode
+        public class Status : Json
         {
-            public string mode;
         }
 
-        public class Mode<T> : Mode
+        public class Fingerprint : Json
         {
-            public T value;
         }
 
-        public class IpMode : Mode
+        public class BrowserProfile : Json
         {
-            public string ipAddress;
+            public string Name
+            {
+                get => (string)this["name"];
+                set => this["name"] = value;
+            }
         }
 
-        public class BlacklistMode : Mode
+        public class UserProfile : Json
         {
-            public string blacklist;
+            public string Username => (string)this["username"];
+            public UserSubscription Subscription => Get<UserSubscription>(this["subscription"]);
         }
 
-        public class NoiseMode : Mode
+        public class UserSubscription : Json
         {
-            public double[] noise;
+            public int BrowserProfilesCount => (int)this["browserProfiles"]["count"];
+            public int BrowserProfilesLimit => (int)this["browserProfiles"]["limit"];
         }
 
-        public class GeoMode : Mode
+        [JsonConverter(typeof(Converter))]
+        public abstract class Json : JObject
         {
-            public string latitude;
-            public string longitude;
-            public string accuracy;
-        }
+            protected static T Get<T>(JToken value) where T : Json, new()
+            {
+                var result = new T();
+                foreach (var token in value)
+                {
+                    result.Add(token);
+                }
+                return result;
+            }
 
-        public class WebGlMode : Mode
-        {
-            public string vendor;
-            public string renderer;
-            public string webgl2Maximum;
-        }
+            public class Converter : JsonConverter<Json>
+            {
+                public override Json ReadJson(JsonReader reader, Type objectType, Json existingValue, bool hasExistingValue, JsonSerializer serializer)
+                {
+                    var value = serializer.Deserialize<JToken>(reader);
+                    var result = (Json)Activator.CreateInstance(objectType);
+                    foreach (var token in value)
+                    {
+                        result.Add(token);
+                    }
+                    return result;
+                }
 
-        public class MediaMode : Mode
-        {
-            public int? audioInputs;
-            public int? videoInputs;
-            public int? audioOutputs;
-        }
-
-        public class Notes
-        {
-            public string content;
-            public string color;
-            public string style;
-            public string icon;
-        }
-
-        public class Access
-        {
-            public int view;
-            public int update;
-            public int delete;
-            public int share;
-            public int usage;
+                public override void WriteJson(JsonWriter writer, Json value, JsonSerializer serializer)
+                {
+                    serializer.Serialize(writer, new JObject(value));
+                }
+            }
         }
 
         private class Data<T>

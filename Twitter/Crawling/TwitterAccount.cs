@@ -2,25 +2,11 @@
 using Core.Crawling;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using System;
-using System.Text.RegularExpressions;
-using System.Web;
 
 namespace Twitter.Crawling
 {
     public class TwitterAccount : Account
     {
-        public override string ToUid(string url)
-        {
-            var uri = new Uri(url);
-            if (uri.LocalPath.StartsWith("/search"))
-            {
-                var query = HttpUtility.ParseQueryString(uri.Query)["q"];
-                return uri.Host + "?" + query;
-            }
-            return uri.Host + Regex.Match(uri.LocalPath, "/[^/]*");
-        }
-
         public override void Login(ChromeDriver driver)
         {
             driver.Url = "https://twitter.com/login";
@@ -31,7 +17,7 @@ namespace Twitter.Crawling
             if (profile != null)
             {
                 var href = profile.GetAttribute("href");
-                if (href == "https://twitter.com/" + Name)
+                if (href == "https://twitter.com/" + UserId)
                 {
                     return;
                 }
@@ -54,7 +40,7 @@ namespace Twitter.Crawling
             if (name != null)
             {
                 name.Click();
-                name.SendKeys(Name + "\n");
+                name.SendKeys(UserId + "\n");
                 driver.WaitForLoading();
             }
 

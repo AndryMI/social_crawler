@@ -6,6 +6,9 @@ namespace Core
     //TODO config hot reload
     public class Config
     {
+        /// <summary> Unique ID of crawler instance running </summary>
+        public static readonly string Guid = System.Guid.NewGuid().ToString();
+
         public static readonly Config Instance = Init();
 
         [JsonProperty]

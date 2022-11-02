@@ -29,7 +29,7 @@ namespace Instagram.Crawling
             ChromeDriver driver = null;
             try
             {
-                driver = browser.Driver<InstagramAccount>(task.Url);
+                driver = browser.Driver<InstagramAccount>();
 
                 driver.Url = task.Url;
                 driver.WaitForMain();

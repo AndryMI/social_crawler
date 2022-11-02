@@ -9,7 +9,7 @@ namespace CrawlerApp
     {
         public static void Profile(string profile)
         {
-            var browser = new Browser(new NullStorage());
+            var browser = new Browser(new NullStorage(), null);
             browser.Driver(new Wrapper(profile));
         }
 

@@ -8,7 +8,7 @@ namespace Facebook.Crawling
 {
     public class FacebookAccount : Account
     {
-        public string Id;
+        public string FacebookId;
 
         public override RequestLimits GetRequestLimits()
         {
@@ -17,18 +17,18 @@ namespace Facebook.Crawling
 
         private bool IsLoggedIn(ChromeDriver driver)
         {
-            if (!string.IsNullOrEmpty(Id))
+            if (!string.IsNullOrEmpty(FacebookId))
             {
                 var cookie = driver.Manage().Cookies.GetCookieNamed("c_user");
-                return cookie != null && cookie.Value == Id;
+                return cookie != null && cookie.Value == FacebookId;
             }
             driver.InjectUtils("Scripts/JsUtils.js");
             driver.InjectUtils("Scripts/Facebook/Utils.js");
-            if (Name == driver.ExecuteScript("return __FindFacebookViewer()").ToString())
+            if (UserId == driver.ExecuteScript("return __FindFacebookViewer()").ToString())
             {
-                if (Id == null)
+                if (FacebookId == null)
                 {
-                    Id = driver.Manage().Cookies.GetCookieNamed("c_user")?.Value;
+                    FacebookId = driver.Manage().Cookies.GetCookieNamed("c_user")?.Value;
                 }
                 return true;
             }
@@ -83,9 +83,9 @@ namespace Facebook.Crawling
 
             //TODO if banned or additional tests
 
-            if (Id == null)
+            if (FacebookId == null)
             {
-                Id = driver.Manage().Cookies.GetCookieNamed("c_user")?.Value;
+                FacebookId = driver.Manage().Cookies.GetCookieNamed("c_user")?.Value;
             }
             Crawler.Sleep(this, "after login");
         }

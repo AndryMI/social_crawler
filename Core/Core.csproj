@@ -77,7 +77,7 @@
     <Compile Include="Configs\Config.cs" />
     <Compile Include="Configs\ServerConfig.cs" />
     <Compile Include="Crawling\Account.cs" />
-    <Compile Include="Crawling\Accounts.cs" />
+    <Compile Include="Crawling\AccountManager.cs" />
     <Compile Include="Crawling\Browser.cs" />
     <Compile Include="Crawling\BrowserConsole.cs" />
     <Compile Include="Crawling\BrowserRequestsDump.cs" />
@@ -119,6 +119,7 @@
     <Compile Include="Utils\DateUtils.cs" />
     <Compile Include="Utils\Exceptions\DriverExtensions.cs" />
     <Compile Include="Crawling\ImageUrlCollector.cs" />
+    <Compile Include="Utils\IpInfo.cs" />
     <Compile Include="Utils\KeyValueList.cs" />
     <Compile Include="Utils\LoggerConfig.cs" />
     <Compile Include="Utils\Apis\MultipartData.cs" />

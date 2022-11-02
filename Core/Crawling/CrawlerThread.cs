@@ -10,18 +10,20 @@ namespace Core.Crawling
         private readonly IDataStorage storage;
         private readonly IMediaStorage media;
         private readonly IErrorStorage errors;
+        private readonly AccountManager accounts;
 
-        public CrawlerThread(TaskManager tasks, IDataStorage storage, IMediaStorage media, IErrorStorage errors)
+        public CrawlerThread(TaskManager tasks, AccountManager accounts, IDataStorage storage, IMediaStorage media, IErrorStorage errors)
         {
             this.storage = storage;
             this.tasks = tasks;
             this.media = media;
             this.errors = errors;
+            this.accounts = accounts;
         }
 
         protected override void Run()
         {
-            var browser = new Browser(media);
+            var browser = new Browser(media, accounts);
             while (IsWorking)
             {
                 if (tasks.TryGet(browser, out var task))

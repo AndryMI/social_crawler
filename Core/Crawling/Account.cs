@@ -1,23 +1,27 @@
 ﻿using Core.Browsers.Profiles;
 using Newtonsoft.Json;
 using OpenQA.Selenium.Chrome;
-using System;
-using System.Collections.Generic;
 
 namespace Core.Crawling
 {
     public abstract class Account
     {
-        [JsonProperty(Required = Required.Always)]
+        [JsonProperty("browser_profile", Required = Required.Always)]
         public IBrowserProfile BrowserProfile;
 
-        public string Name;
+        [JsonProperty("_id", Required = Required.Always)]
+        public readonly ObjectId Id;
+
+        [JsonProperty("user_id", NullValueHandling = NullValueHandling.Ignore)]
+        public string UserId;
+
+        [JsonProperty("login", NullValueHandling = NullValueHandling.Ignore)]
         public string Email;
+
+        [JsonProperty("password", NullValueHandling = NullValueHandling.Ignore)]
         public string Password;
 
-        public readonly HashSet<string> AssignedUids = new HashSet<string>();
-
-        [JsonProperty("LastRequests", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("last_requests", NullValueHandling = NullValueHandling.Ignore)]
         public readonly RequestLimits Limits;
 
         public abstract void Login(ChromeDriver driver);
@@ -26,12 +30,6 @@ namespace Core.Crawling
         protected Account()
         {
             Limits = GetRequestLimits();
-        }
-
-        public virtual string ToUid(string url)
-        {
-            var uri = new Uri(url);
-            return uri.Host + uri.LocalPath;
         }
     }
 }
