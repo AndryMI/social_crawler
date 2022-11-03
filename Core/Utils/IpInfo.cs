@@ -17,6 +17,12 @@ namespace Core
         [JsonProperty]
         public readonly string country;
 
+        public IpInfo(string ip, string country)
+        {
+            this.ip = ip;
+            this.country = country;
+        }
+
         public override string ToString()
         {
             return country + ":" + ip;

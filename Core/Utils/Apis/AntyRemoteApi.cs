@@ -24,12 +24,24 @@ namespace Core
 
         public Page<T> Next<T>(Page<T> page)
         {
+            if (page.next == null)
+            {
+                return null;
+            }
             return JsonConvert.DeserializeObject<Page<T>>(Request("GET", new Uri(page.next).PathAndQuery));
         }
 
         public Page<Status> ListStatuses(string query = null)
         {
             return JsonConvert.DeserializeObject<Page<Status>>(Request("GET", "/browser_profiles/statuses" + new UrlEncodedData
+            {
+                { "query", query },
+            }));
+        }
+
+        public Page<Proxy> ListProxies(string query = null)
+        {
+            return JsonConvert.DeserializeObject<Page<Proxy>>(Request("GET", "/proxy" + new UrlEncodedData
             {
                 { "query", query },
             }));
@@ -173,8 +185,17 @@ namespace Core
         {
         }
 
+        public class Proxy : Json
+        {
+            public int Id => (int)this["id"];
+            public string LastIp => (string)(this["lastCheck"]?["ip"]);
+            public string LastCountry => (string)(this["lastCheck"]?["country"]);
+        }
+
         public class BrowserProfile : Json
         {
+            public string Id => (string)this["id"];
+            public int ProxyId => (int)this["proxyId"];
             public string Name
             {
                 get => (string)this["name"];

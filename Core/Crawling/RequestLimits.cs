@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,8 +13,8 @@ namespace Core.Crawling
     {
         private readonly Queue<DateTimeOffset> requests = new Queue<DateTimeOffset>();
 
-        public readonly int Count;
-        public readonly TimeSpan Duration;
+        public int Count { get; private set; }
+        public TimeSpan Duration { get; private set; }
         public readonly Predicate<string> Matcher;
 
         public RequestLimits(int count, TimeSpan duration, Predicate<string> matcher)
@@ -78,8 +79,12 @@ namespace Core.Crawling
                 if (existingValue != null)
                 {
                     var since = (DateTimeOffset.Now - existingValue.Duration).ToUnixTimeSeconds();
-                    var requests = serializer.Deserialize<long[]>(reader);
-                    foreach (var request in requests)
+                    var json = serializer.Deserialize<JObject>(reader);
+
+                    existingValue.Count = (int)json["count"];
+                    existingValue.Duration = TimeSpan.FromSeconds((int)json["duration"]);
+
+                    foreach (var request in json["last_requests"].Values<long>())
                     {
                         if (request > since)
                         {
@@ -94,7 +99,11 @@ namespace Core.Crawling
             {
                 var requests = new List<DateTimeOffset>();
                 value.TrimRequests(requests);
-                serializer.Serialize(writer, requests.Select(x => x.ToUnixTimeSeconds()));
+                var json = new JObject();
+                json["count"] = value.Count;
+                json["duration"] = value.Duration.TotalSeconds;
+                json["last_requests"] = new JArray(requests.Select(x => x.ToUnixTimeSeconds()));
+                serializer.Serialize(writer, json);
             }
         }
     }

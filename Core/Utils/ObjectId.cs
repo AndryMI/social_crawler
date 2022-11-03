@@ -7,6 +7,7 @@ using System.Text;
 
 namespace Core
 {
+    [JsonConverter(typeof(Json))]
     public class ObjectId
     {
         private static string machine = InitMachineId();

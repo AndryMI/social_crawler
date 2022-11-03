@@ -21,7 +21,7 @@ namespace Core.Crawling
         [JsonProperty("password", NullValueHandling = NullValueHandling.Ignore)]
         public string Password;
 
-        [JsonProperty("last_requests", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("limits", NullValueHandling = NullValueHandling.Ignore)]
         public readonly RequestLimits Limits;
 
         public abstract void Login(ChromeDriver driver);
