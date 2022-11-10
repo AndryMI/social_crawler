@@ -53,6 +53,7 @@
     <Compile Include="Crawling\InstagramAccount.cs" />
     <Compile Include="Crawling\InstagramCommand.cs" />
     <Compile Include="Crawling\InstagramCrawler.cs" />
+    <Compile Include="Crawling\InstagramSearch.cs" />
     <Compile Include="Crawling\InstagramStorage.cs" />
     <Compile Include="Crawling\InstagramTask.cs" />
     <Compile Include="Data\CommentInfo.cs" />
@@ -82,6 +83,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Instagram\StoryInfo.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Instagram\Utils.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

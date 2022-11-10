@@ -57,5 +57,13 @@ namespace Instagram.Crawling
         {
             storage.StorePost(task, story);
         }
+
+        public void StoreSearchResults(InstagramTask task, string[] links)
+        {
+            foreach (var link in links)
+            {
+                tasks.Add(new InstagramTask(link, task.Priority, task));
+            }
+        }
     }
 }

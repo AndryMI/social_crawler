@@ -4,6 +4,21 @@ using System;
 
 namespace Instagram.Crawling
 {
+    public class InstagramSearchTask : InstagramTask
+    {
+        public readonly string[] Keywords;
+
+        public InstagramSearchTask(string url, string[] keywords, string priority, ICommand command) : base(url, priority, command)
+        {
+            Keywords = keywords;
+        }
+
+        public override void Run(Browser browser, IDataStorage storage, TaskManager tasks)
+        {
+            new InstagramSearch(browser, new InstagramStorage(storage, tasks), this).Run();
+        }
+    }
+
     public class PostCommentsTask : InstagramTask
     {
         public PostCommentsTask(string url, string priority, InstagramTask parent) : base(url, priority, parent) { }

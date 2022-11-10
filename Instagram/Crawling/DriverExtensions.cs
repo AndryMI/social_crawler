@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Crawling;
+using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
@@ -83,6 +84,33 @@ namespace Instagram.Crawling
                 });
             }
             catch (WebDriverTimeoutException) { }
+        }
+
+        public static IWebElement TryFindSearchPanel(this ChromeDriver driver)
+        {
+            var input = driver.TryFindElement(By.CssSelector("input[type=text]"));
+            if (input != null)
+            {
+                return input;
+            }
+            foreach (var button in driver.FindElements(By.CssSelector("a[href='#']")))
+            {
+                button.Click();
+
+                input = driver.TryFindElement(By.CssSelector("input[type=text]"));
+                if (input != null)
+                {
+                    return input;
+                }
+            }
+            return null;
+        }
+
+        public static string[] CollectSearchLinks(this ChromeDriver driver)
+        {
+            driver.InjectUtils("Scripts/ReactUtils.js");
+            driver.InjectUtils("Scripts/Instagram/Utils.js");
+            return JsonConvert.DeserializeObject<string[]>((string)driver.ExecuteScript("return __CollectSearchResultLinks()"));
         }
     }
 }

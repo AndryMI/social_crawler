@@ -32,7 +32,8 @@ namespace Core.Crawling
 
         public ChromeDriver Driver<T>() where T : Account, new()
         {
-            account = accounts.Take<T>();
+            accounts.Release(this.account);
+            var account = accounts.Take<T>();
             var driver = Driver(account);
             account.Login(driver);
             return driver;
@@ -45,6 +46,8 @@ namespace Core.Crawling
                 Close();
                 profile = account?.BrowserProfile ?? Anonymous;
             }
+            this.account = account;
+
             if (driver == null)
             {
                 try
