@@ -14,72 +14,68 @@ namespace Instagram.Crawling
             return new RequestLimits(100, TimeSpan.FromHours(1), url => url.Contains("/api/"));
         }
 
-        private bool IsLoggedIn(ChromeDriver driver)
-        {
-            var script =
-                "return __WalkFiberRecursive(__GetFiber(document.querySelector('body>div>div')), (fb) => {" +
-                "  return fb.pendingProps?.viewer?.username" +
-                "})";
-            driver.InjectUtils("Scripts/ReactUtils.js");
-            return driver.ExecuteScript(script)?.ToString() == UserId;
-        }
-
         public override void Login(ChromeDriver driver)
         {
-            if (driver.Url.StartsWith("https://www.instagram.com") && IsLoggedIn(driver))
+            if (!driver.Url.StartsWith("https://www.instagram.com"))
             {
-                Crawler.Sleep(this, "open");
-                return;
-            }
-
-            driver.Url = "https://www.instagram.com/accounts/login/";
-            driver.WaitForMain();
-
-            if (!driver.Url.Contains("/login/"))
-            {
-                if (IsLoggedIn(driver))
-                {
-                    Crawler.Sleep(this, "open");
-                    return;
-                }
-                driver.DeleteCurrentCookies();
                 driver.Url = "https://www.instagram.com/accounts/login/";
                 driver.WaitForMain();
+                Crawler.Sleep(this, "open");
             }
-            Crawler.Sleep(this, "open");
 
-            if (string.IsNullOrEmpty(Email) && string.IsNullOrEmpty(Password))
+            if (driver.Url.Contains("/login/"))
             {
-                throw new AccountException("Email or Password are empty", this);
+                if (string.IsNullOrEmpty(Email) && string.IsNullOrEmpty(Password))
+                {
+                    throw new AccountException("Email or Password are empty", this);
+                }
+                Crawler.Sleep(this, "before login");
+
+                // Accept Cookies
+                driver.FindElements(By.TagName("button")).LastOrDefault(button => button.Text.ToLower().Contains("cookie"))?.Click();
+                Crawler.Sleep(this, "accept cookies");
+
+                driver.TryUntilExec(() =>
+                {
+                    var user = driver.FindElement(By.CssSelector("input[name=username]"));
+                    user.Click();
+                    user.SendKeys(Email);
+                });
+
+                driver.TryUntilExec(() =>
+                {
+                    var pass = driver.FindElement(By.CssSelector("[type=password]"));
+                    pass.Click();
+                    pass.SendKeys(Password + "\n");
+                });
+
+                driver.WaitForUrlChange();
+                driver.WaitForMain();
+
+                Crawler.Sleep(this, "after login");
             }
-            // Accept Cookies
-            driver.FindElements(By.TagName("button")).LastOrDefault(button => button.Text.ToLower().Contains("cookie"))?.Click();
-            Crawler.Sleep(this, "accept cookies");
 
-            driver.TryUntilExec(() =>
-            {
-                var user = driver.FindElement(By.CssSelector("input[name=username]"));
-                user.Click();
-                user.SendKeys(Email);
-            });
+            UserId = GetUserId(driver) ?? UserId;
 
-            driver.TryUntilExec(() =>
-            {
-                var pass = driver.FindElement(By.CssSelector("[type=password]"));
-                pass.Click();
-                pass.SendKeys(Password + "\n");
-            });
-            Crawler.Sleep(this, "after credentials");
-
-            driver.WaitForUrlChange();
-            driver.WaitForMain();
+            //TODO another block checks
 
             var message = driver.TryFindElement(By.CssSelector("main h3"))?.Text ?? "";
             if (message.ToLower().Contains("add phone number"))
             {
                 throw new AccountException("Account is blocked", this);
             }
-            Crawler.Sleep(this, "after login");
+
+            Crawler.Sleep(this, "open");
+        }
+
+        private static string GetUserId(ChromeDriver driver)
+        {
+            var script =
+                "return __WalkFiberRecursive(__GetFiber(document.querySelector('body>div>div')), (fb) => {" +
+                "  return fb.pendingProps?.viewer?.username" +
+                "})";
+            driver.InjectUtils("Scripts/ReactUtils.js");
+            return driver.ExecuteScript(script)?.ToString();
         }
     }
 }

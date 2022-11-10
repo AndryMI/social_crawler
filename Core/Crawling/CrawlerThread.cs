@@ -43,6 +43,14 @@ namespace Core.Crawling
                             tasks.Complete(task);
                             tasks.Delay(ex.Task, later.Time);
                         }
+                        else if (ex.InnerException is AccountException blocked)
+                        {
+                            Log.Error(blocked, "Task failed: {Reason}", blocked.Message);
+                            accounts.Blocked(blocked.Account);
+                            browser.Close();
+                            tasks.Complete(task);
+                            tasks.Retry(ex.Task);
+                        }
                         else
                         {
                             Log.Warning(ex, "Task failed");

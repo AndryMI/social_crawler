@@ -50,6 +50,27 @@ namespace Core.Crawling
             }
         }
 
+        public void Blocked(Account account)
+        {
+            if (account == null)
+            {
+                return;
+            }
+            try
+            {
+                client.Request("POST", "/accounts/block", new JsonData(new
+                {
+                    guid = Config.Guid,
+                    browser = account.BrowserProfile is AntyProfile ? anty.GetIpInfo(account.BrowserProfile) : IpInfo.My(),
+                    account,
+                }));
+            }
+            catch (Exception e)
+            {
+                Log.Warning(e, "Failed to block account");
+            }
+        }
+
         private class Antyinfo
         {
             private readonly AntyRemoteApi anty = new AntyRemoteApi(new AntyLocalApi().RemoteApiToken());
