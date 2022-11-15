@@ -57,7 +57,10 @@ namespace Instagram.Crawling
 
             UserId = GetUserId(driver) ?? UserId;
 
-            //TODO another block checks
+            if (new Uri(driver.Url).LocalPath.StartsWith("/challenge/"))
+            {
+                throw new AccountException("Failed to login", this);
+            }
 
             var message = driver.TryFindElement(By.CssSelector("main h3"))?.Text ?? "";
             if (message.ToLower().Contains("add phone number"))

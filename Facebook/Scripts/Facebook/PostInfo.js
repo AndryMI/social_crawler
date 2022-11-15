@@ -37,7 +37,7 @@ function ProcessStory(story) {
         return typeof value?.creation_time == 'number' ? value.url : undefined
     })
     if (attached_story) {
-        links.push(attached_story)
+        links[attached_story] = true
     }
 
     __WalkObjectRecursive(attachments, (key, value) => {
@@ -69,6 +69,8 @@ function ProcessStory(story) {
     posts.push({
         ProfileLink: profile,
         Link: post.wwwURL,
+
+        FacebookPostId: post.id,
 
         UnixTime: time ?? 0,
         Text: post.message?.text,

@@ -33,6 +33,7 @@ namespace Core.Crawling
         public ChromeDriver Driver<T>() where T : Account, new()
         {
             accounts.Release(this.account);
+            this.account = null;
             var account = accounts.Take<T>();
             var driver = Driver(account);
             account.Login(driver);

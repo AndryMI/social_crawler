@@ -15,6 +15,8 @@ namespace Facebook.Data
         public string AuthorLink { get; set; }
         public string Text;
 
+        public string FacebookPostId;
+
         public int Reactions;
 
         public ImageUrl[] Images;

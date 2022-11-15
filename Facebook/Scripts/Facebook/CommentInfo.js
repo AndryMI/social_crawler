@@ -47,6 +47,8 @@ function ProcessComment(comment) {
         PostLink: document.location.href,
         Link: comment_link,
 
+        FacebookPostId: comment.parent_post_story?.id,
+
         Author: comment.author?.name,
         AuthorLink: comment.author?.url,
         Text: comment.body?.text,

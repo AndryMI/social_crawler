@@ -16,9 +16,9 @@ window.__CollectSearchResultLinks = function () {
                 links.push((new URL('/explore/tags/' + item.name + '/', document.location.href)).href);
                 break;
 
-            case 'PLACE_RESULT':
-                links.push((new URL('/explore/locations/' + item.locationId + '/' + item.slug + '/', document.location.href)).href);
-                break;
+            //case 'PLACE_RESULT':
+            //    links.push((new URL('/explore/locations/' + item.locationId + '/' + item.slug + '/', document.location.href)).href);
+            //    break;
 
             default:
                 console.warn('unknown', item)

@@ -10,6 +10,8 @@ namespace Facebook.Data
         public string ProfileLink { get; set; }
         public string Link { get; set; }
 
+        public string FacebookPostId;
+
         public string Text;
         public ImageUrl[] Images;
         public string[] Videos;
