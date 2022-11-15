@@ -40,6 +40,7 @@ namespace Core.Crawling
                 client.Request("POST", "/accounts/release", new JsonData(new
                 {
                     guid = Config.Guid,
+                    crawler = IpInfo.My(),
                     browser = account.BrowserProfile is AntyProfile ? anty.GetIpInfo(account.BrowserProfile) : IpInfo.My(),
                     account,
                 }));
@@ -61,6 +62,7 @@ namespace Core.Crawling
                 client.Request("POST", "/accounts/block", new JsonData(new
                 {
                     guid = Config.Guid,
+                    crawler = IpInfo.My(),
                     browser = account.BrowserProfile is AntyProfile ? anty.GetIpInfo(account.BrowserProfile) : IpInfo.My(),
                     account,
                 }));
