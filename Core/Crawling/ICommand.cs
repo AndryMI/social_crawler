@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Core.Crawling
@@ -15,6 +16,7 @@ namespace Core.Crawling
         IEnumerable<CrawlerTask> CreateTasks();
     }
 
+    [Serializable]
     public class CancelCommand : ICommand
     {
         public string Id { get; private set; }

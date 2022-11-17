@@ -23,7 +23,7 @@ namespace CrawlerApp
             DevTools.ValidateAll();
             ServerConfig.Load();
 
-            var tasks = new TaskManager();
+            var tasks = new TaskManager("Data/tasks.bin");
             var errors = new LocalErrorStorage("Errors");
             var storage = new LocalMultipartStorage("Data");
             var accounts = new AccountManager();

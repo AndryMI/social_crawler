@@ -1,10 +1,12 @@
 ﻿using Core.Crawling;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Web;
 
 namespace Twitter.Crawling
 {
+    [Serializable]
     public class TwitterCommand : ICommand
     {
         public string Id { get; private set; }

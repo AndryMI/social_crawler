@@ -4,11 +4,13 @@ using System;
 
 namespace Twitter.Crawling
 {
+    [Serializable]
     public class PostCommentsTask : TwitterTask
     {
         public PostCommentsTask(string url, string priority, TwitterTask parent) : base(url, priority, parent) { }
     }
 
+    [Serializable]
     public class PostProfileTask : TwitterTask
     {
         public PostProfileTask(string url, string priority, TwitterTask parent) : base(url, priority, parent) 
@@ -17,6 +19,7 @@ namespace Twitter.Crawling
         }
     }
 
+    [Serializable]
     public class TwitterTask : CrawlerTask
     {
         public TwitterTask(string url, string priority, TwitterTask parent) : this(url, priority, parent.Command)

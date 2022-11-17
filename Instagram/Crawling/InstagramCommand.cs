@@ -1,9 +1,11 @@
 ﻿using Core.Crawling;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Instagram.Crawling
 {
+    [Serializable]
     public class InstagramCommand : ICommand
     {
         public string Id { get; private set; }

@@ -11,7 +11,7 @@ namespace Instagram.Crawling
     {
         private readonly UniqueFilter<CommentInfo> comment = new UniqueFilter<CommentInfo>(comment => comment.Link);
         private readonly UniqueFilter<PostInfo> post = new UniqueFilter<PostInfo>(post => post.Link);
-        private const int PostsTreshold = 300;
+        private const int PostsTreshold = 100;
 
         private readonly Browser browser;
         private readonly InstagramStorage storage;
@@ -81,7 +81,7 @@ namespace Instagram.Crawling
                         break;
                     }
                     driver.ScrollToPageBottom();
-                    driver.WaitForPostsLoading();
+                    //driver.WaitForPostsLoading();
                     Crawler.Sleep(this, "next posts");
                 }
 
@@ -97,7 +97,7 @@ namespace Instagram.Crawling
                         storage.StoreComments(task, comments);
                     }
                     driver.LoadMoreComments();
-                    driver.WaitForCommentsLoading();
+                    //driver.WaitForCommentsLoading();
                     Crawler.Sleep(this, "next comments");
                 }
             }

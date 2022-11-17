@@ -44,6 +44,7 @@ namespace CrawlerApp
             }
         }
 
+        [Serializable]
         private class Command : ICommand
         {
             public string Id { get; private set; }

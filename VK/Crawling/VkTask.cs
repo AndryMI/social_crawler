@@ -4,6 +4,7 @@ using System;
 
 namespace VK.Crawling
 {
+    [Serializable]
     public class VkTask : CrawlerTask
     {
         public VkTask(string url, string priority, VkTask parent) : this(url, priority, parent.Command)

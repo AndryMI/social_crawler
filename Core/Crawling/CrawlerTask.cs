@@ -4,6 +4,7 @@ using System;
 
 namespace Core.Crawling
 {
+    [Serializable]
     public abstract class CrawlerTask
     {
         public readonly ICommand Command;

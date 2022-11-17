@@ -4,11 +4,13 @@ using System;
 
 namespace Facebook.Crawling
 {
+    [Serializable]
     public class PostCommentsTask : FacebookTask
     {
         public PostCommentsTask(string url, string priority, FacebookTask parent) : base(url, priority, parent) { }
     }
 
+    [Serializable]
     public class PostProfileTask : FacebookTask
     {
         public PostProfileTask(string url, string priority, FacebookTask parent) : base(url, priority, parent)
@@ -17,6 +19,7 @@ namespace Facebook.Crawling
         }
     }
 
+    [Serializable]
     public class FacebookTask : CrawlerTask
     {
         public FacebookTask(string url, string priority, FacebookTask parent) : this(url, priority, parent.Command)

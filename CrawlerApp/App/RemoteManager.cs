@@ -45,6 +45,7 @@ namespace CrawlerApp
                     {
                         tasks.Add(command);
                     }
+                    tasks.Save();
                 }
                 catch (Exception ex)
                 {

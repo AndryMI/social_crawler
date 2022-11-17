@@ -4,6 +4,7 @@ using System;
 
 namespace Instagram.Crawling
 {
+    [Serializable]
     public class InstagramSearchTask : InstagramTask
     {
         public readonly string[] Keywords;
@@ -19,11 +20,13 @@ namespace Instagram.Crawling
         }
     }
 
+    [Serializable]
     public class PostCommentsTask : InstagramTask
     {
         public PostCommentsTask(string url, string priority, InstagramTask parent) : base(url, priority, parent) { }
     }
 
+    [Serializable]
     public class PostProfileTask : InstagramTask
     {
         public PostProfileTask(string url, string priority, InstagramTask parent) : base(url, priority, parent)
@@ -32,6 +35,7 @@ namespace Instagram.Crawling
         }
     }
 
+    [Serializable]
     public class InstagramTask : CrawlerTask
     {
         public InstagramTask(string url, string priority, InstagramTask parent) : this(url, priority, parent.Command)

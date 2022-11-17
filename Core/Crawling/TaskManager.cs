@@ -2,14 +2,23 @@
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Core.Crawling
 {
     public class TaskManager
     {
+        private readonly string store;
         private readonly object locker = new object();
-        private readonly Dictionary<ICommand, State> states = new Dictionary<ICommand, State>();
+        private readonly Dictionary<ICommand, State> states;
+
+        public TaskManager(string store = null)
+        {
+            this.store = string.IsNullOrWhiteSpace(store) ? null : store;
+            this.states = Load(this.store);
+        }
 
         public List<Status> Progress
         {
@@ -116,6 +125,57 @@ namespace Core.Crawling
             }
         }
 
+        public void Save()
+        {
+            if (store == null)
+            {
+                return;
+            }
+            lock (locker)
+            {
+                try
+                {
+                    using (var file = File.OpenWrite(store))
+                    {
+                        new BinaryFormatter().Serialize(file, states);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Warning(e, "Failed to save tasks");
+                }
+            }
+        }
+
+        private static Dictionary<ICommand, State> Load(string path)
+        {
+            try
+            {
+                using (var file = File.OpenRead(path))
+                {
+                    var states = (Dictionary<ICommand, State>)new BinaryFormatter().Deserialize(file);
+                    var count = 0;
+                    foreach (var state in states.Values)
+                    {
+                        // Reset active tasks to scheduled tasks on startup
+                        foreach (var task in state.active.ToList())
+                        {
+                            state.Complete(task);
+                            state.Add(task);
+                        }
+                        count += state.tasks.Count;
+                    }
+                    Log.Information("Restored {count} tasks for Task manager", count);
+                    return states;
+                }
+            }
+            catch
+            {
+                Log.Information("Creating empty Task manager");
+                return new Dictionary<ICommand, State>();
+            }
+        }
+
         private IEnumerable<CrawlerTask> Query()
         {
             foreach (var state in states.Values)
@@ -127,6 +187,7 @@ namespace Core.Crawling
             }
         }
 
+        [Serializable]
         public abstract class Status
         {
             public ICommand Command { get; protected set; }
@@ -144,6 +205,7 @@ namespace Core.Crawling
             }
         }
 
+        [Serializable]
         private class State : Status
         {
             [JsonIgnore]
