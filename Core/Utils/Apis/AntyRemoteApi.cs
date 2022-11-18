@@ -68,6 +68,20 @@ namespace Core
             return response.data;
         }
 
+        public BrowserProfile SetBrowserProfileTabs(int id, params string[] tabs)
+        {
+            return SetBrowserProfileTabs(id.ToString(), tabs);
+        }
+
+        public BrowserProfile SetBrowserProfileTabs(string id, params string[] tabs)
+        {
+            var response = JsonConvert.DeserializeObject<Data<BrowserProfile>>(Request("PATCH", "/browser_profiles/" + id + new UrlEncodedData
+            {
+                { "tabs", tabs },
+            }));
+            return response.data;
+        }
+
         public BrowserProfile CreateBrowserProfile(BrowserProfile reference)
         {
             var json = Request("POST", "/browser_profiles", new JsonData(reference));
