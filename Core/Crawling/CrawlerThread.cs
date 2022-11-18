@@ -42,6 +42,7 @@ namespace Core.Crawling
                             Log.Warning(later.InnerException, "Task delayed: {Time} {Reason}", later.Time, later.Message);
                             tasks.Complete(task);
                             tasks.Delay(ex.Task, later.Time);
+                            tasks.Delay(ex.Task.Command, later.Time);
                         }
                         else if (ex.InnerException is AccountException blocked)
                         {

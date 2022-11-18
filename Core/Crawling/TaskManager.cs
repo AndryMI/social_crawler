@@ -89,6 +89,25 @@ namespace Core.Crawling
             }
         }
 
+        public void Delay(ICommand command, DateTimeOffset time = default)
+        {
+            lock (locker)
+            {
+                if (states.TryGetValue(command, out var state))
+                {
+                    var runAt = DateTimeOffset.UtcNow.AddSeconds(Config.Instance.RetryTimeout);
+                    if (runAt < time)
+                    {
+                        runAt = time;
+                    }
+                    foreach (var task in state.tasks)
+                    {
+                        task.RunAt = runAt;
+                    }
+                }
+            }
+        }
+
         public void Delay(CrawlerTask task, DateTimeOffset time = default)
         {
             lock (locker)

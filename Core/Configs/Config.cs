@@ -27,10 +27,10 @@ namespace Core
         public int WaitTimeout { get; private set; } = 300;
 
         [JsonProperty]
-        public int RetryTimeout { get; private set; } = 60;
+        public int RetryTimeout { get; private set; } = 150;
 
         [JsonProperty]
-        public int RetryAttempts { get; private set; } = 15;
+        public int RetryAttempts { get; private set; } = 10;
 
         [JsonProperty]
         public int MultipartSizeThreshold { get; private set; } = 1000000;
