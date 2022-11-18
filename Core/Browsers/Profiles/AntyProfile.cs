@@ -54,8 +54,12 @@ namespace Core.Browsers.Profiles
                 {
                     Api.Stop(Id);
 
-                    for (var i = 0; Api.IsRunning(Id) && i < Config.Instance.WaitTimeout; i++)
+                    for (var i = 1; Api.IsRunning(Id) && i < Config.Instance.WaitTimeout; i++)
                     {
+                        if (i % 10 == 0)
+                        {
+                            Api.Stop(Id);
+                        }
                         Thread.Sleep(1000);
                     }
                 }

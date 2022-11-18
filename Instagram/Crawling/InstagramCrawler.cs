@@ -11,7 +11,7 @@ namespace Instagram.Crawling
     {
         private readonly UniqueFilter<CommentInfo> comment = new UniqueFilter<CommentInfo>(comment => comment.Link);
         private readonly UniqueFilter<PostInfo> post = new UniqueFilter<PostInfo>(post => post.Link);
-        private const int PostsTreshold = 100;
+        private const int PostsTreshold = 50;
 
         private readonly Browser browser;
         private readonly InstagramStorage storage;
