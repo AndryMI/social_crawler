@@ -11,7 +11,7 @@ namespace Instagram.Crawling
     {
         public override RequestLimits GetRequestLimits()
         {
-            return new RequestLimits(100, TimeSpan.FromHours(1), url => url.Contains("/api/"));
+            return new RequestLimits(100, TimeSpan.FromHours(1.5), url => url.Contains("/api/"));
         }
 
         public override void Login(ChromeDriver driver)
