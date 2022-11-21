@@ -59,26 +59,23 @@ namespace Core.Crawling
             }
         }
 
-        public byte[] GetResponseBody(string url)
+        public Response GetResponse(string url)
         {
             var item = GetItem(url);
             if (item != null && item.status == Status.Success)
             {
-                var data = network.GetResponseBody(item.id);
-                return data.Base64Encoded ? Convert.FromBase64String(data.Body) : Encoding.UTF8.GetBytes(data.Body);
+                try
+                {
+                    var data = network.GetResponseBody(item.id);
+                    return new Response(data.Base64Encoded ? Convert.FromBase64String(data.Body) : Encoding.UTF8.GetBytes(data.Body), item.mime);
+                }
+                catch (Exception ex)
+                {
+                    log.Warning(ex, "Get response body failed: {url}", url);
+                    return null;
+                }
             }
             log.Warning("Response body not found: {url}", url);
-            return null;
-        }
-
-        public string GetMimeType(string url)
-        {
-            var item = GetItem(url);
-            if (item != null)
-            {
-                return item.mime;
-            }
-            log.Warning("Response mime-type not found: {url}", url);
             return null;
         }
 
@@ -159,6 +156,18 @@ namespace Core.Crawling
             public override string ToString()
             {
                 return $"{status} {type} {url}";
+            }
+        }
+
+        public class Response
+        {
+            public readonly string MimeType;
+            public readonly byte[] Data;
+
+            public Response(byte[] data, string mime)
+            {
+                MimeType = mime;
+                Data = data;
             }
         }
     }

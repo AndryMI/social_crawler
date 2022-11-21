@@ -1,8 +1,10 @@
 ﻿using Core.Data;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 
 namespace Core.Crawling
@@ -31,8 +33,12 @@ namespace Core.Crawling
             }
             foreach (var image in images)
             {
-                image.MimeType = network.GetMimeType(image.Original);
-                image.Data = network.GetResponseBody(image.Original);
+                var response = network.GetResponse(image.Original) ?? DirectDownload(image.Original);
+                if (response != null)
+                {
+                    image.MimeType = response.MimeType;
+                    image.Data = response.Data;
+                }
             }
         }
 
@@ -46,6 +52,23 @@ namespace Core.Crawling
         public override void WriteJson(JsonWriter writer, ImageUrl value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
+        }
+
+        private static BrowserNetwork.Response DirectDownload(string url)
+        {
+            try
+            {
+                Log.Verbose("Try direct download: {url}", url);
+                using (var client = new WebClient())
+                {
+                    return new BrowserNetwork.Response(client.DownloadData(url), client.ResponseHeaders.Get("Content-Type"));
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Direct download failed");
+                return null;
+            }
         }
     }
 }
