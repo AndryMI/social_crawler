@@ -29,11 +29,10 @@ namespace Instagram.Crawling
             ChromeDriver driver = null;
             try
             {
-                driver = browser.Driver<InstagramAccount>();
+                driver = task.NeedAuthorization ? browser.Driver<InstagramAccount>() : browser.Driver<RandomProxyAccount>();
 
                 driver.Url = task.Url;
                 driver.WaitForMain();
-                Crawler.Sleep(this, "open");
 
                 if (task.CrawlProfile)
                 {
@@ -42,6 +41,18 @@ namespace Instagram.Crawling
                     {
                         storage.StoreProfile(task, profile);
                     }
+                }
+                Crawler.Sleep(this, "open");
+
+                if (driver.IsSomethingWrong())
+                {
+                    throw new Exception("Something wrong");
+                }
+                if (!task.NeedAuthorization && driver.Url.Contains("/login/"))
+                {
+                    driver.Url = "about:blank";
+                    task.NeedAuthorization = true;
+                    throw new TryLaterException("Need Authorization");
                 }
 
                 if (task.CrawlStories)
@@ -104,6 +115,13 @@ namespace Instagram.Crawling
             catch (Exception e)
             {
                 throw new CrawlingException(e, task, driver);
+            }
+            finally
+            {
+                if (!task.NeedAuthorization)
+                {
+                    try { driver.Url = "about:blank"; } catch { }
+                }
             }
         }
     }

@@ -20,9 +20,10 @@ queue.slice(-100).forEach(post => {
     delete images[''];
     delete videos[''];
 
-    for (const url in images) {
-        fetch(url, { cache: 'force-cache' });
-    }
+    //TODO Check for CDN
+    //for (const url in images) {
+    //    fetch(url, { cache: 'force-cache' });
+    //}
 
     posts.push({
         Link: (new URL('/p/' + post.code + '/', document.location.href)).href,

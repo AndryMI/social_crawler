@@ -32,4 +32,11 @@ namespace Core.Crawling
             Limits = GetRequestLimits();
         }
     }
+
+    public class RandomProxyAccount : Account
+    {
+        public override void Login(ChromeDriver driver)
+        {
+        }
+    }
 }

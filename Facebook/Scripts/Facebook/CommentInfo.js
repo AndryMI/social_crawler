@@ -38,9 +38,10 @@ function ProcessComment(comment) {
         }
     })
 
-    for (const url in images) {
-        fetch(url, { cache: 'force-cache' });
-    }
+    //TODO Check for CDN
+    //for (const url in images) {
+    //    fetch(url, { cache: 'force-cache' });
+    //}
 
     comments.push({
         ProfileLink: ExtractProfileFromPostUrl(document.location.href),

@@ -12,6 +12,7 @@ namespace Instagram.Crawling
         public InstagramSearchTask(string url, string[] keywords, string priority, ICommand command) : base(url, priority, command)
         {
             Keywords = keywords;
+            NeedAuthorization = true;
         }
 
         public override void Run(Browser browser, IDataStorage storage, TaskManager tasks)
@@ -64,6 +65,8 @@ namespace Instagram.Crawling
 
         public readonly InstagramTask Parent;
         public bool IsExplore { get; protected set; }
+
+        public bool NeedAuthorization { get; set; }
 
         public bool CrawlProfile { get; protected set; }
         public bool CrawlStories { get; protected set; }

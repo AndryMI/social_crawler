@@ -133,7 +133,7 @@ namespace Core.Crawling
                 {
                     if (update < DateTimeOffset.Now)
                     {
-                        update = DateTimeOffset.Now.AddHours(4);
+                        update = DateTimeOffset.Now.AddMinutes(15);
                         return true;
                     }
                     return false;

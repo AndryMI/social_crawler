@@ -11,6 +11,11 @@ namespace Instagram.Crawling
 {
     public static class DriverExtensions
     {
+        public static bool IsSomethingWrong(this ChromeDriver driver)
+        {
+            return (bool)driver.ExecuteScript("return document.body.innerText.length < 120");
+        }
+
         public static void WaitForStoryLoading(this ChromeDriver driver)
         {
             Thread.Sleep(100);

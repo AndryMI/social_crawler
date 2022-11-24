@@ -26,5 +26,9 @@ namespace Core
         public TryLaterException(string reason, Exception exception) : this(reason, exception, DateTimeOffset.Now)
         {
         }
+
+        public TryLaterException(string reason) : this(reason, DateTimeOffset.Now)
+        {
+        }
     }
 }

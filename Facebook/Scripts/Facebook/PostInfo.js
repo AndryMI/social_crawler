@@ -62,9 +62,10 @@ function ProcessStory(story) {
         }
     })
 
-    for (const url in images) {
-        fetch(url, { cache: 'force-cache' });
-    }
+    //TODO Check for CDN
+    //for (const url in images) {
+    //    fetch(url, { cache: 'force-cache' });
+    //}
 
     posts.push({
         ProfileLink: profile,
