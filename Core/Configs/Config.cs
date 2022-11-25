@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace Core
 {
@@ -7,7 +9,7 @@ namespace Core
     public class Config
     {
         /// <summary> Unique ID of crawler instance running </summary>
-        public static readonly string Guid = System.Guid.NewGuid().ToString();
+        public static readonly string Guid = InitGuid();
 
         public static readonly Config Instance = Init();
 
@@ -57,6 +59,17 @@ namespace Core
                 return JsonConvert.DeserializeObject<Config>(File.ReadAllText("Configs/config.json"));
             }
             return new Config();
+        }
+
+        private static string InitGuid()
+        {
+            using (var random = RandomNumberGenerator.Create())
+            {
+                var server = IpInfo.My();
+                var bytes = new byte[4];
+                random.GetNonZeroBytes(bytes);
+                return $"{server.country} : {server.ip} : {BitConverter.ToInt32(bytes, 0):X8}";
+            }
         }
     }
 }
