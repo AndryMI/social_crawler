@@ -59,7 +59,7 @@ namespace Core.Crawling
             }
         }
 
-        public Response GetResponse(string url)
+        public NetworkResponse GetResponse(string url)
         {
             var item = GetItem(url);
             if (item != null && item.status == Status.Success)
@@ -67,7 +67,7 @@ namespace Core.Crawling
                 try
                 {
                     var data = network.GetResponseBody(item.id);
-                    return new Response(data.Base64Encoded ? Convert.FromBase64String(data.Body) : Encoding.UTF8.GetBytes(data.Body), item.mime);
+                    return new NetworkResponse(data.Base64Encoded ? Convert.FromBase64String(data.Body) : Encoding.UTF8.GetBytes(data.Body), item.mime);
                 }
                 catch (Exception ex)
                 {
@@ -156,18 +156,6 @@ namespace Core.Crawling
             public override string ToString()
             {
                 return $"{status} {type} {url}";
-            }
-        }
-
-        public class Response
-        {
-            public readonly string MimeType;
-            public readonly byte[] Data;
-
-            public Response(byte[] data, string mime)
-            {
-                MimeType = mime;
-                Data = data;
             }
         }
     }

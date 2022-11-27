@@ -13,10 +13,12 @@ namespace Core.Crawling
     {
         private readonly List<ImageUrl> images = new List<ImageUrl>();
         private readonly BrowserNetwork network;
+        private readonly NetworkCache cache;
 
-        public ImageUrlCollector(BrowserNetwork network)
+        public ImageUrlCollector(BrowserNetwork network, NetworkCache cache)
         {
             this.network = network;
+            this.cache = cache;
         }
 
         public List<ImageUrl>.Enumerator GetEnumerator()
@@ -33,7 +35,7 @@ namespace Core.Crawling
             }
             foreach (var image in images)
             {
-                var response = network.GetResponse(image.Original) ?? DirectDownload(image.Original);
+                var response = cache.Get(image.Original, url => network.GetResponse(url) ?? DirectDownload(url));
                 if (response != null)
                 {
                     image.MimeType = response.MimeType;
@@ -54,14 +56,14 @@ namespace Core.Crawling
             throw new NotImplementedException();
         }
 
-        private static BrowserNetwork.Response DirectDownload(string url)
+        private static NetworkResponse DirectDownload(string url)
         {
             try
             {
                 Log.Verbose("Try direct download: {url}", url);
                 using (var client = new WebClient())
                 {
-                    return new BrowserNetwork.Response(client.DownloadData(url), client.ResponseHeaders.Get("Content-Type"));
+                    return new NetworkResponse(client.DownloadData(url), client.ResponseHeaders.Get("Content-Type"));
                 }
             }
             catch (Exception ex)

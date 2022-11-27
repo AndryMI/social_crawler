@@ -15,6 +15,7 @@ namespace Core.Crawling
     {
         private static readonly IBrowserProfile Anonymous = new AnonymousProfile();
 
+        private readonly NetworkCache cache = new NetworkCache();
         private readonly IMediaStorage media;
         private readonly AccountManager accounts;
         private BrowserRequestsDump dumper = null;
@@ -67,6 +68,7 @@ namespace Core.Crawling
             }
             dumper?.Dispose();
             dumper = null;
+            cache.Clear();
             network.Clear();
             network.RequestCounter = account?.Limits;
             return driver;
@@ -94,7 +96,7 @@ namespace Core.Crawling
             {
                 throw new JavaScriptException(json.Replace("__FN__", path));
             }
-            var images = new ImageUrlCollector(network);
+            var images = new ImageUrlCollector(network, cache);
             var result = JsonConvert.DeserializeObject<T>(json, images);
             if (media.WaitForBrowserLoading)
             {

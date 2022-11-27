@@ -123,6 +123,7 @@
     <Compile Include="Utils\KeyValueList.cs" />
     <Compile Include="Utils\LoggerConfig.cs" />
     <Compile Include="Utils\Apis\MultipartData.cs" />
+    <Compile Include="Utils\NetworkCache.cs" />
     <Compile Include="Utils\NumberUtils.cs" />
     <Compile Include="Utils\ObjectId.cs" />
     <Compile Include="Utils\Threaded.cs" />
