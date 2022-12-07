@@ -26,6 +26,14 @@ namespace Core.Crawling
                 var time = DateTimeOffset.FromUnixTimeSeconds(response.time);
                 throw new TryLaterException("No available accounts", time);
             }
+            try
+            {
+                if (response.account is RandomProxyAccount)
+                {
+                    anty.SetActiveTabs(response.account.BrowserProfile, "about:blank");
+                }
+            }
+            catch { }
             return response.account;
         }
 
@@ -38,14 +46,6 @@ namespace Core.Crawling
             {
                 return;
             }
-            try
-            {
-                if (account is RandomProxyAccount)
-                {
-                    anty.SetActiveTabs(account.BrowserProfile, "about:blank");
-                }
-            }
-            catch { }
             try
             {
                 client.Request("POST", "/accounts/" + action, new JsonData(new
