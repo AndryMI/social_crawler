@@ -29,29 +29,10 @@ namespace Core.Crawling
             return response.account;
         }
 
-        public void Release(Account account)
-        {
-            if (account == null)
-            {
-                return;
-            }
-            try
-            {
-                client.Request("POST", "/accounts/release", new JsonData(new
-                {
-                    guid = Config.Guid,
-                    crawler = IpInfo.My(),
-                    browser = account.BrowserProfile is AntyProfile ? anty.GetIpInfo(account.BrowserProfile) : IpInfo.My(),
-                    account,
-                }));
-            }
-            catch (Exception e)
-            {
-                Log.Warning(e, "Failed to release account");
-            }
-        }
+        public void Release(Account account) => Release(account, "release");
+        public void Blocked(Account account) => Release(account, "block");
 
-        public void Blocked(Account account)
+        private void Release(Account account, string action)
         {
             if (account == null)
             {
@@ -59,7 +40,15 @@ namespace Core.Crawling
             }
             try
             {
-                client.Request("POST", "/accounts/block", new JsonData(new
+                if (account is RandomProxyAccount)
+                {
+                    anty.SetActiveTabs(account.BrowserProfile, "about:blank");
+                }
+            }
+            catch { }
+            try
+            {
+                client.Request("POST", "/accounts/" + action, new JsonData(new
                 {
                     guid = Config.Guid,
                     crawler = IpInfo.My(),
@@ -69,7 +58,7 @@ namespace Core.Crawling
             }
             catch (Exception e)
             {
-                Log.Warning(e, "Failed to block account");
+                Log.Warning(e, $"Failed to {action} account");
             }
         }
 
@@ -86,6 +75,11 @@ namespace Core.Crawling
             public Antyinfo()
             {
                 username = anty.GetUserProfile().Username;
+            }
+
+            public void SetActiveTabs(IBrowserProfile profile, params string[] tabs)
+            {
+                anty.SetBrowserProfileTabs(profile.Id, tabs);
             }
 
             public IpInfo GetIpInfo(IBrowserProfile profile)
