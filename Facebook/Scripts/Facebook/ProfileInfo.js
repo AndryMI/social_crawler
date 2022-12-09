@@ -1,5 +1,8 @@
 ﻿
 function ExtractUsername(link) {
+    try {
+        link = decodeURIComponent(link ?? '')
+    } catch { }
     const url = new URL(link ?? '', document.location.origin)
     const match = url.href.match(/\/profile\.php\?\W*id=(\d+)/)
     if (match) {

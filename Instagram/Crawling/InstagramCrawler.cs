@@ -32,7 +32,10 @@ namespace Instagram.Crawling
                 driver = task.NeedAuthorization ? browser.Driver<InstagramAccount>() : browser.Driver<RandomProxyAccount>();
 
                 driver.Url = task.Url;
-                driver.WaitForMain();
+                if (!driver.WaitForMainShortly(TimeSpan.FromSeconds(10)))
+                {
+                    throw new Exception("Something wrong");
+                }
 
                 if (task.CrawlProfile)
                 {

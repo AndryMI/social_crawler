@@ -54,6 +54,21 @@ namespace Core.Crawling
             wait.Until(x => x.FindElements(By.TagName("main")).Count > 0);
         }
 
+        public static bool WaitForMainShortly(this ChromeDriver driver, TimeSpan time)
+        {
+            try
+            {
+                Thread.Sleep(100);
+                var wait = new WebDriverWait(driver, time);
+                wait.Until(x => x.FindElements(By.TagName("main")).Count > 0);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static void FocusToWindow(this ChromeDriver driver)
         {
             driver.SwitchTo().Window(driver.CurrentWindowHandle);
