@@ -26,11 +26,10 @@ namespace CrawlerApp
             factory.Register<FacebookCommand>("facebook:by_keyword");
         }
 
-        private ICommand[] Sync(List<TaskManager.Status> progress)
+        private SyncResponse Sync(List<TaskManager.Status> progress)
         {
             var response = Request("POST", "/crawler", new JsonData(new { guid = Config.Guid, progress, types = factory.Types }));
-            var data = JsonConvert.DeserializeObject<SyncResponse>(response, factory);
-            return data.commands;
+            return JsonConvert.DeserializeObject<SyncResponse>(response, factory);
         }
 
         public static void Run(TaskManager tasks)
@@ -40,8 +39,9 @@ namespace CrawlerApp
             {
                 try
                 {
-                    var commands = client.Sync(tasks.Progress);
-                    foreach (var command in commands)
+                    var data = client.Sync(tasks.Progress);
+                    tasks.SetBlacklist(data.blacklist);
+                    foreach (var command in data.commands)
                     {
                         tasks.Add(command);
                     }
@@ -58,6 +58,7 @@ namespace CrawlerApp
         private class SyncResponse
         {
             public ICommand[] commands = null;
+            public string[] blacklist = null;
         }
     }
 }

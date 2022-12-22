@@ -14,6 +14,7 @@ namespace Core.Crawling
         private readonly string store;
         private readonly object locker = new object();
         private readonly Dictionary<ICommand, State> states;
+        private readonly HashSet<string> blacklist = new HashSet<string>(ServerConfig.Instance.Blacklists);
 
         public TaskManager(string store = null)
         {
@@ -40,6 +41,19 @@ namespace Core.Crawling
             }
         }
 
+        public void SetBlacklist(string[] blacklist)
+        {
+            lock (locker)
+            {
+                this.blacklist.Clear();
+
+                foreach (var item in blacklist)
+                {
+                    this.blacklist.Add(item);
+                }
+            }
+        }
+
         public void Add(ICommand command)
         {
             lock (locker)
@@ -59,7 +73,10 @@ namespace Core.Crawling
                     }
                     foreach (var task in command.CreateTasks())
                     {
-                        state.Add(task);
+                        if (!blacklist.Contains(task.Url))
+                        {
+                            state.Add(task);
+                        }
                     }
                 }
             }
@@ -71,7 +88,10 @@ namespace Core.Crawling
             {
                 if (states.TryGetValue(task.Command, out var state))
                 {
-                    state.Add(task);
+                    if (!blacklist.Contains(task.Url))
+                    {
+                        state.Add(task);
+                    }
                 }
             }
         }

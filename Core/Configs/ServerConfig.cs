@@ -10,6 +10,9 @@ namespace Core
         [JsonProperty("server_info")]
         public readonly ServerInfo Server;
 
+        [JsonProperty("blacklist")]
+        public readonly string[] Blacklists;
+
         [JsonProperty("media_warmup")]
         public readonly Dictionary<string, string> MediaWarmup;
 
