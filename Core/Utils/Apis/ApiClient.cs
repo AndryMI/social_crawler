@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Text;
 
@@ -25,6 +26,7 @@ namespace Core
                 var request = (HttpWebRequest)WebRequest.Create(host + path);
                 request.Method = method;
                 request.ContentType = data?.ContentType;
+                request.Headers.Add("Accept-Encoding", "gzip");
 
                 if (!string.IsNullOrEmpty(AuthHeader))
                 {
@@ -60,8 +62,11 @@ namespace Core
 
         protected static string ReadAllText(WebResponse response)
         {
+            var encoding = response.Headers[HttpResponseHeader.ContentEncoding];
+
             using (var stream = response.GetResponseStream())
-            using (var reader = new StreamReader(stream, Encoding.UTF8))
+            using (var decoded = encoding == "gzip" ? new GZipStream(stream, CompressionMode.Decompress) : stream)
+            using (var reader = new StreamReader(decoded, Encoding.UTF8))
             {
                 return reader.ReadToEnd();
             }
