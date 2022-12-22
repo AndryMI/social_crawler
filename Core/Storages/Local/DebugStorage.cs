@@ -27,6 +27,12 @@ namespace Core.Storages
             Debug.WriteLine(JsonConvert.SerializeObject(data));
         }
 
+        public void StoreRelation(CrawlerTask task, IRelationInfo data)
+        {
+            Debug.WriteLine($"--- {data.Link} ---");
+            Debug.WriteLine(JsonConvert.SerializeObject(data));
+        }
+
         public void StoreException(CrawlingException ex)
         {
             WriteException(ex.InnerException);

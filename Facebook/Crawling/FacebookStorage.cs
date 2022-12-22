@@ -18,6 +18,7 @@ namespace Facebook.Crawling
         public void StoreProfile(FacebookTask task, ProfileInfo profile)
         {
             storage.StoreProfile(task, profile);
+            tasks.Add(new RelationsTask(RelationsTask.ToUrl(task.Url), task.Priority, task));
         }
 
         public void StorePosts(FacebookTask task, PostInfo[] posts)
@@ -50,6 +51,14 @@ namespace Facebook.Crawling
             foreach (var comment in comments)
             {
                 storage.StoreComment(task, comment);
+            }
+        }
+
+        public void StoreRelations(FacebookTask task, RelationInfo[] relations)
+        {
+            foreach (var relation in relations)
+            {
+                storage.StoreRelation(task, relation);
             }
         }
     }

@@ -33,7 +33,10 @@ namespace Facebook.Crawling
                 var requests = browser.DumpRequests(url => url.Contains("/graphql/"));
 
                 driver.Url = task.Url;
-                driver.WaitForMain();
+                if (!task.IsViewSource)
+                {
+                    driver.WaitForMain();
+                }
                 Crawler.Sleep(this, "open");
 
                 driver.DumpPrefetchedRequests();
@@ -45,6 +48,15 @@ namespace Facebook.Crawling
                     if (profile != null)
                     {
                         storage.StoreProfile(task, profile);
+                    }
+                }
+
+                if (task.CrawlRelations)
+                {
+                    var relations = RelationInfo.Collect(browser);
+                    if (relations != null && relations.Length > 0)
+                    {
+                        storage.StoreRelations(task, relations);
                     }
                 }
 

@@ -49,6 +49,11 @@ namespace Core.Storages
             StoreChunk("comments[]", JsonConvert.SerializeObject(new Json { task = task, data = data }));
         }
 
+        public void StoreRelation(CrawlerTask task, IRelationInfo data)
+        {
+            StoreChunk("relations[]", JsonConvert.SerializeObject(new Json { task = task, data = data }));
+        }
+
         public void StoreImage(ImageUrl image)
         {
             if (unique.NeedStore(image))

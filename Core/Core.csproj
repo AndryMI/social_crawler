@@ -90,6 +90,7 @@
     <Compile Include="Data\IPostInfo.cs" />
     <Compile Include="Data\IProfileInfo.cs" />
     <Compile Include="Crawling\ICommand.cs" />
+    <Compile Include="Data\IRelationInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Crawling\CrawlerTask.cs" />
     <Compile Include="Crawling\TaskManager.cs" />

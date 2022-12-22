@@ -8,5 +8,6 @@ namespace Core.Storages
         void StoreProfile(CrawlerTask task, IProfileInfo data);
         void StorePost(CrawlerTask task, IPostInfo data);
         void StoreComment(CrawlerTask task, ICommentInfo data);
+        void StoreRelation(CrawlerTask task, IRelationInfo data);
     }
 }

@@ -25,6 +25,10 @@ namespace Core.Storages
         {
         }
 
+        public void StoreRelation(CrawlerTask task, IRelationInfo data)
+        {
+        }
+
         public void StoreException(CrawlingException ex)
         {
         }
