@@ -31,11 +31,11 @@ namespace Core.Crawling
             this.accounts = accounts;
         }
 
-        public ChromeDriver Driver<T>() where T : Account, new()
+        public ChromeDriver Driver<T>(string url) where T : Account, new()
         {
             accounts.Release(this.account);
             this.account = null;
-            var account = accounts.Take<T>();
+            var account = accounts.Take<T>(url);
             var driver = Driver(account);
             account.Login(driver);
             return driver;

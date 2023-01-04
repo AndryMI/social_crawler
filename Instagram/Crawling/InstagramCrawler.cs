@@ -29,7 +29,7 @@ namespace Instagram.Crawling
             ChromeDriver driver = null;
             try
             {
-                driver = task.NeedAuthorization ? browser.Driver<InstagramAccount>() : browser.Driver<RandomProxyAccount>();
+                driver = task.NeedAuthorization ? browser.Driver<InstagramAccount>(task.Url) : browser.Driver<RandomProxyAccount>(task.Url);
 
                 driver.Url = task.Url;
                 if (!driver.WaitForMainShortly(TimeSpan.FromSeconds(10)))

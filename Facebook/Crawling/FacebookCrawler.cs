@@ -28,7 +28,7 @@ namespace Facebook.Crawling
             ChromeDriver driver = null;
             try
             {
-                driver = browser.Driver<FacebookAccount>();
+                driver = browser.Driver<FacebookAccount>(task.Url);
 
                 var requests = browser.DumpRequests(url => url.Contains("/graphql/"));
 

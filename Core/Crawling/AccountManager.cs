@@ -11,7 +11,7 @@ namespace Core.Crawling
         private readonly ApiServerClient client = new ApiServerClient();
         private readonly Antyinfo anty = new Antyinfo();
 
-        public Account Take<T>() where T : Account
+        public Account Take<T>(string url) where T : Account
         {
             var json = client.Request("POST", "/accounts/take", new JsonData(new
             {
@@ -19,6 +19,7 @@ namespace Core.Crawling
                 type = typeof(T).Name,
                 crawler = IpInfo.My(),
                 antyuser = anty.username,
+                url,
             }));
             var response = JsonConvert.DeserializeObject<Response<T>>(json, new BrowserProfileJson());
             if (response.account == null)
