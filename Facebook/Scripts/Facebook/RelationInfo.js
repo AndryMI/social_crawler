@@ -1,6 +1,5 @@
 ﻿
 var relations = []
-var unique = {}
 
 var source = (function () {
     const id = new URLSearchParams(document.location.search).get('id')
@@ -8,23 +7,25 @@ var source = (function () {
     return new URL(path, 'https://www.facebook.com').href
 })()
 
+var infos = {}
 document.querySelectorAll('a').forEach(a => {
-    if (unique[a.href]) {
-        return;
+    if (a.href.indexOf('pn_ref=') > 0) {
+        infos[a.href] = a.innerText.trim() || infos[a.href]
     }
-    unique[a.href] = true
-
-    const query = new URLSearchParams(a.search)
-    const type = query.get('pn_ref')
+})
+Object.entries(infos).forEach(info => {
+    const url = new URL(info[0])
+    const type = url.searchParams.get('pn_ref')
     if (type) {
-        const id = query.get('id')
-        const path = id ? a.pathname + '?id=' + id : a.pathname
+        const id = url.searchParams.get('id')
+        const path = id ? url.pathname + '?id=' + id : url.pathname
         const target = new URL(path, 'https://www.facebook.com').href
 
         relations.push({
             Link: source,
             TargetLink: target,
             Type: type,
+            Name: info[1],
         })
     }
 })

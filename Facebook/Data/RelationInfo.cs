@@ -10,6 +10,8 @@ namespace Facebook.Data
         public string TargetLink { get; set; }
         public string Type { get; set; }
 
+        public string Name;
+
         public static RelationInfo[] Collect(Browser browser)
         {
             return browser.RunCollector<RelationInfo[]>("Scripts/Facebook/RelationInfo.js");

@@ -33,10 +33,7 @@ namespace Facebook.Crawling
                 var requests = browser.DumpRequests(url => url.Contains("/graphql/"));
 
                 driver.Url = task.Url;
-                if (!task.IsViewSource)
-                {
-                    driver.WaitForMain();
-                }
+                driver.WaitForMain(task.IsViewSource);
                 Crawler.Sleep(this, "open");
 
                 driver.DumpPrefetchedRequests();
