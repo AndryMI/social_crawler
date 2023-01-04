@@ -8,6 +8,7 @@ namespace Facebook.Crawling
 {
     public class FacebookCrawler
     {
+        private readonly UniqueFilter<RelationInfo> relation = new UniqueFilter<RelationInfo>(relation => relation.TargetLink);
         private readonly UniqueFilter<CommentInfo> comment = new UniqueFilter<CommentInfo>(comment => comment.Link);
         private readonly UniqueFilter<PostInfo> post = new UniqueFilter<PostInfo>(post => post.Link);
         private const int PostsTreshold = 50;
@@ -48,13 +49,22 @@ namespace Facebook.Crawling
                     }
                 }
 
-                if (task.CrawlRelations)
+                while (task.CrawlRelations)
                 {
-                    var relations = RelationInfo.Collect(browser);
+                    var relations = relation.Filter(RelationInfo.Collect(browser));
+                    if (relations != null && relations.Length == 0)
+                    {
+                        break;
+                    }
                     if (relations != null && relations.Length > 0)
                     {
                         storage.StoreRelations(task, relations);
                     }
+                    requests.ClearDump();
+                    driver.FocusToWindow();
+                    driver.ScrollToPageBottom();
+                    requests.WaitForComplete();
+                    Crawler.Sleep(this, "next relations");
                 }
 
                 var totalPosts = 0;

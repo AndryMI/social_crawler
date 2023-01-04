@@ -14,11 +14,18 @@ namespace Facebook.Crawling
             CrawlPosts = false;
         }
 
-        public static string ToUrl(string profileUrl)
+        public static string ToInfoUrl(string profileUrl)
         {
             var uri = new Uri(profileUrl);
             var separator = string.IsNullOrEmpty(uri.Query) ? "?" : "&";
             return "view-source:https://m.facebook.com" + uri.PathAndQuery + separator + "v=info";
+        }
+
+        public static string ToFriendsUrl(string profileUrl)
+        {
+            var uri = new Uri(profileUrl);
+            var separator = string.IsNullOrEmpty(uri.Query) ? "?" : "&";
+            return "https://m.facebook.com" + uri.PathAndQuery + separator + "v=friends";
         }
     }
 

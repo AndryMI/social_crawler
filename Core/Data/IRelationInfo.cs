@@ -1,4 +1,5 @@
-﻿
+﻿using Newtonsoft.Json;
+
 namespace Core.Data
 {
     public interface IRelationInfo
@@ -11,6 +12,7 @@ namespace Core.Data
         /// <summary>Target profile link</summary>
         string TargetLink { get; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         string Type { get; }
     }
 }
