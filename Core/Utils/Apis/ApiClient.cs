@@ -27,6 +27,7 @@ namespace Core
                 request.Method = method;
                 request.ContentType = data?.ContentType;
                 request.Headers.Add("Accept-Encoding", "gzip");
+                request.ServerCertificateValidationCallback = (a, b, c, d) => true;
 
                 if (!string.IsNullOrEmpty(AuthHeader))
                 {

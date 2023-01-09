@@ -18,8 +18,12 @@ namespace Facebook.Crawling
         public void StoreProfile(FacebookTask task, ProfileInfo profile)
         {
             storage.StoreProfile(task, profile);
-            tasks.Add(new RelationsTask(RelationsTask.ToFriendsUrl(task.Url), task.Priority, task));
-            tasks.Add(new RelationsTask(RelationsTask.ToInfoUrl(task.Url), task.Priority, task));
+
+            if (profile.Type == "User")
+            {
+                tasks.Add(new RelationsTask(RelationsTask.ToFriendsUrl(task.Url), task.Priority, task));
+                tasks.Add(new RelationsTask(RelationsTask.ToInfoUrl(task.Url), task.Priority, task));
+            }
         }
 
         public void StorePosts(FacebookTask task, PostInfo[] posts)

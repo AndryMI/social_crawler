@@ -15,7 +15,7 @@ namespace Facebook.Crawling
 
         public override void Login(ChromeDriver driver)
         {
-            if (!driver.Url.StartsWith("https://www.facebook.com"))
+            if (!driver.Url.Contains(".facebook.com"))
             {
                 driver.Url = "https://www.facebook.com/login";
                 driver.WaitForMain();
