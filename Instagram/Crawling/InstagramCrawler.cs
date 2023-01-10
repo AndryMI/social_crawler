@@ -119,13 +119,6 @@ namespace Instagram.Crawling
             {
                 throw new CrawlingException(e, task, driver);
             }
-            finally
-            {
-                if (!task.NeedAuthorization)
-                {
-                    try { driver.Url = "about:blank"; } catch { }
-                }
-            }
         }
     }
 }
