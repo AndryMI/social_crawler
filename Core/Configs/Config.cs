@@ -52,6 +52,17 @@ namespace Core
         [JsonProperty]
         public bool BrowserHeadless { get; private set; } = false;
 
+        [JsonProperty]
+        public CrawlerStrategy Strategy { get; private set; } = CrawlerStrategy.Default;
+
+        public enum CrawlerStrategy
+        {
+            /// <summary>Take commands sequentially and try to execute completely</summary>
+            Default,
+            /// <summary>Take the newest commands and leave the previous ones unfinished</summary>
+            Urgent,
+        }
+
         private static Config Init()
         {
             if (File.Exists("Configs/config.json"))

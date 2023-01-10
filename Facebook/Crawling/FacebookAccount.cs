@@ -13,6 +13,11 @@ namespace Facebook.Crawling
             return new RequestLimits(100, TimeSpan.FromHours(1), url => url.Contains("facebook.com"));
         }
 
+        public override string GetDefaultTab()
+        {
+            return "https://m.facebook.com/bookmarks/";
+        }
+
         public override void Login(ChromeDriver driver)
         {
             if (!driver.Url.Contains(".facebook.com"))

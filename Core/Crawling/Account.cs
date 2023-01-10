@@ -25,6 +25,7 @@ namespace Core.Crawling
         public readonly RequestLimits Limits;
 
         public abstract void Login(ChromeDriver driver);
+        public virtual string GetDefaultTab() => null;
         public virtual RequestLimits GetRequestLimits() => null;
 
         protected Account()
@@ -35,6 +36,11 @@ namespace Core.Crawling
 
     public class RandomProxyAccount : Account
     {
+        public override string GetDefaultTab()
+        {
+            return "about:blank";
+        }
+
         public override void Login(ChromeDriver driver)
         {
         }

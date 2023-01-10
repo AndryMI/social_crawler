@@ -28,7 +28,7 @@ namespace CrawlerApp
 
         private SyncResponse Sync(List<TaskManager.Status> progress)
         {
-            var response = Request("POST", "/crawler", new JsonData(new { guid = Config.Guid, progress, types = factory.Types }));
+            var response = Request("POST", "/crawler", new JsonData(new { guid = Config.Guid, progress, types = factory.Types, strategy = Config.Instance.Strategy }));
             return JsonConvert.DeserializeObject<SyncResponse>(response, factory);
         }
 

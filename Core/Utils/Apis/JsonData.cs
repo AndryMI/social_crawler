@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.IO;
 
 namespace Core
@@ -11,7 +12,7 @@ namespace Core
 
         public JsonData(object data)
         {
-            this.data = JsonConvert.SerializeObject(data);
+            this.data = JsonConvert.SerializeObject(data, new StringEnumConverter());
         }
 
         public void Serialize(StreamWriter writer)

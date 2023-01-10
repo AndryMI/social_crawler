@@ -29,9 +29,10 @@ namespace Core.Crawling
             }
             try
             {
-                if (response.account is RandomProxyAccount)
+                var tabs = response.account.GetDefaultTab();
+                if (tabs != null)
                 {
-                    anty.SetActiveTabs(response.account.BrowserProfile, "about:blank");
+                    anty.SetActiveTabs(response.account.BrowserProfile, tabs);
                 }
             }
             catch { }

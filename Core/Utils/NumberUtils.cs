@@ -46,6 +46,11 @@ namespace Core.Crawling
                 var b = Regex.Replace(match.Groups[2].Value, @"\s+", "");
                 return a + "." + b;
             }
+            match = Regex.Match(line, @"\d+[mk]$");
+            if (match.Success)
+            {
+                return match.Value;
+            }
             return Regex.Replace(line, @"[^\d]+", "");
         }
 

@@ -1,10 +1,5 @@
-﻿using Core;
-using Core.Crawling;
-using OpenQA.Selenium;
+﻿using Core.Crawling;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
-using System;
-using System.Threading;
 
 namespace Facebook.Crawling
 {
@@ -15,12 +10,6 @@ namespace Facebook.Crawling
             if (isViewSource)
             {
                 driver.ExecuteScript("document.body.innerHTML = document.body.innerText");
-            }
-            else
-            {
-                Thread.Sleep(100);
-                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(Config.Instance.WaitTimeout));
-                wait.Until(x => x.FindElements(By.CssSelector("[role=main]")).Count > 0);
             }
         }
 
