@@ -1,35 +1,31 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace CrawlerApp
+namespace Updater
 {
-    public static class ProgramArgs
+    internal class Arguments
     {
-        public static void Handle(string[] args)
-        {
-            for (var i = 0; i < args.Length; i++)
-            {
-                if (args[i].StartsWith("--"))
-                {
-                    var name = Regex.Replace(args[i], @"-+(\w)", match => match.Groups[1].Value.ToUpper());
-                    try
-                    {
-                        var method = typeof(Program).GetMethod(name);
-                        var parameters = new string[method.GetParameters().Length];
+        public readonly string ProcessId;
+        public readonly string UpdatePath;
+        public readonly string CrawlerPath;
+        public readonly string CrawlerArgs;
 
-                        for (var j = 0; j < parameters.Length; j++)
-                        {
-                            parameters[j] = args[++i];
-                        }
-                        method.Invoke(null, parameters);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("Failed to process: " + name, ex);
-                    }
-                }
-            }
+        public Arguments(string[] args)
+        {
+            ProcessId = args[0];
+            UpdatePath = args[1];
+            CrawlerPath = args[2];
+            CrawlerArgs = Escape(args.Skip(3).ToArray());
+        }
+
+        public void Print()
+        {
+            Console.WriteLine("ProcessId: " + ProcessId);
+            Console.WriteLine("UpdatePath: " + UpdatePath);
+            Console.WriteLine("CrawlerPath: " + CrawlerPath);
+            Console.WriteLine("CrawlerArgs: " + CrawlerArgs);
         }
 
         /// <summary>

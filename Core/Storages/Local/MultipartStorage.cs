@@ -15,6 +15,15 @@ namespace Core.Storages
         protected abstract void Enqueue(MultipartData data);
         protected abstract bool Dequeue(out MultipartData data);
 
+        public void Flush()
+        {
+            lock (data)
+            {
+                Enqueue(data);
+                data = new MultipartData();
+            }
+        }
+
         public bool TryDequeue(out MultipartData result)
         {
             if (!Dequeue(out result))

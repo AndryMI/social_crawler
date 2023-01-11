@@ -18,18 +18,18 @@ namespace Core
             set => SharedAuthHeader = value;
         }
 
-        public override string Request(string method, string path, IRequestData data = null)
+        public override string Request(string method, string path, IRequestData data = null, bool base64 = false)
         {
             try
             {
-                return base.Request(method, path, data);
+                return base.Request(method, path, data, base64);
             }
             catch (WebException e)
             {
                 if (e.Response is HttpWebResponse response && response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     Login();
-                    return base.Request(method, path, data);
+                    return base.Request(method, path, data, base64);
                 }
                 Log.Warning(e, "{ErrorResponse}", e.Response != null ? ReadAllText(e.Response) : null);
                 throw;

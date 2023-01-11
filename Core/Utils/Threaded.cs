@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Core
@@ -20,6 +21,14 @@ namespace Core
             threads.Add(this);
         }
 
+        protected void LongSleep(TimeSpan time)
+        {
+            for (var ms = (int)time.TotalMilliseconds; working && ms > 0; ms -= 1000)
+            {
+                Thread.Sleep(Math.Min(ms, 1000));
+            }
+        }
+
         public void Stop(int timeout = -1)
         {
             working = false;
@@ -28,15 +37,26 @@ namespace Core
 
         public static void StopAll()
         {
+            StopAll<Threaded>();
+        }
+
+        public static void StopAll<T>() where T : Threaded
+        {
             foreach (var thread in threads)
             {
-                thread.Stop(0);
+                if (thread is T)
+                {
+                    thread.Stop(0);
+                }
             }
             foreach (var thread in threads)
             {
-                thread.Stop();
+                if (thread is T)
+                {
+                    thread.Stop();
+                }
             }
-            threads.Clear();
+            threads.RemoveAll(thread => thread is T);
         }
     }
 }

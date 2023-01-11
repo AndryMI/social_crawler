@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using System;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
@@ -19,7 +20,7 @@ namespace Core
             this.host = host;
         }
 
-        public virtual string Request(string method, string path, IRequestData data = null)
+        public virtual string Request(string method, string path, IRequestData data = null, bool base64 = false)
         {
             try
             {
@@ -46,10 +47,20 @@ namespace Core
                 }
 
                 var response = request.GetResponse();
-                var result = ReadAllText(response);
-                log.Verbose("Receive {json}", result);
+                if (base64)
+                {
+                    var result = ReadAllBytes(response);
+                    log.Verbose("Receive {size} bytes", result.Length);
 
-                return result;
+                    return Convert.ToBase64String(result);
+                }
+                else
+                {
+                    var result = ReadAllText(response);
+                    log.Verbose("Receive {json}", result);
+
+                    return result;
+                }
             }
             catch (WebException e)
             {
@@ -58,6 +69,19 @@ namespace Core
                     Log.Verbose("Failed {Responce}", ReadAllText(e.Response));
                 }
                 throw;
+            }
+        }
+
+        protected static byte[] ReadAllBytes(WebResponse response)
+        {
+            var encoding = response.Headers[HttpResponseHeader.ContentEncoding];
+
+            using (var stream = response.GetResponseStream())
+            using (var decoded = encoding == "gzip" ? new GZipStream(stream, CompressionMode.Decompress) : stream)
+            using (var memory = new MemoryStream())
+            {
+                decoded.CopyTo(memory);
+                return memory.ToArray();
             }
         }
 

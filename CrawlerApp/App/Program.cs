@@ -36,9 +36,13 @@ namespace CrawlerApp
             {
                 new RemoteStorageThread(storage, errors);
             }
+            new RemoteManager(tasks);
+            new UpdateManager("Data/update.zip", "Updater.exe");
 
-            RemoteManager.Run(tasks);
+            MainLoop.Run();
 
+            Threaded.StopAll<CrawlerThread>();
+            Threaded.StopAll<RemoteStorageThread>();
             Threaded.StopAll();
             Log.CloseAndFlush();
         }

@@ -28,15 +28,16 @@ namespace Core.Storages
                     {
                         client.Request("POST", "/crawler/data", data);
                     }
-                    Thread.Sleep(TimeSpan.FromSeconds(Config.Instance.StorageApiSendInterval));
+                    LongSleep(TimeSpan.FromSeconds(Config.Instance.StorageApiSendInterval));
                 }
                 catch (Exception ex)
                 {
                     Log.Fatal(ex, "Failed to store data");
                     errors.StoreMultipart(ex, data);
-                    Thread.Sleep(TimeSpan.FromSeconds(Config.Instance.RetryTimeout));
+                    LongSleep(TimeSpan.FromSeconds(Config.Instance.RetryTimeout));
                 }
             }
+            storage.Flush();
         }
     }
 }

@@ -72,12 +72,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App\UpdateManager.cs" />
     <Compile Include="Utils\CommandsFactory.cs" />
     <Compile Include="Configs\LogConfig.cs" />
     <Compile Include="App\ConsoleManager.cs" />
     <Compile Include="App\Program.cs" />
     <Compile Include="Utils\GZipHooks.cs" />
     <Compile Include="Utils\BrowserRun.cs" />
+    <Compile Include="Utils\MainLoop.cs" />
     <Compile Include="Utils\ProgramArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="App\RemoteManager.cs" />
@@ -102,6 +104,10 @@
     <ProjectReference Include="..\Twitter\Twitter.csproj">
       <Project>{7c96d4e2-c40f-4531-84bd-c46b7432d014}</Project>
       <Name>Twitter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Updater\Updater.csproj">
+      <Project>{c1d92213-1d56-4eba-b143-c64155da82a6}</Project>
+      <Name>Updater</Name>
     </ProjectReference>
     <ProjectReference Include="..\VK\VK.csproj">
       <Project>{2490c20d-aa9a-495e-98de-6afe33a34edd}</Project>

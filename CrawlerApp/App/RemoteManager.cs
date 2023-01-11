@@ -6,36 +6,23 @@ using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using Twitter.Crawling;
 
 namespace CrawlerApp
 {
-    public class RemoteManager : ApiServerClient
+    public class RemoteManager : Threaded
     {
-        private readonly CommandsFactory factory = new CommandsFactory();
+        private readonly TaskManager tasks;
 
-        private RemoteManager()
+        public RemoteManager(TaskManager tasks)
         {
-            factory.Register<CancelCommand>("command:cancel");
-            factory.Register<TwitterCommand>("twitter:by_profile_link");
-            factory.Register<TwitterCommand>("twitter:by_keyword");
-            factory.Register<InstagramCommand>("instagram:by_profile_link");
-            factory.Register<InstagramCommand>("instagram:by_keyword");
-            factory.Register<FacebookCommand>("facebook:by_profile_link");
-            factory.Register<FacebookCommand>("facebook:by_keyword");
+            this.tasks = tasks;
         }
 
-        private SyncResponse Sync(List<TaskManager.Status> progress)
+        protected override void Run()
         {
-            var response = Request("POST", "/crawler", new JsonData(new { guid = Config.Guid, progress, types = factory.Types, strategy = Config.Instance.Strategy }));
-            return JsonConvert.DeserializeObject<SyncResponse>(response, factory);
-        }
-
-        public static void Run(TaskManager tasks)
-        {
-            var client = new RemoteManager();
-            while (true)
+            var client = new Client();
+            while (IsWorking)
             {
                 try
                 {
@@ -51,7 +38,30 @@ namespace CrawlerApp
                 {
                     Log.Fatal(ex, "Failed to sync commands");
                 }
-                Thread.Sleep(TimeSpan.FromMinutes(1));
+                LongSleep(TimeSpan.FromMinutes(1));
+            }
+            tasks.Save();
+        }
+
+        private class Client : ApiServerClient
+        {
+            private readonly CommandsFactory factory = new CommandsFactory();
+
+            public Client()
+            {
+                factory.Register<CancelCommand>("command:cancel");
+                factory.Register<TwitterCommand>("twitter:by_profile_link");
+                factory.Register<TwitterCommand>("twitter:by_keyword");
+                factory.Register<InstagramCommand>("instagram:by_profile_link");
+                factory.Register<InstagramCommand>("instagram:by_keyword");
+                factory.Register<FacebookCommand>("facebook:by_profile_link");
+                factory.Register<FacebookCommand>("facebook:by_keyword");
+            }
+
+            public SyncResponse Sync(List<TaskManager.Status> progress)
+            {
+                var response = Request("POST", "/crawler", new JsonData(new { guid = Config.Guid, progress, types = factory.Types, strategy = Config.Instance.Strategy }));
+                return JsonConvert.DeserializeObject<SyncResponse>(response, factory);
             }
         }
 

@@ -14,6 +14,9 @@ namespace Core
         public static readonly Config Instance = Init();
 
         [JsonProperty]
+        public int CheckUpdateInterval { get; private set; } = 300;
+
+        [JsonProperty]
         public string ApiUrl { get; private set; } = "https://sc-api-srv.profcatalyst.com/api";
 
         [JsonProperty]
