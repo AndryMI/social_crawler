@@ -1,4 +1,13 @@
 ﻿
+var anchors =
+    (document.location.host == 'm.facebook.com') ?
+        Array.from(document.querySelectorAll('h1 a, h3 a')) :
+        Array.from(document.querySelectorAll('[data-pagelet="ProfileAppSection_0"] a')).filter(a => {
+            return __FindClosestFiber(__GetFiber(a), fb => {
+                return fb.elementType?.displayName?.indexOf('ListItem') >= 0
+            })
+        })
+
 var relations = []
 
 function NormalizeUrl(link) {
@@ -11,7 +20,7 @@ function NormalizeUrl(link) {
 var source = NormalizeUrl(document.location.href)
 
 var infos = {}
-document.querySelectorAll('h1 a, h3 a').forEach(a => {
+anchors.forEach(a => {
     const target = NormalizeUrl(a.href)
     if (!infos[target]) {
         infos[target] = {}

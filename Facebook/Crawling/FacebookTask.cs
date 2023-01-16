@@ -25,7 +25,7 @@ namespace Facebook.Crawling
         {
             var uri = new Uri(profileUrl);
             var separator = string.IsNullOrEmpty(uri.Query) ? "?" : "&";
-            return "https://m.facebook.com" + uri.PathAndQuery + separator + "v=friends";
+            return profileUrl + separator + "sk=friends";
         }
     }
 
