@@ -58,6 +58,7 @@
     <Compile Include="Crawling\FacebookStorage.cs" />
     <Compile Include="Crawling\FacebookAccount.cs" />
     <Compile Include="Data\CommentInfo.cs" />
+    <Compile Include="Data\FriendListInfo.cs" />
     <Compile Include="Data\PostInfo.cs" />
     <Compile Include="Data\ProfileInfo.cs" />
     <Compile Include="Data\RelationInfo.cs" />

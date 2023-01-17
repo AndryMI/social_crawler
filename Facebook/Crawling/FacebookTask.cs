@@ -56,6 +56,7 @@ namespace Facebook.Crawling
         {
             var uri = new Uri(url);
             IsViewSource = uri.Scheme == "view-source";
+            IsFriends = url.Contains("sk=friends");
 
             if (uri.LocalPath.StartsWith("/search/"))
             {
@@ -74,6 +75,7 @@ namespace Facebook.Crawling
 
         public readonly FacebookTask Parent;
         public bool IsSearch { get; protected set; }
+        public bool IsFriends { get; protected set; }
         public bool IsViewSource { get; protected set; }
 
         public bool CrawlProfile { get; protected set; }

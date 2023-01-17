@@ -66,5 +66,10 @@ namespace Facebook.Crawling
                 storage.StoreRelation(task, relation);
             }
         }
+
+        public void StoreFriends(FacebookTask task, FriendListInfo friends)
+        {
+            storage.StoreFriends(task, friends);
+        }
     }
 }

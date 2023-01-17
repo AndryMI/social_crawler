@@ -86,6 +86,7 @@
     <Compile Include="Crawling\CrawlerThread.cs" />
     <Compile Include="Crawling\RequestLimits.cs" />
     <Compile Include="Data\ICommentInfo.cs" />
+    <Compile Include="Data\IFriendListInfo.cs" />
     <Compile Include="Data\ImageUrl.cs" />
     <Compile Include="Data\IPostInfo.cs" />
     <Compile Include="Data\IProfileInfo.cs" />

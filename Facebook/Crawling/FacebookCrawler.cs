@@ -49,6 +49,7 @@ namespace Facebook.Crawling
                     }
                 }
 
+                var friends = new FriendListInfo.Collector();
                 while (task.CrawlRelations)
                 {
                     var relations = relation.Filter(RelationInfo.Collect(browser));
@@ -59,12 +60,17 @@ namespace Facebook.Crawling
                     if (relations != null && relations.Length > 0)
                     {
                         storage.StoreRelations(task, relations);
+                        friends.AddRange(relations);
                     }
                     requests.ClearDump();
                     driver.FocusToWindow();
                     driver.ScrollToPageBottom();
                     requests.WaitForComplete();
                     Crawler.Sleep(this, "next relations");
+                }
+                if (task.IsFriends && !friends.IsEmpty)
+                {
+                    storage.StoreFriends(task, friends.Collected());
                 }
 
                 var totalPosts = 0;

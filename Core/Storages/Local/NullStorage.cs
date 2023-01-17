@@ -29,6 +29,10 @@ namespace Core.Storages
         {
         }
 
+        public void StoreFriends(CrawlerTask task, IFriendListInfo data)
+        {
+        }
+
         public void StoreException(CrawlingException ex)
         {
         }
