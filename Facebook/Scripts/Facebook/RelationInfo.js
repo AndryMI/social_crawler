@@ -2,9 +2,10 @@
 var anchors =
     (document.location.host == 'm.facebook.com') ?
         Array.from(document.querySelectorAll('h1 a, h3 a')) :
-        Array.from(document.querySelectorAll('[data-pagelet="ProfileAppSection_0"] a')).filter(a => {
+        Array.from(document.querySelectorAll('a')).filter(a => {
             return __FindClosestFiber(__GetFiber(a), fb => {
-                return fb.elementType?.displayName?.indexOf('ListItem') >= 0
+                return fb.pendingProps?.timelineAppCollectionItem
+                    && fb.elementType?.displayName?.indexOf('ListItem') >= 0
             })
         })
 

@@ -96,16 +96,26 @@ namespace Core.Crawling
             }
         }
 
-        public bool TryGet(Browser browser, out CrawlerTask task)
+        public bool TryGet(Browser browser, out CrawlerTask result)
         {
             lock (locker)
             {
-                task = Query().Where(x => x.RunAt <= DateTimeOffset.UtcNow).OrderByDescending(x => x.Priority).FirstOrDefault();
-                if (task != null && states.TryGetValue(task.Command, out var state))
+                var query =
+                    from state in states.Values
+                    let remained = Math.Min(10, state.tasks.Count)
+                    from task in state.tasks
+                    where task.RunAt <= DateTimeOffset.UtcNow
+                    orderby remained ascending, task.Priority descending
+                    select new { task, state };
+
+                var selected = query.FirstOrDefault();
+                if (selected != null)
                 {
-                    state.Activate(task);
+                    selected.state.Activate(selected.task);
+                    result = selected.task;
                     return true;
                 }
+                result = null;
                 return false;
             }
         }
@@ -213,17 +223,6 @@ namespace Core.Crawling
             {
                 Log.Information("Creating empty Task manager");
                 return new Dictionary<ICommand, State>();
-            }
-        }
-
-        private IEnumerable<CrawlerTask> Query()
-        {
-            foreach (var state in states.Values)
-            {
-                foreach (var task in state.tasks)
-                {
-                    yield return task;
-                }
             }
         }
 

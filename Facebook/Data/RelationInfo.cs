@@ -14,6 +14,7 @@ namespace Facebook.Data
 
         public static RelationInfo[] Collect(Browser browser)
         {
+            browser.InjectUtils("Scripts/ReactUtils.js");
             return browser.RunCollector<RelationInfo[]>("Scripts/Facebook/RelationInfo.js");
         }
     }
