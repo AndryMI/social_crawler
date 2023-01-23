@@ -102,7 +102,7 @@ namespace Core.Crawling
             {
                 var query =
                     from state in states.Values
-                    let remained = Math.Min(10, state.tasks.Count)
+                    let remained = Math.Min(Config.Instance.PrioritizedTaskCount, state.tasks.Count)
                     from task in state.tasks
                     where task.RunAt <= DateTimeOffset.UtcNow
                     orderby remained ascending, task.Priority descending

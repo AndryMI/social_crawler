@@ -25,6 +25,10 @@ namespace Core
         [JsonProperty]
         public string ApiPass { get; private set; } = "test";
 
+        /// <summary>If a Command has fewer Tasks, try to finish it completely. Otherwise use Task priorities. 0 to disable.</summary>
+        [JsonProperty]
+        public int PrioritizedTaskCount { get; private set; } = 50;
+
         [JsonProperty]
         public int Threads { get; private set; } = 1;
 
